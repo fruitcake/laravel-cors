@@ -63,6 +63,18 @@ Publish the config file to create your own configuration:
 
 The config.php file will be published in app/config/packages/barryvdh/laravel-cors
 
+## Error catching
+
+The headers aren't added to error responses (because App::close() isn't run), so you have to add them to app/start.global.php
+
+    App::error(function(Exception $exception, $code)
+    {
+		Log::error($exception);
+
+		if(app('laravel-cors.send')){
+			return Response::json(array('error' => array('message' => $exception->getMessage() )), $code, app('laravel-cors.headers'));
+		}
+	});
 
 ## License
 

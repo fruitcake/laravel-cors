@@ -27,7 +27,10 @@ class CorsServiceProvider extends ServiceProvider {
 	public function register()
 	{
         $this->package('barryvdh/laravel-cors');
+        $this->app['laravel-cors.send'] = false;
+        $this->app['laravel-cors.headers'] = array();
         $this->load($this->app['config']->get('laravel-cors::config'));
+
 
 	}
 
@@ -88,7 +91,7 @@ class CorsServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array();
+		return array('laravel-cors.send', 'laravel-cors.headers');
 	}
 
 }

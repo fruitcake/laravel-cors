@@ -46,7 +46,6 @@ class CorsListener
 
     public function onAppBefore(Request $request)
     {
-
         // skip if not a CORS request
         if (!$request->headers->has('Origin')) {
             return;
@@ -68,15 +67,28 @@ class CorsListener
                 }
 
                 $self = $this;
-                $this->app->after(function(Request $request, Response $response) use ($self){
-                        $self->onAppAfter($request, $response);
+                $this->app->close(function(Request $request, Response $response) use ($self){
+                        $self->onAppClose($request, $response);
                     });
+
+                // add CORS response headers
+                $headers = array();
+                $headers['Access-Control-Allow-Origin'] =  $request->headers->get('Origin');
+                if ($this->options['allow_credentials']) {
+                    $headers['Access-Control-Allow-Credentials'] = 'true';
+                }
+                if ($this->options['expose_headers']) {
+                    $headers['Access-Control-Expose-Headers'] = strtolower(implode(', ', $this->options['expose_headers']));
+                }
+                $this->app['laravel-cors.send'] = true;
+                $this->app['laravel-cors.headers'] = $headers;
+
                 return;
             }
         }
     }
 
-    public function onAppAfter(Request $request, Response $response)
+    public function onAppClose(Request $request, Response $response)
     {
         // add CORS response headers
         $response->headers->set('Access-Control-Allow-Origin', $request->headers->get('Origin'));
