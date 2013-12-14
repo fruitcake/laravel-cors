@@ -67,8 +67,8 @@ class CorsListener
                 }
 
                 $self = $this;
-                $this->app->close(function(Request $request, Response $response) use ($self){
-                        $self->onAppClose($request, $response);
+                $this->app->after(function(Request $request, Response $response) use ($self){
+                        $self->onAppAfter($request, $response);
                     });
 
                 // add CORS response headers
@@ -88,7 +88,7 @@ class CorsListener
         }
     }
 
-    public function onAppClose(Request $request, Response $response)
+    public function onAppAfter(Request $request, Response $response)
     {
         // add CORS response headers
         $response->headers->set('Access-Control-Allow-Origin', $request->headers->get('Origin'));
