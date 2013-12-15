@@ -63,9 +63,9 @@ Publish the config file to create your own configuration:
 
 The config.php file will be published in app/config/packages/barryvdh/laravel-cors
 
-## Error catching
-
-The headers aren't added to error responses (because App::close() isn't run), so you have to add them to app/start.global.php
+## Error catching in Laravel 4.0
+### Note: L4.1 uses Middleware, so no need for this in Laravel >= 4.1
+The headers aren't added to error responses (because App::after() isn't run), so you have to add them to app/start.global.php
 
     App::error(function(Exception $exception, $code)
     {
