@@ -77,14 +77,19 @@ class CorsServiceProvider extends ServiceProvider {
         }
 
 
+        $app = $this->app;
         $listener = new CorsListener($this->app, $config['paths'], $defaults);
 
-        $this->app->before(function(Request $request) use ($listener){
-               return $listener->checkRequest($request);
+        if(version_compare($app::VERSION, '4.1', '>=')){
+            $this->app->middleware('Barryvdh\Cors\CorsMiddleware', array($listener));
+        }else{
+            $this->app->before(function(Request $request) use ($listener){
+                return $listener->checkRequest($request);
             });
-        $this->app->after(function(Request $request, $response) use ($listener){
-            $listener->modifyResponse($request, $response);
-        });
+            $this->app->after(function(Request $request, $response) use ($listener){
+                $listener->modifyResponse($request, $response);
+            });
+        }
 
     }
 
