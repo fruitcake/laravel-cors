@@ -27,8 +27,11 @@ class CorsMiddleware implements HttpKernelInterface {
      */
     public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true)
     {
-        $this->listener->checkRequest($request);
-        $response = $this->app->handle($request, $type, $catch);
-        return $this->listener->modifyResponse($request, $response);
+        if($response = $this->listener->checkRequest($request)){
+            return $response;
+        }else{
+            $response = $this->app->handle($request, $type, $catch);
+            return $this->listener->modifyResponse($request, $response);
+        }
     }
 }
