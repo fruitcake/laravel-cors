@@ -37,6 +37,8 @@ class CorsListener
     protected $defaults;
     protected $options;
 
+    protected $runAfter = false;
+
     public function __construct(Application $app, array $paths, array $defaults = array())
     {
         $this->app = $app;
@@ -44,7 +46,7 @@ class CorsListener
         $this->defaults = $defaults;
     }
 
-    public function onAppBefore(Request $request)
+    public function checkRequest(Request $request)
     {
         // skip if not a CORS request
         if (!$request->headers->has('Origin')) {
@@ -66,12 +68,9 @@ class CorsListener
                     return new Response('', 403, array('Access-Control-Allow-Origin' => 'null'));
                 }
 
-                $self = $this;
-                $this->app->after(function(Request $request, Response $response) use ($self){
-                        $self->onAppAfter($request, $response);
-                    });
+                $this->runAfter = true;
 
-                // add CORS response headers
+                // Save response headers
                 $headers = array();
                 $headers['Access-Control-Allow-Origin'] =  $request->headers->get('Origin');
                 if ($this->options['allow_credentials']) {
@@ -88,16 +87,14 @@ class CorsListener
         }
     }
 
-    public function onAppAfter(Request $request, Response $response)
+    public function modifyResponse(Request $request, Response $response)
     {
+        if(!$this->runAfter){
+            return $response;
+        }
         // add CORS response headers
-        $response->headers->set('Access-Control-Allow-Origin', $request->headers->get('Origin'));
-        if ($this->options['allow_credentials']) {
-            $response->headers->set('Access-Control-Allow-Credentials', 'true');
-        }
-        if ($this->options['expose_headers']) {
-            $response->headers->set('Access-Control-Expose-Headers', strtolower(implode(', ', $this->options['expose_headers'])));
-        }
+        $response->headers->add($this->app['laravel-cors.headers']);
+        return $response;
     }
 
     protected function getPreflightResponse(Request $request, array $options)

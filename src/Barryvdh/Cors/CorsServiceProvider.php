@@ -76,11 +76,15 @@ class CorsServiceProvider extends ServiceProvider {
             $config['paths'][$path] = $opts;
         }
 
-        $app = $this->app;
-        $this->app->before(function(Request $request) use ($app, $config, $defaults){
-               $listener = new CorsListener($app, $config['paths'], $defaults);
-               return $listener->onAppBefore($request);
+
+        $listener = new CorsListener($this->app, $config['paths'], $defaults);
+
+        $this->app->before(function(Request $request) use ($listener){
+               return $listener->checkRequest($request);
             });
+        $this->app->after(function(Request $request, $response) use ($listener){
+            $listener->modifyResponse($request, $response);
+        });
 
     }
 
