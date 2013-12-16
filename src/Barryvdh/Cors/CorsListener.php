@@ -73,11 +73,11 @@ class CorsListener
                 // Save response headers
                 $headers = array();
                 $headers['Access-Control-Allow-Origin'] =  $request->headers->get('Origin');
-                if ($this->options['allow_credentials']) {
+                if ($options['allow_credentials']) {
                     $headers['Access-Control-Allow-Credentials'] = 'true';
                 }
-                if ($this->options['expose_headers']) {
-                    $headers['Access-Control-Expose-Headers'] = strtolower(implode(', ', $this->options['expose_headers']));
+                if ($options['expose_headers']) {
+                    $headers['Access-Control-Expose-Headers'] = strtolower(implode(', ', $options['expose_headers']));
                 }
                 $this->app['laravel-cors.send'] = true;
                 $this->app['laravel-cors.headers'] = $headers;
