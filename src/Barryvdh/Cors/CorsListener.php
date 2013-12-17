@@ -36,6 +36,7 @@ class CorsListener
     protected $paths;
     protected $defaults;
     protected $runAfter = false;
+    protected $headers = array();
 
     public function __construct(Application $app, array $paths, array $defaults = array())
     {
@@ -69,16 +70,17 @@ class CorsListener
                 $this->runAfter = true;
 
                 // Save response headers
-                $headers = array();
-                $headers['Access-Control-Allow-Origin'] =  $request->headers->get('Origin');
+                $this->headers['Access-Control-Allow-Origin'] =  $request->headers->get('Origin');
                 if ($options['allow_credentials']) {
-                    $headers['Access-Control-Allow-Credentials'] = 'true';
+                    $this->headers['Access-Control-Allow-Credentials'] = 'true';
                 }
                 if ($options['expose_headers']) {
-                    $headers['Access-Control-Expose-Headers'] = strtolower(implode(', ', $options['expose_headers']));
+                    $this->headers['Access-Control-Expose-Headers'] = strtolower(implode(', ', $options['expose_headers']));
                 }
+
+                //For Laravel 4.0, to modify the headers for custom responses
                 $this->app['laravel-cors.send'] = true;
-                $this->app['laravel-cors.headers'] = $headers;
+                $this->app['laravel-cors.headers'] = $this->headers;
 
                 return;
             }
@@ -90,8 +92,9 @@ class CorsListener
         if(!$this->runAfter){
             return $response;
         }
+
         // add CORS response headers
-        $response->headers->add($this->app['laravel-cors.headers']);
+        $response->headers->add($this->headers);
         return $response;
     }
 
