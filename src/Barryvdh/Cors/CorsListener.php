@@ -35,8 +35,6 @@ class CorsListener
     protected $app;
     protected $paths;
     protected $defaults;
-    protected $options;
-
     protected $runAfter = false;
 
     public function __construct(Application $app, array $paths, array $defaults = array())
