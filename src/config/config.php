@@ -1,6 +1,4 @@
 <?php
-use Assetic\FilterManager;
-use Assetic\AssetManager;
 
 return array(
 
