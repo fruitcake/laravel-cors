@@ -32,7 +32,7 @@ class CorsServiceProvider extends ServiceProvider
     public function register()
     {
         $request = $this->app['request'];
-        if (!$this->app['request']->headers->has('Origin')) {
+        if (!$request->headers->has('Origin') || $request->headers->get('Origin') == $request->getSchemeAndHttpHost()) {
             return;
         }
 
