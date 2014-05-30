@@ -1,9 +1,10 @@
 <?php namespace Barryvdh\Cors;
 
 
+use Illuminate\Support\Str;
 use ReflectionClass;
 use Illuminate\Support\ServiceProvider;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 /*
  * This file is based on the NelmioCorsBundle.
@@ -31,6 +32,7 @@ class CorsServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        /** @var \Illuminate\Http\Request $request */
         $request = $this->app['request'];
         if (!$request->headers->has('Origin') || $request->headers->get('Origin') == $request->getSchemeAndHttpHost()) {
             return;
@@ -52,14 +54,17 @@ class CorsServiceProvider extends ServiceProvider
         $paths = $this->app['config']->get('laravel-cors::config.paths', array());
 
         $uri = $request->getPathInfo() ? : '/';
-        foreach ($paths as $pathRegexp => $options) {
-            if (preg_match('{' . $pathRegexp . '}i', $uri)) {
+        $host = $request->getHost();
+
+        foreach ($paths as $pathPattern => $options) {
+            //Check for legacy patterns
+            if ($request->is($pathPattern) || (\Str::startsWith($pathPattern, '^') && preg_match('{' . $pathPattern . '}i', $uri))) {
                 $options = array_merge($defaults, $this->normalizeOptions($options));
 
                 // skip if the host is not matching
                 if (isset($options['hosts']) && count($options['hosts']) > 0) {
-                    foreach ($options['hosts'] as $hostRegexp) {
-                        if (preg_match('{' . $hostRegexp . '}i', $request->getHost())) {
+                    foreach ($options['hosts'] as $hostPattern) {
+                        if (Str::is($hostPattern, $host)) {
                             return $options;
                         }
                     }

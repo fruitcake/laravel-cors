@@ -17,8 +17,8 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 ## Configuration
 
 The `defaults` are the default values applied to all the `paths` that match,
-unless overriden in a specific URL configuration. If you want them to apply
-to everything, you must define a path with `^/`. Use the `hosts` key to restrict
+unless overridden in a specific URL configuration. This uses the same syntax as Request::is($pattern)
+If you want them to apply to everything, you must define a path with `*`. Use the `hosts` key to restrict
 the matches only to specific subdomains.
 
 This example config contains all the possible config values with their default
@@ -38,18 +38,18 @@ seconds.
     ),
 
     'paths' => array(
-        '^/api/' => array(
+        'api/*' => array(
             'allowedOrigins' => array('*'),
             'allowedHeaders' => array('Content-Type'),
             'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
             'maxAge' => 3600,
         ),
-        '^/' => array(
+        '*' => array(
             'allowedOrigins' => array('*'),
             'allowedHeaders' => array('Content-Type'),
             'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
             'maxAge' => 3600,
-            'hosts' => array('^api\.'),
+            'hosts' => array('api.*'),
         ),
     ),
 
