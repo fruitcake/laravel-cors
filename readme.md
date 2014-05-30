@@ -7,7 +7,7 @@ Based on https://github.com/nelmio/NelmioCorsBundle and https://github.com/asm89
 
 ## About
 
-The LaravelCorsBundle allows you to send [Cross-Origin Resource Sharing](http://enable-cors.org/)
+The `laravel-cors` package allows you to send [Cross-Origin Resource Sharing](http://enable-cors.org/)
 headers with ACL-style per-url configuration.
 
 If you want to have have a global overview of CORS workflow, you can  browse
