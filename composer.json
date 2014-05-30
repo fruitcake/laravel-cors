@@ -1,7 +1,8 @@
 {
     "name": "barryvdh/laravel-cors",
     "description": "Adds CORS (Cross-Origin Resource Sharing) headers support in your Laravel application",
-    "tags": ["laravel", "cors", "crossdomain", "api"],
+    "keywords": ["laravel", "cors", "crossdomain", "api"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Barry vd. Heuvel",
@@ -15,7 +16,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Barryvdh\\Cors": "src/"
+            "Barryvdh\\Cors\\": "src/"
         }
     },
     "minimum-stability": "dev"
