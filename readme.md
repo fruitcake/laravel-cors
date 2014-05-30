@@ -1,6 +1,10 @@
 # CORS in Laravel 4.1+
 Based on https://github.com/nelmio/NelmioCorsBundle and https://github.com/asm89/stack-cors
 
+> **Note:** If you are coming from 0.1.0 (or dev-master), the configuration for 0.2.0 has changed.
+> The old config still works, but is deprecated and will probably be removed in future releases.
+> Make sure you require `0.2.x` and not `dev-master` to prevent breaking changes.
+
 ## About
 
 The LaravelCorsBundle allows you to send [Cross-Origin Resource Sharing](http://enable-cors.org/)
