@@ -33,6 +33,7 @@ seconds.
         'allowedMethods' => array(),
         'exposedHeaders' => array(),
         'maxAge' => 0,
+        'hosts' => array(),
     ),
 
     'paths' => array(
@@ -42,10 +43,20 @@ seconds.
             'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
             'maxAge' => 3600,
         ),
+        '^/' => array(
+            'allowedOrigins' => array('*'),
+            'allowedHeaders' => array('Content-Type'),
+            'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
+            'maxAge' => 3600,
+            'hosts' => array('^api\.'),
+        ),
     ),
+
 
 `allowedOrigins` and `allowedHeaders` can be set to `*` to accept any value, the
 allowed methods however have to be explicitly listed.
+
+> **Note:** Because of [http method overriding](http://symfony.com/doc/current/reference/configuration/framework.html#http-method-override) in Laravel, allowing POST methods will also enable the API users to perform PUT and DELETE requests as well.
 
 ## Installation
 

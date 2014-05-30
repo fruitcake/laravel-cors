@@ -27,23 +27,42 @@ class CorsServiceProvider extends ServiceProvider {
 	public function register()
 	{
         $request = $this->app['request'];
-        if(!$request->headers->has('Origin')){
+        if(!$this->app['request']->headers->has('Origin')){
             return;
         }
 
         $this->package('barryvdh/laravel-cors');
+        $this->app->middleware('Asm89\Stack\Cors', array($this->getOptions($request)));
+	}
+
+    protected function getOptions(Request $request){
+
         $defaults = $this->normalizeOptions($this->app['config']->get('laravel-cors::config.defaults', array()));
         $paths = $this->app['config']->get('laravel-cors::config.paths', array());
 
-        $currentPath = $request->getPathInfo() ?: '/';
-        foreach ($paths as $path => $options) {
-            if (preg_match('{' . $path . '}i', $currentPath)) {
+        $uri = $request->getPathInfo() ?: '/';
+        foreach ($paths as $pathRegexp  => $options) {
+            if (preg_match('{' . $pathRegexp . '}i', $uri)) {
                 $options = array_merge($defaults, $this->normalizeOptions($options));
-                $this->app->middleware('Asm89\Stack\Cors', array($options));
-                return;
+
+                // skip if the host is not matching
+                if (count($options['hosts']) > 0) {
+                    foreach ($options['hosts'] as $hostRegexp) {
+                        if (preg_match('{'.$hostRegexp.'}i', $request->getHost())) {
+                            return $options;
+                        }
+                    }
+
+                    continue;
+                }
+
+                return $options;
             }
         }
-	}
+
+        return $defaults;
+
+    }
 
     protected function normalizeOptions($options){
         $replaces = array(

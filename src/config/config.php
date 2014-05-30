@@ -22,6 +22,7 @@ return array(
         'allowedMethods' => array(),
         'exposedHeaders' => array(),
         'maxAge' => 0,
+        'hosts' => array(),
     ),
 
     'paths' => array(
@@ -30,6 +31,13 @@ return array(
             'allowedHeaders' => array('Content-Type'),
             'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
             'maxAge' => 3600,
+        ),
+        '^/' => array(
+            'allowedOrigins' => array('*'),
+            'allowedHeaders' => array('Content-Type'),
+            'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
+            'maxAge' => 3600,
+            'hosts' => array('^api\.'),
         ),
     ),
 
