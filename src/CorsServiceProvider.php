@@ -31,7 +31,7 @@ class CorsServiceProvider extends ServiceProvider {
             return;
         }
 
-        $this->package('barryvdh/laravel-cors');
+        $this->app['config']->package('barryvdh/laravel-cors',realpath( __DIR__ . '/config'));
         $this->app->middleware('Asm89\Stack\Cors', array($this->getOptions($request)));
 	}
 
@@ -46,7 +46,7 @@ class CorsServiceProvider extends ServiceProvider {
                 $options = array_merge($defaults, $this->normalizeOptions($options));
 
                 // skip if the host is not matching
-                if (count($options['hosts']) > 0) {
+                if (isset($options['hosts']) && count($options['hosts']) > 0) {
                     foreach ($options['hosts'] as $hostRegexp) {
                         if (preg_match('{'.$hostRegexp.'}i', $request->getHost())) {
                             return $options;
