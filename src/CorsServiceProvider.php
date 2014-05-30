@@ -58,7 +58,7 @@ class CorsServiceProvider extends ServiceProvider
 
         foreach ($paths as $pathPattern => $options) {
             //Check for legacy patterns
-            if ($request->is($pathPattern) || (\Str::startsWith($pathPattern, '^') && preg_match('{' . $pathPattern . '}i', $uri))) {
+            if ($request->is($pathPattern) || (Str::startsWith($pathPattern, '^') && preg_match('{' . $pathPattern . '}i', $uri))) {
                 $options = array_merge($defaults, $this->normalizeOptions($options));
 
                 // skip if the host is not matching
