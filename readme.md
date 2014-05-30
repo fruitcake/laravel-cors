@@ -18,7 +18,8 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 The `defaults` are the default values applied to all the `paths` that match,
 unless overriden in a specific URL configuration. If you want them to apply
-to everything, you must define a path with `^/`.
+to everything, you must define a path with `^/`. Use the `hosts` key to restrict
+the matches only to specific subdomains.
 
 This example config contains all the possible config values with their default
 values shown in the `defaults` key. In paths, you see that we allow CORS
@@ -53,7 +54,7 @@ seconds.
     ),
 
 
-`allowedOrigins` and `allowedHeaders` can be set to `*` to accept any value, the
+`allowedOrigins`, `allowedHeaders` and `allowedMethods` can be set to `array('*')` to accept any value, the
 allowed methods however have to be explicitly listed.
 
 > **Note:** Because of [http method overriding](http://symfony.com/doc/current/reference/configuration/framework.html#http-method-override) in Laravel, allowing POST methods will also enable the API users to perform PUT and DELETE requests as well.
