@@ -16,28 +16,19 @@ return array(
      |
      */
     'defaults' => array(
-        'supportsCredentials' => false,
-        'allowedOrigins' => array(),
-        'allowedHeaders' => array(),
-        'allowedMethods' => array(),
-        'exposedHeaders' => array(),
-        'maxAge' => 0,
-        'hosts' => array(),
+        'allow_credentials' => false,
+        'allow_origin' => array(),
+        'allow_headers' => array(),
+        'allow_methods' => array(),
+        'expose_headers' => array(),
+        'max_age' => 0,
     ),
-
     'paths' => array(
-        '^/api/' => array(
-            'allowedOrigins' => array('*'),
-            'allowedHeaders' => array('Content-Type'),
-            'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
-            'maxAge' => 3600,
-        ),
-        '^/' => array(
-            'allowedOrigins' => array('*'),
-            'allowedHeaders' => array('Content-Type'),
-            'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
-            'maxAge' => 3600,
-            'hosts' => array('^api\.'),
+        '^/ajax/' => array(
+            'allow_origin' => array('*'),
+            'allow_headers' => array('*'),
+            'allow_methods' => array('POST', 'PUT', 'GET', 'DELETE', 'OPTIONS'),
+            'max_age' => 3600,
         ),
     ),
 
