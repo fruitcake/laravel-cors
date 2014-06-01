@@ -28,8 +28,8 @@ return array(
     'paths' => array(
         'api/*' => array(
             'allowedOrigins' => array('*'),
-            'allowedHeaders' => array('Content-Type'),
-            'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
+            'allowedHeaders' => array('*'),
+            'allowedMethods' => array('*'),
             'maxAge' => 3600,
         ),
         '*' => array(
