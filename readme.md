@@ -31,6 +31,8 @@ requests from any origin on `/api/`. One custom header and some HTTP methods
 are defined as allowed as well. Preflight requests can be cached for 3600
 seconds.
 
+> **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the allowedHeaders to include those headers. You can also set it to `array('*')` to allow all custom headers.
+
     'defaults' => array(
         'supportsCredentials' => false,
         'allowedOrigins' => array(),
@@ -44,8 +46,8 @@ seconds.
     'paths' => array(
         'api/*' => array(
             'allowedOrigins' => array('*'),
-            'allowedHeaders' => array('Content-Type'),
-            'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
+            'allowedHeaders' => array('*'),
+            'allowedMethods' => array('*'),
             'maxAge' => 3600,
         ),
         '*' => array(
