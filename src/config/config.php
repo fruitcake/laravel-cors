@@ -9,10 +9,10 @@ return array(
      |
      | The defaults are the default values applied to all the paths that match,
      | unless overridden in a specific URL configuration.
-     | If you want them to apply to everything, you must define a path with ^/.
+     | If you want them to apply to everything, you must define a path with *.
      |
-     | allow_origin and allow_headers can be set to * to accept any value,
-     | the allowed methods however have to be explicitly listed.
+     | allowedOrigins, allowedHeaders and allowedMethods can be set to array('*') 
+     | to accept any value, the allowed methods however have to be explicitly listed.
      |
      */
     'defaults' => array(
