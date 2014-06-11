@@ -4,6 +4,7 @@ Based on https://github.com/nelmio/NelmioCorsBundle and https://github.com/asm89
 > **Note:** If you are coming from 0.1.0 (or dev-master), the configuration for 0.2.0 has changed.
 > The old config still works, but is deprecated and will probably be removed in future releases.
 > Make sure you require `0.2.x` and not `dev-master` to prevent breaking changes.
+> The headers are also no longer in `app('laravel-cors.send')`, as this is not needed for error handling with the Middleware.
 
 ## About
 
