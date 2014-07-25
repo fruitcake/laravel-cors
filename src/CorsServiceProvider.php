@@ -32,13 +32,27 @@ class CorsServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app['config']->package('barryvdh/laravel-cors', realpath(__DIR__ .'/config'));
+
+        //Make sure that the Cors code is run early in the application so that bad requests wont consume server resources.
+        $this->app->before(function (Request $request) {
+            $this->passRequestToMiddleware($request);
+        });
+   }
+
+    /**
+    *  Check for a cross origin request. If true, pass it on to Asm89's middleware
+    *
+    * @return void
+    */
+    protected function passRequestToMiddleware(Request $request)
+    {
         /** @var \Illuminate\Http\Request $request */
         $request = $this->app['request'];
         if (!$request->headers->has('Origin') || $request->headers->get('Origin') == $request->getSchemeAndHttpHost()) {
             return;
         }
 
-        $this->app['config']->package('barryvdh/laravel-cors', realpath(__DIR__ . '/config'));
         $this->app->middleware('Asm89\Stack\Cors', array($this->getOptions($request)));
     }
 
