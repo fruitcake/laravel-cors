@@ -75,6 +75,10 @@ Require the `barryvdh/laravel-cors` package in your composer.json and update you
 Add the CorsServiceProvider to your app/config/app.php providers array:
 
      'Barryvdh\Cors\CorsServiceProvider',
+     
+For Laravel 5.x, you need to add the Middleware to your App Kernel:
+
+    'Barryvdh\Cors\Middleware\HandleCors',
 
 Publish the config file to create your own configuration:
 

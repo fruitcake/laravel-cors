@@ -1,8 +1,7 @@
 <?php namespace Barryvdh\Cors;
 
-
+use Asm89\Stack\CorsService;
 use Illuminate\Support\Str;
-use ReflectionClass;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Request;
 
@@ -34,12 +33,18 @@ class CorsServiceProvider extends ServiceProvider
     {
         /** @var \Illuminate\Http\Request $request */
         $request = $this->app['request'];
-        if (!$request->headers->has('Origin') || $request->headers->get('Origin') == $request->getSchemeAndHttpHost()) {
-            return;
-        }
 
         $this->app['config']->package('barryvdh/laravel-cors', realpath(__DIR__ . '/config'));
-        $this->app->middleware('Asm89\Stack\Cors', array($this->getOptions($request)));
+
+        if ($this->checkVersion('5.0-dev', '<')) {
+            if ($request->headers->has('Origin') && $request->headers->get('Origin') !== $request->getSchemeAndHttpHost()) {
+                $this->app->middleware('Asm89\Stack\Cors', array($this->getOptions($request)));
+            }
+        } else {
+            $this->app->bind('Asm89\Stack\CorsService', function() use($request){
+                return new CorsService($this->getOptions($request));
+            });
+        }
     }
 
     /**
@@ -102,8 +107,18 @@ class CorsServiceProvider extends ServiceProvider
             }
         }
         return $options;
-
     }
 
+    /**
+     * Compare the current Laravel version
+     *
+     * @param $version
+     * @param null $operator
+     * @return mixed
+     */
+    protected function checkVersion($version, $operator = null)
+    {
+        return version_compare($this->app->version(), $version, $operator);
+    }
 
 }
