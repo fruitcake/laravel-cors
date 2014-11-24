@@ -118,7 +118,8 @@ class CorsServiceProvider extends ServiceProvider
      */
     protected function checkVersion($version, $operator = null)
     {
-        return version_compare($this->app->version(), $version, $operator);
+        $app = $this->app;
+        return version_compare($app::VERSION, $version, $operator);
     }
 
 }
