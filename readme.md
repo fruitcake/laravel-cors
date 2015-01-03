@@ -1,10 +1,5 @@
-# CORS in Laravel 4.1+
+# CORS in Laravel 5
 Based on https://github.com/nelmio/NelmioCorsBundle and https://github.com/asm89/stack-cors
-
-> **Note:** If you are coming from 0.1.0 (or dev-master), the configuration for 0.2.0 has changed.
-> The old config still works, but is deprecated and will probably be removed in future releases.
-> Make sure you require `0.2.x` and not `dev-master` to prevent breaking changes.
-> The headers are also no longer in `app('laravel-cors.send')`, as this is not needed for error handling with the Middleware.
 
 ## About
 
@@ -70,13 +65,13 @@ allowed methods however have to be explicitly listed.
 
 Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
 
-    $ composer require barryvdh/laravel-cors:0.2.x
+    $ composer require barryvdh/laravel-cors
 
 Add the CorsServiceProvider to your app/config/app.php providers array:
 
      'Barryvdh\Cors\CorsServiceProvider',
      
-For Laravel 5.x, you need to add the Middleware to your App Kernel:
+Then add the Middleware to your App Kernel:
 
     'Barryvdh\Cors\Middleware\HandleCors',
 

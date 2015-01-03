@@ -34,17 +34,14 @@ class CorsServiceProvider extends ServiceProvider
         /** @var \Illuminate\Http\Request $request */
         $request = $this->app['request'];
 
-        $this->app['config']->package('barryvdh/laravel-cors', realpath(__DIR__ . '/config'));
+         // Load the config
+        $config = require __DIR__ . '/config/config.php';
+        $this->app['config']->set('laravel-cors', $config);
 
-        if ($this->checkVersion('5.0-dev', '<')) {
-            if ($request->headers->has('Origin') && $request->headers->get('Origin') !== $request->getSchemeAndHttpHost()) {
-                $this->app->middleware('Asm89\Stack\Cors', array($this->getOptions($request)));
-            }
-        } else {
-            $this->app->bind('Asm89\Stack\CorsService', function() use($request){
-                return new CorsService($this->getOptions($request));
-            });
-        }
+        $this->app->bind('Asm89\Stack\CorsService', function() use($request){
+            return new CorsService($this->getOptions($request));
+        });
+
     }
 
     /**
@@ -55,8 +52,8 @@ class CorsServiceProvider extends ServiceProvider
      */
     protected function getOptions(Request $request)
     {
-        $defaults = $this->normalizeOptions($this->app['config']->get('laravel-cors::config.defaults', array()));
-        $paths = $this->app['config']->get('laravel-cors::config.paths', array());
+        $defaults = $this->normalizeOptions($this->app['config']->get('laravel-cors.defaults', array()));
+        $paths = $this->app['config']->get('laravel-cors.paths', array());
 
         $uri = $request->getPathInfo() ? : '/';
         $host = $request->getHost();
