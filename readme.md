@@ -75,11 +75,7 @@ Then add the Middleware to your App Kernel:
 
     'Barryvdh\Cors\Middleware\HandleCors',
 
-Publish the config file to create your own configuration:
-
-     $ php artisan config:publish barryvdh/laravel-cors
-
-The config.php file will be published in app/config/packages/barryvdh/laravel-cors
+Set the `laravel-cors.paths` and `laravel-cors.defaults` config in ConfigServiceProvider, or copy config/config.php to a local `config/laravel-cors.php` file.
 
 ## License
 
