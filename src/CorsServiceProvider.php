@@ -34,9 +34,9 @@ class CorsServiceProvider extends ServiceProvider
         /** @var \Illuminate\Http\Request $request */
         $request = $this->app['request'];
 
-         // Load the config
-        $config = require __DIR__ . '/config/config.php';
-        $this->app['config']->set('laravel-cors', $config);
+         // Register the config publish path
+        $configPath = __DIR__ . '/../config/cors.php';
+        $this->publishes([$configPath => config_path('cors.php')]);
 
         $this->app->bind('Asm89\Stack\CorsService', function() use($request){
             return new CorsService($this->getOptions($request));
@@ -52,8 +52,8 @@ class CorsServiceProvider extends ServiceProvider
      */
     protected function getOptions(Request $request)
     {
-        $defaults = $this->normalizeOptions($this->app['config']->get('laravel-cors.defaults', array()));
-        $paths = $this->app['config']->get('laravel-cors.paths', array());
+        $defaults = $this->app['config']->get('cors.defaults', []);
+        $paths = $this->app['config']->get('cors.paths', []);
 
         $uri = $request->getPathInfo() ? : '/';
         $host = $request->getHost();
@@ -61,7 +61,7 @@ class CorsServiceProvider extends ServiceProvider
         foreach ($paths as $pathPattern => $options) {
             //Check for legacy patterns
             if ($request->is($pathPattern) || (Str::startsWith($pathPattern, '^') && preg_match('{' . $pathPattern . '}i', $uri))) {
-                $options = array_merge($defaults, $this->normalizeOptions($options));
+                $options = array_merge($defaults, $options);
 
                 // skip if the host is not matching
                 if (isset($options['hosts']) && count($options['hosts']) > 0) {
@@ -78,45 +78,5 @@ class CorsServiceProvider extends ServiceProvider
         }
 
         return $defaults;
-
     }
-
-    /**
-     * Normalize the options for backwards compatibility.
-     *
-     * @param array $options
-     * @return array
-     */
-    protected function normalizeOptions($options)
-    {
-        $replaces = array(
-            'allow_credentials' => 'supportsCredentials',
-            'allow_origin' => 'allowedOrigins',
-            'allow_headers' => 'allowedHeaders',
-            'allow_methods' => 'allowedMethods',
-            'expose_headers' => 'exposedHeaders',
-            'max_age' => 'maxAge',
-        );
-        foreach ($options as $k => $v) {
-            if (isset($replaces[$k])) {
-                $options[$replaces[$k]] = $v;
-                unset($options[$k]);
-            }
-        }
-        return $options;
-    }
-
-    /**
-     * Compare the current Laravel version
-     *
-     * @param $version
-     * @param null $operator
-     * @return mixed
-     */
-    protected function checkVersion($version, $operator = null)
-    {
-        $app = $this->app;
-        return version_compare($app::VERSION, $version, $operator);
-    }
-
 }
