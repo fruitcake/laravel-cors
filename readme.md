@@ -65,7 +65,7 @@ allowed methods however have to be explicitly listed.
 
 Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
 
-    $ composer require barryvdh/laravel-cors 0.3.x@dev
+    $ composer require barryvdh/laravel-cors 0.4.x@dev
 
 Add the CorsServiceProvider to your app/config/app.php providers array:
 
