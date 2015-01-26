@@ -1,7 +1,7 @@
 # CORS in Laravel 4.1+
 Based on https://github.com/nelmio/NelmioCorsBundle and https://github.com/asm89/stack-cors
 
-For Laravel 5, see the [0.3 branch](https://github.com/barryvdh/laravel-cors/tree/0.3)
+For Laravel 5, see the [0.4 branch](https://github.com/barryvdh/laravel-cors/tree/0.3)
 
 > **Note:** If you are coming from 0.1.0 (or dev-master), the configuration for 0.2.0 has changed.
 > The old config still works, but is deprecated and will probably be removed in future releases.
