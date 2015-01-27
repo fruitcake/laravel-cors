@@ -84,7 +84,7 @@ For Laravel 5.x, you need to add the Middleware to your App Kernel:
 
 Publish the config file to create your own configuration:
 
-     $ php artisan config:publish barryvdh/laravel-cors
+     $ php artisan publish:config barryvdh/laravel-cors
 
 The config.php file will be published in app/config/packages/barryvdh/laravel-cors
 
