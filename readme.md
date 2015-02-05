@@ -1,6 +1,8 @@
 # CORS in Laravel 5
 Based on https://github.com/nelmio/NelmioCorsBundle and https://github.com/asm89/stack-cors
 
+### For Laravel 4, please use the [0.2 branch](https://github.com/barryvdh/laravel-cors/tree/0.2)!
+
 ## About
 
 The `laravel-cors` package allows you to send [Cross-Origin Resource Sharing](http://enable-cors.org/)
