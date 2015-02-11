@@ -37,7 +37,7 @@ class HandleCors implements Middleware {
 		}
 
 		if ( ! $this->cors->isActualRequestAllowed($request)) {
-			return new Response('Not allowed.', 403);
+			abort(403);
 		}
 
 		$response = $next($request);
