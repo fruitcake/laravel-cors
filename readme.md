@@ -31,6 +31,8 @@ seconds.
 
 > **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the allowedHeaders to include those headers. You can also set it to `array('*')` to allow all custom headers.
 
+> **Note:** If you are explicitly whitelisting headers, you must include `Origin` or requests will fail to be recognized as CORS.
+
     'defaults' => array(
         'supportsCredentials' => false,
         'allowedOrigins' => array(),
