@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "5.0.x",
+        "illuminate/support": "~5.0.17",
         "asm89/stack-cors": "0.2.x"
     },
     "autoload": {
@@ -21,7 +21,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.4-dev"
+            "dev-master": "0.5-dev"
         }
     },
     "minimum-stability": "dev"

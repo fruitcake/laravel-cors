@@ -41,7 +41,56 @@ class CorsServiceProvider extends ServiceProvider
         $this->app->bind('Asm89\Stack\CorsService', function() use($request){
             return new CorsService($this->getOptions($request));
         });
-
+    }
+    
+    /**
+     * Boot the service provider
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->app['router']->before([$this, 'onBefore']); 
+    }
+    
+    /**
+     * Check the Request before running it through the router.
+     * 
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response|null
+     */
+    public function onBefore($request)
+    {
+        $cors = $this->app['Asm89\Stack\CorsService'];
+        
+        if (
+            ! $cors->isCorsRequest($request)
+            || $request->headers->get('Origin') == $request->getSchemeAndHttpHost()
+        ) {
+            return;
+        }
+        
+        if ($cors->isPreflightRequest($request)) {
+            return $cors->handlePreflightRequest($request);
+        }
+        
+        if ( ! $cors->isActualRequestAllowed($request)) {
+            abort(403);
+        }
+        
+        $this->app['events']->listen('kernel.handled', [$this, 'onHandled']);
+    }
+    
+    /**
+     * Modify the Response object to add the correct headers.
+     * 
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Response $response
+     * @return void
+     */
+    public function onHandled($request, $response)
+    {
+        $this->app['Asm89\Stack\CorsService']->addActualRequestHeaders($response, $request);
     }
 
     /**
