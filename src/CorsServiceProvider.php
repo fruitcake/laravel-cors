@@ -34,9 +34,18 @@ class CorsServiceProvider extends ServiceProvider
         /** @var \Illuminate\Http\Request $request */
         $request = $this->app['request'];
 
-         // Register the config publish path
-        $configPath = __DIR__ . '/../config/cors.php';
-        $this->publishes([$configPath => config_path('cors.php')]);
+        //Lumen users need to copy the config file over to /config themselves
+        //and it needs to be pulled in with $this->app->configure().
+        if (str_contains($this->app->version(), 'Lumen')) {
+            $this->app->configure('cors');
+        }
+
+        //Laravel users can run artisan config:publish and config will be
+        //automatically read in with directory scanning.
+        else {
+            $configPath = __DIR__ . '/../config/cors.php';
+            $this->publishes([$configPath => config_path('cors.php')]);
+        }
 
         $this->app->bind('Asm89\Stack\CorsService', function() use($request){
             return new CorsService($this->getOptions($request));
