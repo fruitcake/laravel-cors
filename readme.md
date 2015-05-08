@@ -78,6 +78,13 @@ Add the CorsServiceProvider to your config/app.php providers array:
 Set the `cors.paths` and `cors.defaults` config in ConfigServiceProvider, or publish config/cors.php to a local `config/cors.php` file.
 
     php artisan vendor:publish --provider="Barryvdh\Cors\CorsServiceProvider"
+    
+Add Middleware to app/Http/Kernel.php:
+
+    protected $middleware = [
+        // ...
+        'Barryvdh\Cors\Middleware\HandleCors'
+    ];
 
 ## License
 
