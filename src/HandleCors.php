@@ -27,10 +27,6 @@ class HandleCors {
 			return $next($request);
 		}
 
-		if ($this->cors->isPreflightRequest($request)) {
-			return $this->cors->handlePreflightRequest($request);
-		}
-
 		if ( ! $this->cors->isActualRequestAllowed($request)) {
 			abort(403);
 		}
