@@ -3,8 +3,8 @@
 use Closure;
 use Asm89\Stack\CorsService;
 
-class HandlePreflight {
-
+class HandlePreflight
+{
 	/**
 	 * @param CorsService $cors
 	 */
@@ -14,7 +14,7 @@ class HandlePreflight {
 	}
 
 	/**
-	 * Handle an incoming OPTIONS request. 
+	 * Handle an incoming OPTIONS request.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
 	 * @param  \Closure  $next
@@ -22,10 +22,13 @@ class HandlePreflight {
 	 */
 	public function handle($request, Closure $next)
 	{
+		$response = $next($request);
+
 		if ($this->cors->isPreflightRequest($request)) {
-			return $this->cors->handlePreflightRequest($request);
+			$preflight = $this->cors->handlePreflightRequest($request);
+			$response->headers->add($preflight->headers->all());
 		}
 
-		return $next($request);
+		return $response;
 	}
 }
