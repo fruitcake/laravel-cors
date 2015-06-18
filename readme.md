@@ -1,5 +1,5 @@
 # CORS in Laravel 5
-Based on https://github.com/nelmio/NelmioCorsBundle and https://github.com/asm89/stack-cors
+Based on https://github.com/asm89/stack-cors
 
 ### For Laravel 4, please use the [0.2 branch](https://github.com/barryvdh/laravel-cors/tree/0.2)!
 
@@ -18,47 +18,23 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 ## Configuration
 
-The `defaults` are the default values applied to all the `paths` that match,
-unless overridden in a specific URL configuration. This uses the same syntax as Request::is($pattern)
-If you want them to apply to everything, you must define a path with `*`. Use the `hosts` key to restrict
-the matches only to specific subdomains.
+The defaults are set in `config/cors.php'. Copy this file to your own config directory to modify the values. You can publish the config using this command:
 
-This example config contains all the possible config values with their default
-values shown in the `defaults` key. In paths, you see that we allow CORS
-requests from any origin on `/api/`. One custom header and some HTTP methods
-are defined as allowed as well. Preflight requests can be cached for 3600
-seconds.
+    php artisan vendor:publish --provider="Barryvdh\Cors\ServiceProvider"
 
 > **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the allowedHeaders to include those headers. You can also set it to `array('*')` to allow all custom headers.
 
 > **Note:** If you are explicitly whitelisting headers, you must include `Origin` or requests will fail to be recognized as CORS.
 
-    'defaults' => array(
+    return [
         'supportsCredentials' => false,
-        'allowedOrigins' => array(),
-        'allowedHeaders' => array(),
-        'allowedMethods' => array(),
-        'exposedHeaders' => array(),
+        'allowedOrigins' => ['*'],
+        'allowedHeaders' => ['Content-Type', 'Accept'],
+        'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE'],
+        'exposedHeaders' => [],
         'maxAge' => 0,
-        'hosts' => array(),
-    ),
-
-    'paths' => array(
-        'api/*' => array(
-            'allowedOrigins' => array('*'),
-            'allowedHeaders' => array('*'),
-            'allowedMethods' => array('*'),
-            'maxAge' => 3600,
-        ),
-        '*' => array(
-            'allowedOrigins' => array('*'),
-            'allowedHeaders' => array('Content-Type'),
-            'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
-            'maxAge' => 3600,
-            'hosts' => array('api.*'),
-        ),
-    ),
-
+        'hosts' => [],
+    ]
 
 `allowedOrigins`, `allowedHeaders` and `allowedMethods` can be set to `array('*')` to accept any value, the
 allowed methods however have to be explicitly listed.
@@ -69,20 +45,44 @@ allowed methods however have to be explicitly listed.
 
 Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
 
-    $ composer require barryvdh/laravel-cors 0.6.x
+    $ composer require barryvdh/laravel-cors 0.7.x
 
-Add the CorsServiceProvider to your config/app.php providers array:
+Add the Cors\ServiceProvider to your config/app.php providers array:
 
-     'Barryvdh\Cors\CorsServiceProvider',
+     'Barryvdh\Cors\ServiceProvider',
      
-Then add the Middleware to your App Kernel:
+## Usage
 
-    'Barryvdh\Cors\Middleware\HandleCors',
+The ServiceProvider adds a route middleware you can use, called `cors`. You can apply this to a route or group to add CORS support.
 
-Set the `cors.paths` and `cors.defaults` config in ConfigServiceProvider, or publish config/cors.php to a local `config/cors.php` file.
+    Route::group(['middleware' => 'cors'], function(Router $router){
+        $router->get('api', 'ApiController@index');
+    });
 
-    php artisan vendor:publish --provider="Barryvdh\Cors\CorsServiceProvider"
+## Common problems and errors
 
+When an error occurs, the middleware isn't run completely. So when this happens, you won't see the actual result, but will get a CORS error.
+
+This could be a CSRF token error or just a simple problem.
+
+### Disabling CSRF protection for your API
+
+In `App\Http\Middleware\VerifyCsrfToken`, add your routes to the exceptions:
+
+    protected $except = [
+      'api/*'
+    ];
+    
+### Debugging errors
+
+A simple but hacky method is to just always send the CORS headers. This isn't recommended for production, but it will show you the actual errors.
+
+Add this to the top of `public/index.php`:
+
+    header("Access-Control-Allow-Origin: *");
+    
+Don't forget to remove that in production, so you can specify what routes/headers/origins are allowed.
+    
 ## License
 
 Released under the MIT License, see LICENSE.

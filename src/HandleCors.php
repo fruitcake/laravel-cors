@@ -1,11 +1,9 @@
-<?php namespace Barryvdh\Cors\Middleware;
+<?php namespace Barryvdh\Cors;
 
 use Closure;
 use Asm89\Stack\CorsService;
-use Illuminate\Contracts\Routing\Middleware;
-use Symfony\Component\HttpFoundation\Response;
 
-class HandleCors implements Middleware {
+class HandleCors {
 
 	/**
 	 * @param CorsService $cors
@@ -25,10 +23,7 @@ class HandleCors implements Middleware {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if (
-			! $this->cors->isCorsRequest($request)
-			|| $request->headers->get('Origin') == $request->getSchemeAndHttpHost()
-		) {
+		if ($this->isSameDomain($request) || ! $this->cors->isCorsRequest($request)) {
 			return $next($request);
 		}
 
@@ -43,5 +38,14 @@ class HandleCors implements Middleware {
 		$response = $next($request);
 
 		return $this->cors->addActualRequestHeaders($response, $request);
+	}
+
+	/**
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return bool
+	 */
+	protected function isSameDomain($request)
+	{
+		return $request->headers->get('Origin') == $request->getSchemeAndHttpHost();
 	}
 }
