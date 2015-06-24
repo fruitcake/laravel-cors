@@ -83,6 +83,19 @@ Add this to the top of `public/index.php`:
     
 Don't forget to remove that in production, so you can specify what routes/headers/origins are allowed.
     
+You can add the CORS headers to the Errors also, in your Exception Handler:
+
+    public function render($request, Exception $e)
+    {
+        $response = parent::render($request, $e);
+
+        if ($request->is('api/*')) {
+            app('Asm89\Stack\CorsService')->addActualRequestHeaders($response, $request);
+        }
+
+        return $response;
+    }
+    
 ## License
 
 Released under the MIT License, see LICENSE.
