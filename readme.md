@@ -59,6 +59,20 @@ The ServiceProvider adds a route middleware you can use, called `cors`. You can 
         $router->get('api', 'ApiController@index');
     });
 
+If you want CORS to apply for all your routes, add it as global middleware:
+
+    'Barryvdh\Cors\HandleCors',
+
+## Lumen
+
+On Laravel Lumen, use LumenServiceProvider:
+
+     'Barryvdh\Cors\LumenServiceProvider',
+
+And load your configuration file manually:
+
+    $app->configure('cors');
+
 ## Common problems and errors
 
 When an error occurs, the middleware isn't run completely. So when this happens, you won't see the actual result, but will get a CORS error.
