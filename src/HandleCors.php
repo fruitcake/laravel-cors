@@ -2,15 +2,31 @@
 
 use Closure;
 use Asm89\Stack\CorsService;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 
-class HandleCors {
+class HandleCors
+{
+    /**
+     * The Exception Handler
+     *
+     * @var ExceptionHandler
+     */
+    protected $exceptionHandler;
+    
+    /**
+     * The CORS service
+     *
+     * @var CorsService
+     */
+    protected $cors;
 
 	/**
 	 * @param CorsService $cors
 	 */
-	public function __construct(CorsService $cors)
+	public function __construct(CorsService $cors, ExceptionHandler $exceptionHandler)
 	{
 		$this->cors = $cors;
+		$this->exceptionHandler = $exceptionHandler;
 	}
 
 	/**
@@ -31,7 +47,13 @@ class HandleCors {
 			abort(403);
 		}
 
-		$response = $next($request);
+		try {
+		    /** @var \Illuminate\Http\Response $response */
+		    $response = $next($request);
+		} catch (\Exception $e) {
+		    $this->exceptionHandler->report($e);
+		    $response = $this->exceptionHandler->render($request, $e);
+		}
 
 		return $this->cors->addActualRequestHeaders($response, $request);
 	}
