@@ -40,7 +40,7 @@ class ServiceProvider extends BaseServiceProvider
         $this->app['router']->middleware('cors', 'Barryvdh\Cors\HandleCors');
 
         if ($request->isMethod('OPTIONS')) {
-            $kernel->pushMiddleware('Barryvdh\Cors\HandlePreflight');
+            $kernel->prependMiddleware('Barryvdh\Cors\HandlePreflight');
         }
     }
 
