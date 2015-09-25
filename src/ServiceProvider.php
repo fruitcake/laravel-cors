@@ -31,6 +31,7 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * Add the Cors middleware to the router.
      *
+     * @param Request $request
      * @param Kernel $kernel
      */
     public function boot(Request $request, Kernel $kernel)
