@@ -1,4 +1,6 @@
-<?php namespace Barryvdh\Cors;
+<?php
+
+namespace Barryvdh\Cors;
 
 use Asm89\Stack\CorsService;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
@@ -21,14 +23,13 @@ class LumenServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom($this->configPath(), 'cors');
 
-        $this->app->bind('Asm89\Stack\CorsService', function($app){
+        $this->app->bind('Asm89\Stack\CorsService', function ($app) {
             return new CorsService(config('cors'));
         });
     }
 
     /**
      * Add the Cors middleware to the router.
-     *
      */
     public function boot()
     {
@@ -38,9 +39,7 @@ class LumenServiceProvider extends BaseServiceProvider
         $request = app('Illuminate\Http\Request');
 
         if ($request->isMethod('OPTIONS')) {
-
-            $this->app->options($request->path(), function()
-            {
+            $this->app->options($request->path(), function () {
                 return response('OK', 200);
             });
 
@@ -50,6 +49,6 @@ class LumenServiceProvider extends BaseServiceProvider
 
     protected function configPath()
     {
-        return __DIR__ . '/../config/cors.php';
+        return __DIR__.'/../config/cors.php';
     }
 }
