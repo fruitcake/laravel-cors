@@ -1,4 +1,6 @@
-<?php namespace Barryvdh\Cors;
+<?php
+
+namespace Barryvdh\Cors;
 
 use Asm89\Stack\CorsService;
 use Illuminate\Contracts\Http\Kernel;
@@ -23,7 +25,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom($this->configPath(), 'cors');
 
-        $this->app->bind('Asm89\Stack\CorsService', function($app){
+        $this->app->bind('Asm89\Stack\CorsService', function ($app) {
             return new CorsService($app['config']->get('cors'));
         });
     }
@@ -46,6 +48,6 @@ class ServiceProvider extends BaseServiceProvider
 
     protected function configPath()
     {
-        return __DIR__ . '/../config/cors.php';
+        return __DIR__.'/../config/cors.php';
     }
 }
