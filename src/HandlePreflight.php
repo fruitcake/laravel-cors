@@ -22,13 +22,10 @@ class HandlePreflight
 	 */
 	public function handle($request, Closure $next)
 	{
-		$response = $next($request);
-
 		if ($this->cors->isPreflightRequest($request)) {
-			$preflight = $this->cors->handlePreflightRequest($request);
-			$response->headers->add($preflight->headers->all());
+			return $this->cors->handlePreflightRequest($request);
 		}
 
-		return $response;
+		return $next($request);
 	}
 }
