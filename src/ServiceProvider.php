@@ -23,7 +23,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom($this->configPath(), 'cors');
 
-        $this->app->bind('Asm89\Stack\CorsService', function($app){
+        $this->app->singleton(CorsService::class, function($app){
             return new CorsService($app['config']->get('cors'));
         });
     }
@@ -37,10 +37,10 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->publishes([$this->configPath() => config_path('cors.php')]);
 
-        $this->app['router']->middleware('cors', 'Barryvdh\Cors\HandleCors');
+        $this->app['router']->middleware('cors', HandleCors::class);
 
         if ($request->isMethod('OPTIONS')) {
-            $kernel->prependMiddleware('Barryvdh\Cors\HandlePreflight');
+            $kernel->prependMiddleware(HandlePreflight::class);
         }
     }
 
