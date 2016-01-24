@@ -45,15 +45,11 @@ allowed methods however have to be explicitly listed.
 
 Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
 
-    $ composer require barryvdh/laravel-cors 0.7.x
+    $ composer require barryvdh/laravel-cors 0.8.x
 
 Add the Cors\ServiceProvider to your config/app.php providers array:
 
      'Barryvdh\Cors\ServiceProvider',
-     
-Until a stable version is tagged, please require the dev version of asm89/stack-cors for Laravel 5.2
-
-    "asm89/stack-cors": "dev-master as 0.2"
      
 ## Usage
 
