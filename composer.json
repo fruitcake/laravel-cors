@@ -10,9 +10,9 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "illuminate/support": "~5.0.14|5.1.x|5.2.x",
-        "asm89/stack-cors": "0.2.x"
+        "php": ">=5.5.9",
+        "illuminate/support": "5.1.x|5.2.x",
+        "asm89/stack-cors": "0.2.x|dev-master"
     },
     "autoload": {
         "psr-4": {
@@ -21,7 +21,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.7-dev"
+            "dev-master": "0.8-dev"
         }
     }
 }
