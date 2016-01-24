@@ -51,6 +51,10 @@ Add the Cors\ServiceProvider to your config/app.php providers array:
 
      'Barryvdh\Cors\ServiceProvider',
      
+Until a stable version is tagged, please require the dev version of asm89/stack-cors for Laravel 5.2
+
+    "asm89/stack-cors": "dev-master as 0.2"
+     
 ## Usage
 
 The ServiceProvider adds a route middleware you can use, called `cors`. You can apply this to a route or group to add CORS support.
