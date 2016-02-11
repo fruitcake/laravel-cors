@@ -30,7 +30,7 @@ class HandleCors
 	 */
 	public function handle($request, Closure $next)
 	{
-		if ($this->isSameDomain($request) || ! $this->cors->isCorsRequest($request)) {
+		if (! $this->cors->isCorsRequest($request)) {
 			return $next($request);
 		}
 
@@ -44,12 +44,4 @@ class HandleCors
 		return $this->cors->addActualRequestHeaders($response, $request);
 	}
 
-	/**
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return bool
-	 */
-	protected function isSameDomain($request)
-	{
-		return $request->headers->get('Origin') == $request->getSchemeAndHttpHost();
-	}
 }
