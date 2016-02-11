@@ -1,7 +1,7 @@
 <?php namespace Barryvdh\Cors;
 
 use Closure;
-use Asm89\Stack\CorsService;
+use Barryvdh\Cors\Stack\CorsService;
 use Illuminate\Routing\Router;
 use Illuminate\Contracts\Http\Kernel;
 

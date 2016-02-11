@@ -1,6 +1,6 @@
 <?php namespace Barryvdh\Cors;
 
-use Asm89\Stack\CorsService;
+use Barryvdh\Cors\Stack\CorsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 

@@ -1,5 +1,6 @@
-Copyright (c) 2013 Barryvdh
-Based on NelmioCorsBundle by Nelmio / Jordi Boggiano: https://github.com/nelmio/NelmioCorsBundle
+Copyright (c) 2013-2016 Barry vd. Heuvel
+
+Copyright for portions of this project are held by [asm89 (Alexander)] as part of project asm89/stack-cors.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
