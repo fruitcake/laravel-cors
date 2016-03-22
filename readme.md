@@ -61,7 +61,7 @@ The ServiceProvider adds a route middleware you can use, called `cors`. You can 
 
 If you want CORS to apply for all your routes, add it as global middleware:
 
-    'Barryvdh\Cors\HandleCors',
+    \Barryvdh\Cors\HandleCors::class,
 
 ## Lumen
 
