@@ -54,8 +54,10 @@ class HandlePreflight
 		$request->setMethod($request->header('Access-Control-Request-Method'));
 
 		try {
-			$middleware = $this->router->getRoutes()->match($request)->middleware();
-			return in_array('cors', $middleware);
+			$route = $this->router->getRoutes()->match($request);
+			$middleware = $this->router->gatherRouteMiddlewares($route);
+
+			return in_array(HandleCors::class, $middleware);
 		} catch (\Exception $e){
 			return false;
 		}
