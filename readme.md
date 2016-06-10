@@ -74,9 +74,9 @@ And load your configuration file manually:
     $app->configure('cors');
 
 ## Common problems and errors
-In order for the package to works the requst has to be a valid CORS requst and needs to include a "Origin" header
+In order for the package to work, the request has to be a valid CORS requst and needs to include an "Origin" header.
 
-When an error occurs, the middleware isn't run completely. So when this happens, you won't see the actual result, but will get a CORS error.
+When an error occurs, the middleware isn't run completely. So when this happens, you won't see the actual result, but will get a CORS error instead.
 
 This could be a CSRF token error or just a simple problem.
 
