@@ -105,7 +105,7 @@ You can add the CORS headers to the Errors also, in your Exception Handler:
         $response = parent::render($request, $e);
 
         if ($request->is('api/*')) {
-            app('Asm89\Stack\CorsService')->addActualRequestHeaders($response, $request);
+            app('Barryvdh\Cors\Stack\CorsService')->addActualRequestHeaders($response, $request);
         }
 
         return $response;
