@@ -26,15 +26,17 @@ The defaults are set in `config/cors.php'. Copy this file to your own config dir
 
 > **Note:** If you are explicitly whitelisting headers, you must include `Origin` or requests will fail to be recognized as CORS.
 
-    return [
-        'supportsCredentials' => false,
-        'allowedOrigins' => ['*'],
-        'allowedHeaders' => ['Content-Type', 'Accept'],
-        'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE'],
-        'exposedHeaders' => [],
-        'maxAge' => 0,
-        'hosts' => [],
-    ]
+```php
+return [
+    'supportsCredentials' => false,
+    'allowedOrigins' => ['*'],
+    'allowedHeaders' => ['Content-Type', 'Accept'],
+    'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE'],
+    'exposedHeaders' => [],
+    'maxAge' => 0,
+    'hosts' => [],
+]
+```
 
 `allowedOrigins`, `allowedHeaders` and `allowedMethods` can be set to `array('*')` to accept any value, the
 allowed methods however have to be explicitly listed.
@@ -49,15 +51,17 @@ Require the `barryvdh/laravel-cors` package in your composer.json and update you
 
 Add the Cors\ServiceProvider to your config/app.php providers array:
 
-     'Barryvdh\Cors\ServiceProvider',
-     
+    'Barryvdh\Cors\ServiceProvider',
+    
 ## Usage
 
 The ServiceProvider adds a route middleware you can use, called `cors`. You can apply this to a route or group to add CORS support.
 
-    Route::group(['middleware' => 'cors'], function(Router $router){
-        $router->get('api', 'ApiController@index');
-    });
+```php
+Route::group(['middleware' => 'cors'], function(Router $router){
+    $router->get('api', 'ApiController@index');
+});
+```
 
 If you want CORS to apply for all your routes, add it as global middleware:
 
@@ -84,9 +88,11 @@ This could be a CSRF token error or just a simple problem.
 
 In `App\Http\Middleware\VerifyCsrfToken`, add your routes to the exceptions:
 
-    protected $except = [
-      'api/*'
-    ];
+```php
+protected $except = [
+  'api/*'
+];
+```
     
 ### Debugging errors
 
@@ -94,23 +100,26 @@ A simple but hacky method is to just always send the CORS headers. This isn't re
 
 Add this to the top of `public/index.php`:
 
-    header("Access-Control-Allow-Origin: *");
-    
+```php
+header("Access-Control-Allow-Origin: *");
+```
+
 Don't forget to remove that in production, so you can specify what routes/headers/origins are allowed.
     
 You can add the CORS headers to the Errors also, in your Exception Handler:
 
-    public function render($request, Exception $e)
-    {
-        $response = parent::render($request, $e);
+```php
+public function render($request, Exception $e)
+{
+    $response = parent::render($request, $e);
 
-        if ($request->is('api/*')) {
-            app('Barryvdh\Cors\Stack\CorsService')->addActualRequestHeaders($response, $request);
-        }
-
-        return $response;
+    if ($request->is('api/*')) {
+        app('Barryvdh\Cors\Stack\CorsService')->addActualRequestHeaders($response, $request);
     }
-    
+
+    return $response;
+}
+```
 ## License
 
 Released under the MIT License, see LICENSE.
