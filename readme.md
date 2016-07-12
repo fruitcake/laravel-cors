@@ -50,9 +50,10 @@ Require the `barryvdh/laravel-cors` package in your composer.json and update you
     $ composer require barryvdh/laravel-cors
 
 Add the Cors\ServiceProvider to your config/app.php providers array:
+```php
+    Barryvdh\Cors\ServiceProvider::class,
+```
 
-    'Barryvdh\Cors\ServiceProvider',
-    
 ## Usage
 
 The ServiceProvider adds a route middleware you can use, called `cors`. You can apply this to a route or group to add CORS support.
