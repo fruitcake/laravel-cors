@@ -13,6 +13,7 @@ return [
      */
     'supportsCredentials' => false,
     'allowedOrigins' => ['*'],
+    'allowedOriginsRegExp' => [],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],
     'exposedHeaders' => [],
