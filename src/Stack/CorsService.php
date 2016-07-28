@@ -2,6 +2,7 @@
 
 namespace Barryvdh\Cors\Stack;
 
+use Barryvdh\Cors\Util\OriginMatcher;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -165,7 +166,12 @@ class CorsService
         }
         $origin = $request->headers->get('Origin');
 
-        return in_array($origin, $this->options['allowedOrigins']);
+        foreach ($this->options['allowedOrigins'] as $allowedOrign) {
+            if (OriginMatcher::matches($allowedOrign, $origin)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function checkMethod(Request $request) {
