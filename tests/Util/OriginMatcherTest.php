@@ -48,23 +48,23 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
             ],
             [
                 'google.com:8080',
-                ['scheme' => null, 'host' => 'google.com', 'port' => 8080],
+                ['scheme' => null, 'host' => 'google.com', 'port' => '8080'],
             ],
             [
                 '*.google.com:8080',
-                ['scheme' => null, 'host' => '*.google.com', 'port' => 8080],
+                ['scheme' => null, 'host' => '*.google.com', 'port' => '8080'],
             ],
             [
                 'https://google.com:8080',
-                ['scheme' => 'https', 'host' => 'google.com', 'port' => 8080],
+                ['scheme' => 'https', 'host' => 'google.com', 'port' => '8080'],
             ],
             [
                 'https://*.google.com:8080',
-                ['scheme' => 'https', 'host' => '*.google.com', 'port' => 8080],
+                ['scheme' => 'https', 'host' => '*.google.com', 'port' => '8080'],
             ],
             [
                 'https://*.g-o_o1gLe.com:8080',
-                ['scheme' => 'https', 'host' => '*.g-o_o1gLe.com', 'port' => 8080],
+                ['scheme' => 'https', 'host' => '*.g-o_o1gLe.com', 'port' => '8080'],
             ],
             [
                 '*',
@@ -76,7 +76,7 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
             ],
             [
                 '*:8000',
-                ['scheme' => null, 'host' => '*', 'port' => 8000],
+                ['scheme' => null, 'host' => '*', 'port' => '8000'],
             ],
             [
                 '192.168.0.1',
@@ -86,12 +86,20 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
                 'localhost',
                 ['scheme' => null, 'host' => 'localhost', 'port' => null],
             ],
+            [
+                'google.com:8000-8888',
+                ['scheme' => null, 'host' => 'google.com', 'port' => '8000-8888'],
+            ],
+            [
+                'google.com:*',
+                ['scheme' => null, 'host' => 'google.com', 'port' => '*'],
+            ],
         ];
     }
 
     /**
      * @dataProvider parseOriginPatternInvalidPatternDataProvider
-     * @expectedException Exception
+     * @expectedException InvalidArgumentException
      */
     public function testParseOriginPatternInvalidPattern($pattern)
     {
@@ -107,12 +115,16 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
             ['http:/google.com'],
             ['//google.com'],
             ['google:com'],
+            ['google.com:foo'],
+            ['google.com:8000-'],
+            ['google.com:-8000'],
+            ['google.com:8-00-0'],
         ];
     }
 
     /**
      * @dataProvider parseOriginPatternInvalidComponentDataProvider
-     * @expectedException Exception
+     * @expectedException InvalidArgumentException
      */
     public function testParseOriginPatternInvalidComponent($pattern, $component)
     {
@@ -187,10 +199,22 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
     public function portMatchesDataProvider()
     {
         return [
-            [8080, 8080, true],
-            [null, 8080, true],
-            [8080, 8090, false],
-            [8000, null, false],
+            [null       , null, true ],
+            [null       , ''  , true ],
+            [8080       , 8080, true ],
+            ['8080'     , 8080, true ],
+            ['*'        , null, true ],
+            ['*'        , 8000, true ],
+            ['8000-9000', 8000, true ],
+            ['8000-9000', 8500, true ],
+            ['8000-9000', 9000, true ],
+            [null       , 8080, false],
+            [null       , 0   , false],
+            [8080       , 8090, false],
+            [8000       , null, false],
+            ['8000-8080', 7999, false],
+            ['8000-8080', 8081, false],
+            ['8000-8080', null, false],
         ];
     }
 
@@ -208,12 +232,14 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
     public function matchesDataProvider()
     {
         return [
-            ['google.com'            , 'google.com'                 , true ],
-            ['http://google.com'     , 'http://google.com'          , true ],
-            ['http://google.com:8000', 'http://google.com:8000'     , true ],
-            ['*.google.com'          , 'http://google.com:8000'     , true ],
-            ['*.google.com'          , 'http://maps.google.com:8000', true ],
-            ['http://*.google.com'   , 'https://maps.google.com'    , false],
+            ['http://google.com'     , 'http://google.com'      , true ],
+            ['google.com'            , 'http://google.com'      , true ],
+            ['http://google.com'     , 'http://google.com'      , true ],
+            ['http://google.com:8000', 'http://google.com:8000' , true ],
+            ['*.google.com'          , 'http://google.com'      , true ],
+            ['*.google.com:8000'     , 'http://google.com:8000' , true ],
+            ['*.google.com'          , 'http://maps.google.com' , true ],
+            ['http://*.google.com'   , 'https://maps.google.com', false],
         ];
     }
 }

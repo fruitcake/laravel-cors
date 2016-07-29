@@ -49,7 +49,19 @@ class OriginMatcher
 
     public static function portMatches($pattern, $port)
     {
-        return is_null($pattern) || $pattern === $port;
+        if ($pattern === "*") {
+            return true;
+        }
+        if ((string) $pattern === "") {
+            return (string) $port === "";
+        }
+        if (preg_match('/\A\d+\z/', $pattern)) {
+            return (string) $pattern === (string) $port;
+        }
+        if (preg_match('/\A(?P<from>\d+)-(?P<to>\d+)\z/', $pattern, $captured)) {
+            return $captured['from'] <= $port && $port <= $captured['to'];
+        }
+        throw new \InvalidArgumentException("Invalid port pattern: ${pattern}");
     }
 
     public static function parseOriginPattern($originPattern, $component = -1)
@@ -58,18 +70,18 @@ class OriginMatcher
             '!\A
                 (?: (?P<scheme> https? ):// )?
                 (?P<host> (?:\*|[\w-]+)(?:\.[\w-]+)* )
-                (?: :(?P<port> \d+ ) )?
+                (?: :(?P<port> (?: \*|\d+(?:-\d+)? ) ) )?
             \z!x',
             $originPattern,
             $captured
         );
         if (!$matched) {
-            throw new \Exception("Invalid origin pattern ${originPattern}");
+            throw new \InvalidArgumentException("Invalid origin pattern ${originPattern}");
         }
         $components = [
             'scheme' => $captured['scheme'] ?: null,
             'host'   => $captured['host'],
-            'port'   => array_key_exists('port', $captured) ? (int) $captured['port'] : null,
+            'port'   => array_key_exists('port', $captured) ? $captured['port'] : null,
         ];
         switch ($component) {
             case -1:
@@ -81,6 +93,6 @@ class OriginMatcher
             case PHP_URL_PORT:
                 return $components['port'];
         }
-        throw new \Exception("Invalid component: ${component}");
+        throw new \InvalidArgumentException("Invalid component: ${component}");
     }
 }
