@@ -55,7 +55,13 @@ class HandlePreflight
 
 		try {
 			$route = $this->router->getRoutes()->match($request);
-			$middleware = $this->router->gatherRouteMiddlewares($route);
+			// change of method name in laravel 5.3
+			if (method_exists($this->router, 'gatherRouteMiddleware')) {
+				$middleware = $this->router->gatherRouteMiddleware($route);
+			}
+			else {
+				$middleware = $this->router->gatherRouteMiddlewares($route);
+			}
 
 			return in_array(HandleCors::class, $middleware);
 		} catch (\Exception $e){
