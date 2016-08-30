@@ -66,7 +66,7 @@ Route::group(['middleware' => 'cors'], function(Router $router){
 
 If you want CORS to apply for all your routes, add it as global middleware:
 
-    'Barryvdh\Cors\HandleCors',
+    \Barryvdh\Cors\HandleCors::class,
 
 ## Lumen
 
