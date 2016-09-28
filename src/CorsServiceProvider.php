@@ -36,6 +36,10 @@ class CorsServiceProvider extends ServiceProvider
 
         $this->app['config']->package('barryvdh/laravel-cors', realpath(__DIR__ . '/config'));
 
+        if (!$this->pathMaches($request)) {
+            return;
+        }
+
         if ($this->checkVersion('5.0-dev', '<')) {
             if ($request->headers->has('Origin') && $request->headers->get('Origin') !== $request->getSchemeAndHttpHost()) {
                 $this->app->middleware('Asm89\Stack\Cors', array($this->getOptions($request)));
@@ -45,6 +49,26 @@ class CorsServiceProvider extends ServiceProvider
                 return new CorsService($this->getOptions($request));
             });
         }
+    }
+
+    /**
+     * Check if any configured paths match this request.
+     *
+     * @param Request $request
+     * @return bool
+     */
+    protected function pathMatches(Request $request)
+    {
+        $paths = $this->app['config']->get('laravel-cors::config.paths', array());
+        $uri = $request->getPathInfo() ? : '/';
+
+        foreach ($paths as $pathPattern => $options) {
+            if ($request->is($pathPattern) || (Str::startsWith($pathPattern, '^') && preg_match('{' . $pathPattern . '}i', $uri))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
