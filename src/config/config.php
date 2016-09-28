@@ -11,8 +11,8 @@ return array(
      | unless overridden in a specific URL configuration.
      | If you want them to apply to everything, you must define a path with *.
      |
-     | allowedOrigins can be set to array('*') to accept any value.
-     | allowedHeaders and allowedMethods have to be explicitly listed.
+     | allowedOrigins, allowedHeaders, and allowedMethods can be set to
+     | array('*') to accept any value.
      |
      */
     'defaults' => array(
@@ -28,8 +28,8 @@ return array(
     'paths' => array(
         'api/*' => array(
             'allowedOrigins' => array('*'),
-            'allowedHeaders' => array(),
-            'allowedMethods' => array('POST', 'PUT', 'GET', 'DELETE'),
+            'allowedHeaders' => array('*'),
+            'allowedMethods' => array('*'),
             'maxAge' => 3600,
         ),
         '*' => array(
