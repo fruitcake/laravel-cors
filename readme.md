@@ -50,8 +50,9 @@ Require the `barryvdh/laravel-cors` package in your composer.json and update you
     $ composer require barryvdh/laravel-cors
 
 Add the Cors\ServiceProvider to your config/app.php providers array:
+
 ```php
-    Barryvdh\Cors\ServiceProvider::class,
+Barryvdh\Cors\ServiceProvider::class,
 ```
 
 ## Usage
