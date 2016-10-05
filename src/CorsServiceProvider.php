@@ -36,7 +36,7 @@ class CorsServiceProvider extends ServiceProvider
 
         $this->app['config']->package('barryvdh/laravel-cors', realpath(__DIR__ . '/config'));
 
-        if (!$this->pathMaches($request)) {
+        if (!$this->pathMatches($request)) {
             return;
         }
 
