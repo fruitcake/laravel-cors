@@ -18,7 +18,7 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 ## Configuration
 
-The defaults are set in `config/cors.php'. Copy this file to your own config directory to modify the values. You can publish the config using this command:
+The defaults are set in `config/cors.php`. Copy this file to your own config directory to modify the values. You can publish the config using this command:
 
     php artisan vendor:publish --provider="Barryvdh\Cors\ServiceProvider"
 
