@@ -28,10 +28,20 @@ The defaults are set in `config/cors.php`. Copy this file to your own config dir
 
 ```php
 return [
+     /*
+     |--------------------------------------------------------------------------
+     | Laravel CORS
+     |--------------------------------------------------------------------------
+     |
+
+     | allowedOrigins, allowedHeaders and allowedMethods can be set to array('*')
+     | to accept any value.
+     |
+     */
     'supportsCredentials' => false,
     'allowedOrigins' => ['*'],
-    'allowedHeaders' => ['Content-Type', 'Accept'],
-    'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE'],
+    'allowedHeaders' => ['*'], // ex : ['Content-Type', 'Accept']
+    'allowedMethods' => ['*'], // ex: ['GET', 'POST', 'PUT',  'DELETE']
     'exposedHeaders' => [],
     'maxAge' => 0,
     'hosts' => [],
@@ -65,9 +75,11 @@ Route::group(['middleware' => 'cors'], function(Router $router){
 });
 ```
 
-If you want CORS to apply for all your routes, add it as global middleware:
-
-    'Barryvdh\Cors\HandleCors',
+If you want CORS to apply for all your routes, add it as global middleware in app/http/Kernal.php
+   protected $middleware = [
+        ....
+        \Barryvdh\Cors\HandleCors::class
+    ];
 
 ## Lumen
 
