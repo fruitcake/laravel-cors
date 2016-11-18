@@ -68,7 +68,7 @@ class OriginMatcher
     {
         $matched = preg_match(
             '!\A
-                (?: (?P<scheme> https? ):// )?
+                (?: (?P<scheme> ([a-z][a-z0-9+\-.]*) ):// )?
                 (?P<host> (?:\*|[\w-]+)(?:\.[\w-]+)* )
                 (?: :(?P<port> (?: \*|\d+(?:-\d+)? ) ) )?
             \z!x',
