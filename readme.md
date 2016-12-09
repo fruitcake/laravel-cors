@@ -75,17 +75,20 @@ Route::group(['middleware' => 'cors'], function(Router $router){
 });
 ```
 
-If you want CORS to apply for all your routes, add it as global middleware in app/http/Kernal.php
-   protected $middleware = [
-        ....
-        \Barryvdh\Cors\HandleCors::class
-    ];
+If you want CORS to apply for all your routes, add it as global middleware in `app/http/Kernel.php`:
+
+```php
+protected $middleware = [
+    ....
+    \Barryvdh\Cors\HandleCors::class
+];
+```
 
 ## Lumen
 
 On Laravel Lumen, use LumenServiceProvider:
 
-     'Barryvdh\Cors\LumenServiceProvider',
+    'Barryvdh\Cors\LumenServiceProvider',
 
 And load your configuration file manually:
 
