@@ -94,6 +94,10 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
                 'google.com:*',
                 ['scheme' => null, 'host' => 'google.com', 'port' => '*'],
             ],
+            [
+                'chrome-extension://aicmkgpgakddgnaphhhpliifpcfhicfo',
+                ['scheme' => 'chrome-extension', 'host' => 'aicmkgpgakddgnaphhhpliifpcfhicfo', 'port' => null],
+            ],
         ];
     }
 
@@ -111,7 +115,6 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
         return [
             ['foo.*'],
             ['foo..bar'],
-            ['ftp://google.com'],
             ['http:/google.com'],
             ['//google.com'],
             ['google:com'],
