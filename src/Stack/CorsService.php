@@ -90,7 +90,7 @@ class CorsService
         }
 
         if ($this->options['allowedHeaders']) {
-            $response->headers->set('Access-Control-Allow-Headers', implode(', ', $this->options['allowedHeaders']));
+            $response->headers->set('Access-Control-Allow-Headers', implode(', ', (array)$this->options['allowedHeaders']));
         }
         
         return $response;
