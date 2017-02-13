@@ -2,6 +2,7 @@
 
 use Closure;
 use Barryvdh\Cors\Stack\CorsService;
+use Illuminate\Http\Response;
 
 class HandleCors
 {
@@ -35,7 +36,7 @@ class HandleCors
 		}
 
 		if ( ! $this->cors->isActualRequestAllowed($request)) {
-			abort(403);
+			return new Response('Not allowed.', 403);
 		}
 
 		/** @var \Illuminate\Http\Response $response */

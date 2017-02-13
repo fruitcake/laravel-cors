@@ -1,12 +1,11 @@
 # CORS in Laravel 5
 Based on https://github.com/asm89/stack-cors
-
-### For Laravel 4, please use the [0.2 branch](https://github.com/barryvdh/laravel-cors/tree/0.2)!
+For Laravel 4, please use the [0.2 branch](https://github.com/barryvdh/laravel-cors/tree/0.2)!
 
 ## About
 
 The `laravel-cors` package allows you to send [Cross-Origin Resource Sharing](http://enable-cors.org/)
-headers with ACL-style per-url configuration.
+headers with Laravel middleware configuration.
 
 If you want to have have a global overview of CORS workflow, you can  browse
 this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
@@ -65,30 +64,27 @@ Add the Cors\ServiceProvider to your config/app.php providers array:
 Barryvdh\Cors\ServiceProvider::class,
 ```
 
+Add the Preflight Middleware to your global middleware array:
+
+```php
+Barryvdh\Cors\HandlePreflight::class,
+```
+
 ## Usage
 
-The ServiceProvider adds a route middleware you can use, called `cors`. You can apply this to a route or group to add CORS support.
+Add the CORS middleware to the group you want to allow CORS access:
 
 ```php
-Route::group(['middleware' => 'cors'], function(Router $router){
-    $router->get('api', 'ApiController@index');
-});
+Barryvdh\Cors\HandleCors::class,
 ```
 
-If you want CORS to apply for all your routes, add it as global middleware in `app/http/Kernel.php`:
-
-```php
-protected $middleware = [
-    ....
-    \Barryvdh\Cors\HandleCors::class
-];
-```
+If you want to add CORS to all your routes, just add HandleCors to the global middleware.
 
 ## Lumen
 
-On Laravel Lumen, use LumenServiceProvider:
+On Laravel Lumen, use `HandlePreflightSimple` as global middleware:
 
-    'Barryvdh\Cors\LumenServiceProvider',
+    Barryvdh\Cors\HandlePreflightSimple::class,
 
 And load your configuration file manually:
 

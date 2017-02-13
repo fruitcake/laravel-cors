@@ -23,29 +23,18 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom($this->configPath(), 'cors');
 
-        $this->app->singleton(CorsService::class, function($app){
-            return new CorsService($app['config']->get('cors'));
+        $this->app->singleton(CorsService::class, function(){
+            return new CorsService(config('cors'));
         });
     }
 
     /**
-     * Add the Cors middleware to the router.
+     * Add the cors config
      *
-     * @param Kernel $kernel
      */
-    public function boot(Request $request, Kernel $kernel)
+    public function boot()
     {
         $this->publishes([$this->configPath() => config_path('cors.php')]);
-
-        if (method_exists($this->app['router'], 'aliasMiddleware')) {
-            $this->app['router']->aliasMiddleware('cors', HandleCors::class);
-        } else {
-            $this->app['router']->middleware('cors', HandleCors::class);
-        }
-
-        if ($request->isMethod('OPTIONS')) {
-            $kernel->prependMiddleware(HandlePreflight::class);
-        }
     }
 
     protected function configPath()
