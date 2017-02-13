@@ -15,7 +15,6 @@ class HandlePreflightSimpleTest extends TestCase
             'allowedMethods' => ['GET', 'POST', 'PUT'],
             'exposedHeaders' => [],
             'maxAge' => 0,
-            'hosts' => [],
         ];
     }
 

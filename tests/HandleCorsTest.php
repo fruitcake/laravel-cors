@@ -15,7 +15,6 @@ class HandleCorsTest extends TestCase
             'allowedMethods' => ['GET', 'POST'],
             'exposedHeaders' => [],
             'maxAge' => 0,
-            'hosts' => [],
         ];
     }
 
