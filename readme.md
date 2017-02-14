@@ -63,25 +63,53 @@ Add the Cors\ServiceProvider to your config/app.php providers array:
 Barryvdh\Cors\ServiceProvider::class,
 ```
 
-Add the Preflight Middleware to your global middleware array:
+## Global usage
+
+To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware (`$middleware` in your `Kernel.php`)
 
 ```php
-Barryvdh\Cors\HandlePreflight::class,
+protected $middleware = [
+    \Barryvdh\Cors\HandleCors::class,
+];
 ```
 
-## Usage
+## Group middleware
 
-Add the CORS middleware to the group you want to allow CORS access:
+If you want to allow CORS on a specific middleware group or route, you should add the Preflight middleware to your global middleware first:
 
 ```php
-Barryvdh\Cors\HandleCors::class,
+protected $middleware = [
+    \Barryvdh\Cors\HandlePreflight::class,
+];
 ```
 
-If you want to add CORS to all your routes, just add HandleCors to the global middleware.
+Add the middleware to your group or routes you want to allow CORS for:
+
+```php
+protected $middlewareGroups = [
+    'web' => [
+       ..
+    ],
+
+    'api' => [
+        ..
+        \Barryvdh\Cors\HandleCors::class,
+    ],
+];
+```
+
+Optionally alias the HandleCors middleware to `cors` by adding it to your `$routeMiddleware` so you can just use `cors` as middleware:
+
+```php
+protected $routeMiddleware = [
+    ..
+    'cors' => \Barryvdh\Cors\HandleCors::class,
+];
+```
 
 ## Lumen
 
-On Laravel Lumen, use `HandlePreflightSimple` as global middleware:
+On Laravel Lumen, use `HandlePreflightSimple` as global middleware instead of the regular `HandlePreflight`:
 
     Barryvdh\Cors\HandlePreflightSimple::class,
 

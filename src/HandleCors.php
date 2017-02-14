@@ -31,6 +31,10 @@ class HandleCors
 	 */
 	public function handle($request, Closure $next)
 	{
+        if ($request->isMethod('OPTIONS') && $this->cors->isPreflightRequest($request)) {
+            return $this->cors->handlePreflightRequest($request);
+        }
+
 		if (! $this->cors->isCorsRequest($request)) {
 			return $next($request);
 		}
