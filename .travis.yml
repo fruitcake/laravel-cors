@@ -10,6 +10,7 @@ php:
 env:
   global:
     - setup=basic
+    - laravel=5.x
 
 matrix:
   include:
@@ -17,12 +18,21 @@ matrix:
       env: setup=lowest
     - php: 5.5.9
       env: setup=stable
+    - php: 5.5.9
+      env: laravel=5.1
+    - php: 5.5.9
+      env: laravel=5.2
+    - php: 5.6
+      env: laravel=5.3
 
 sudo: false
 
 cache:
   directories:
     - $HOME/.composer/cache
+
+before_script:
+  - composer require laravel/famework:${laravel} --no-update
 
 install:
   - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-dist; fi
