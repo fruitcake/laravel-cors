@@ -1,4 +1,10 @@
-# CORS in Laravel 5
+# CORS Middleware for Laravel 5
+
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+[![Build Status][ico-travis]][link-travis]
+[![Total Downloads][ico-downloads]][link-downloads]
+
 Based on https://github.com/asm89/stack-cors
 For Laravel 4, please use the [0.2 branch](https://github.com/barryvdh/laravel-cors/tree/0.2)!
 
@@ -106,16 +112,19 @@ return [
 > **Note:** Because of [http method overriding](http://symfony.com/doc/current/reference/configuration/framework.html#http-method-override) in Laravel, allowing POST methods will also enable the API users to perform PUT and DELETE requests as well.
 
 
-## Common problems and errors
+## Common problems and errors (Pre Laravel 5.3)
 In order for the package to work, the request has to be a valid CORS request and needs to include an "Origin" header.
 
 When an error occurs, the middleware isn't run completely. So when this happens, you won't see the actual result, but will get a CORS error instead.
 
 This could be a CSRF token error or just a simple problem.
 
+> **Note:** This should be working in Laravel 5.3+
+
 ### Disabling CSRF protection for your API
 
-In `App\Http\Middleware\VerifyCsrfToken`, add your routes to the exceptions:
+If possible, use a different route group with CSRF protection enabled. 
+Otherwise you can disable CSRF for certain requests in `App\Http\Middleware\VerifyCsrfToken`:
 
 ```php
 protected $except = [
@@ -123,32 +132,21 @@ protected $except = [
 ];
 ```
     
-### Debugging errors
-
-A simple but hacky method is to just always send the CORS headers. This isn't recommended for production, but it will show you the actual errors.
-
-Add this to the top of `public/index.php`:
-
-```php
-header("Access-Control-Allow-Origin: *");
-```
-
-Don't forget to remove that in production, so you can specify what routes/headers/origins are allowed.
-    
-You can add the CORS headers to the Errors also, in your Exception Handler:
-
-```php
-public function render($request, Exception $e)
-{
-    $response = parent::render($request, $e);
-
-    if ($request->is('api/*')) {
-        app('Barryvdh\Cors\Stack\CorsService')->addActualRequestHeaders($response, $request);
-    }
-
-    return $response;
-}
-```
 ## License
 
 Released under the MIT License, see LICENSE.
+
+[ico-version]: https://img.shields.io/packagist/v/barryvdh/laravel-cors.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/barryvdh/laravel-cors/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/barryvdh/laravel-cors.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/barryvdh/laravel-cors.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/barryvdh/laravel-cors.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/barryvdh/laravel-cors
+[link-travis]: https://travis-ci.org/barryvdh/laravel-cors
+[link-scrutinizer]: https://scrutinizer-ci.com/g/barryvdh/laravel-cors/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/barryvdh/laravel-cors
+[link-downloads]: https://packagist.org/packages/barryvdh/laravel-cors
+[link-author]: https://github.com/barryvdh
+[link-contributors]: ../../contributors
