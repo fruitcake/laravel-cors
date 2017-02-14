@@ -15,11 +15,11 @@ matrix:
     - php: 5.6
       env: setup=lowest
     - php: 5.6
-      env: laravel=5.1
+      env: laravel=5.1.x
     - php: 5.6
-      env: laravel=5.2
+      env: laravel=5.2.x
     - php: 5.6
-      env: laravel=5.3
+      env: laravel=5.3.x
 
 sudo: false
 
@@ -28,7 +28,7 @@ cache:
     - $HOME/.composer/cache
 
 install:
-  - composer require laravel/famework:${laravel} --no-update
+  - composer require laravel/framework:${laravel} --no-update
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
 
