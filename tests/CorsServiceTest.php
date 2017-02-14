@@ -18,6 +18,9 @@ class CorsServiceTest extends PHPUnit_Framework_TestCase
 
         $response = $app->handle(new Request());
 
+        $unmodifiedResponse->headers->date = '';
+        $response->headers->date = '';
+
         $this->assertEquals($unmodifiedResponse->headers, $response->headers);
     }
 

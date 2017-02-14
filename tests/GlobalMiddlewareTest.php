@@ -114,7 +114,7 @@ class GlobalMiddlewareTest extends TestCase
 
     public function testError()
     {
-        if ($this->checkVersion('5.2', '<')) {
+        if ($this->checkVersion('5.3', '<')) {
             $this->markTestSkipped('Catching exceptions is not possible on Laravel 5.1');
         }
 
