@@ -100,6 +100,10 @@ class GroupMiddlewareTest extends TestCase
 
     public function testValidationException()
     {
+        if ($this->checkVersion('5.3', '<')) {
+            $this->markTestSkipped('Catching exceptions is not possible on Laravel 5.1');
+        }
+
         $crawler = $this->call('POST', 'api/validation', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
