@@ -25,7 +25,7 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
 
-    $ composer require barryvdh/laravel-cors
+    $ composer require barryvdh/laravel-cors:"1.x"
 
 
 ## Global usage
