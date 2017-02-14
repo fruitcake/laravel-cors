@@ -1,13 +1,12 @@
 <?php
 
-use PHPUnit_Framework_TestCase;
 use Barryvdh\Cors\Stack\Cors;
 use Barryvdh\Cors\Stack\CorsService;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CorsTest extends PHPUnit_Framework_TestCase
+class CorsServiceTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @test

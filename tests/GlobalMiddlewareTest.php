@@ -2,21 +2,8 @@
 
 use Illuminate\Routing\Router;
 
-class HandleCorsTest extends TestCase
+class GlobalMiddlewareTest extends TestCase
 {
-    protected function resolveApplicationConfiguration($app)
-    {
-        parent::resolveApplicationConfiguration($app);
-
-        $app['config']['cors'] =  [
-            'supportsCredentials' => false,
-            'allowedOrigins' => ['localhost'],
-            'allowedHeaders' => ['X-Custom-1', 'X-Custom-2'],
-            'allowedMethods' => ['GET', 'POST'],
-            'exposedHeaders' => [],
-            'maxAge' => 0,
-        ];
-    }
 
     /**
      * Define environment setup.
@@ -29,14 +16,37 @@ class HandleCorsTest extends TestCase
     {
         // Add the middleware
         $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
-        $kernel->prependMiddleware(\Barryvdh\Cors\HandlePreflight::class);
+        $kernel->prependMiddleware(\Barryvdh\Cors\HandleCors::class);
 
         parent::getEnvironmentSetUp($app);
     }
 
+    public function testOptionsAllowOriginAllowed()
+    {
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+        ]);
+
+        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals(200, $crawler->getStatusCode());
+    }
+
+    public function testOptionsAllowOriginNotAllowed()
+    {
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'otherhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+        ]);
+
+        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals(403, $crawler->getStatusCode());
+    }
+
+
     public function testAllowOriginAllowed()
     {
-        $crawler = $this->call('POST', 'api/ping', [], [], [], [
+        $crawler = $this->call('POST', 'web/ping', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
@@ -49,7 +59,7 @@ class HandleCorsTest extends TestCase
 
     public function testAllowOriginNotAllowed()
     {
-        $crawler = $this->call('POST', 'api/ping', [], [], [], [
+        $crawler = $this->call('POST', 'web/ping', [], [], [], [
             'HTTP_ORIGIN' => 'otherhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
@@ -60,7 +70,7 @@ class HandleCorsTest extends TestCase
 
     public function testAllowMethodAllowed()
     {
-        $crawler = $this->call('POST', 'api/ping', [], [], [], [
+        $crawler = $this->call('POST', 'web/ping', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
@@ -72,7 +82,7 @@ class HandleCorsTest extends TestCase
 
     public function testAllowMethodNotAllowed()
     {
-        $crawler = $this->call('POST', 'api/ping', [], [], [], [
+        $crawler = $this->call('POST', 'web/ping', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'PUT',
         ]);
@@ -80,19 +90,9 @@ class HandleCorsTest extends TestCase
         $this->assertEquals(200, $crawler->getStatusCode());
     }
 
-    public function testAllowMethodsForWeb()
-    {
-        $crawler = $this->call('POST', 'web/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
-            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
-        ]);
-        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Methods'));
-        $this->assertEquals(200, $crawler->getStatusCode());
-    }
-
     public function testAllowHeaderAllowed()
     {
-        $crawler = $this->call('POST', 'api/ping', [], [], [], [
+        $crawler = $this->call('POST', 'web/ping', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-1, x-custom-2',
         ]);
@@ -104,7 +104,7 @@ class HandleCorsTest extends TestCase
 
     public function testAllowHeaderNotAllowed()
     {
-        $crawler = $this->call('POST', 'api/ping', [], [], [], [
+        $crawler = $this->call('POST', 'web/ping', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
@@ -114,7 +114,11 @@ class HandleCorsTest extends TestCase
 
     public function testError()
     {
-        $crawler = $this->call('POST', 'api/error', [], [], [], [
+        if ($this->checkVersion('5.2', '<')) {
+            $this->markTestSkipped('Catching exceptions is not possible on Laravel 5.1');
+        }
+
+        $crawler = $this->call('POST', 'web/error', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
@@ -125,7 +129,7 @@ class HandleCorsTest extends TestCase
 
     public function testValidationException()
     {
-        $crawler = $this->call('POST', 'api/validation', [], [], [], [
+        $crawler = $this->call('POST', 'web/validation', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);

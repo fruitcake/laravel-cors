@@ -4,9 +4,25 @@ use Illuminate\Routing\Router;
 
 abstract class TestCase extends Orchestra\Testbench\TestCase
 {
+    use \Illuminate\Foundation\Validation\ValidatesRequests;
+
     protected function getPackageProviders($app)
     {
         return [\Barryvdh\Cors\ServiceProvider::class];
+    }
+
+    protected function resolveApplicationConfiguration($app)
+    {
+        parent::resolveApplicationConfiguration($app);
+
+        $app['config']['cors'] =  [
+            'supportsCredentials' => false,
+            'allowedOrigins' => ['localhost'],
+            'allowedHeaders' => ['X-Custom-1', 'X-Custom-2'],
+            'allowedMethods' => ['GET', 'POST'],
+            'exposedHeaders' => [],
+            'maxAge' => 0,
+        ];
     }
 
     /**
@@ -39,6 +55,18 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
         $router->post('web/ping', ['uses' => function () {
             return 'PONG';
         }]);
+
+        $router->post('web/error', ['uses' => function () {
+            abort(500);
+        }]);
+
+        $router->post('web/validation', ['uses' => function (\Illuminate\Http\Request $request) {
+            $this->validate($request, [
+                'name' => 'required',
+            ]);
+
+            return 'ok';
+        }]);
     }
 
     /**
@@ -60,15 +88,23 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
                 return 'PONG';
             }]);
 
-            $router->post('api/error', ['as' => 'api.ping', 'uses' => function () {
+            $router->post('api/error', ['uses' => function () {
                 abort(500);
             }]);
 
-            $router->post('api/validation', ['as' => 'api.ping', 'uses' => function () {
-                $validator = \Illuminate\Support\Facades\Validator::make([], []);
-                throw new \Illuminate\Validation\ValidationException($validator);
+            $router->post('api/validation', ['uses' => function (\Illuminate\Http\Request $request) {
+                $this->validate($request, [
+                    'name' => 'required',
+                ]);
+
+                return 'ok';
             }]);
         });
+    }
+
+    protected function checkVersion($version, $operator = ">=")
+    {
+        return version_compare($this->app->version(), $version, $operator);
     }
 
 }

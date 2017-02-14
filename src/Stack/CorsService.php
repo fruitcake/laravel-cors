@@ -23,11 +23,11 @@ class CorsService
     {
 
         $options += array(
-            'allowedOrigins' => array(),
             'supportsCredentials' => false,
-            'allowedHeaders' => array(),
-            'exposedHeaders' => array(),
-            'allowedMethods' => array(),
+            'allowedOrigins' => ['*'],
+            'allowedHeaders' => ['*'],
+            'allowedMethods' => ['*'],
+            'exposedHeaders' => [],
             'maxAge' => 0,
         );
 

@@ -15,7 +15,62 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 * Handles CORS pre-flight OPTIONS requests
 * Adds CORS headers to your responses
 
+## Installation
+
+Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
+
+    $ composer require barryvdh/laravel-cors
+
+
+## Global usage
+
+To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware (`$middleware` in your `Kernel.php`)
+
+```php
+protected $middleware = [
+    \Barryvdh\Cors\HandleCors::class,
+];
+```
+
+## Group middleware
+
+If you want to allow CORS on a specific middleware group or route, you should add the HandleCors middleware to your group:
+
+```php
+protected $middlewareGroups = [
+    'web' => [
+       ..
+    ],
+
+    'api' => [
+        ..
+        \Barryvdh\Cors\HandleCors::class,
+    ],
+];
+```
+
+Optionally alias the HandleCors middleware to `cors` by adding it to your `$routeMiddleware` so you can just use `cors` as middleware:
+
+```php
+protected $routeMiddleware = [
+    ..
+    'cors' => \Barryvdh\Cors\HandleCors::class,
+];
+```
+
+## Lumen
+
+On Laravel Lumen, load your configuration file manually:
+
+    $app->configure('cors');
+    
 ## Configuration
+
+To use custom options, add the Cors\ServiceProvider to your config/app.php providers array:
+
+```php
+Barryvdh\Cors\ServiceProvider::class,
+```
 
 The defaults are set in `config/cors.php`. Copy this file to your own config directory to modify the values. You can publish the config using this command:
 
@@ -46,76 +101,10 @@ return [
 ]
 ```
 
-`allowedOrigins`, `allowedHeaders` and `allowedMethods` can be set to `array('*')` to accept any value, the
-allowed methods however have to be explicitly listed.
+`allowedOrigins`, `allowedHeaders` and `allowedMethods` can be set to `array('*')` to accept any value.
 
 > **Note:** Because of [http method overriding](http://symfony.com/doc/current/reference/configuration/framework.html#http-method-override) in Laravel, allowing POST methods will also enable the API users to perform PUT and DELETE requests as well.
 
-## Installation
-
-Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
-
-    $ composer require barryvdh/laravel-cors
-
-Add the Cors\ServiceProvider to your config/app.php providers array:
-
-```php
-Barryvdh\Cors\ServiceProvider::class,
-```
-
-## Global usage
-
-To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware (`$middleware` in your `Kernel.php`)
-
-```php
-protected $middleware = [
-    \Barryvdh\Cors\HandleCors::class,
-];
-```
-
-## Group middleware
-
-If you want to allow CORS on a specific middleware group or route, you should add the Preflight middleware to your global middleware first:
-
-```php
-protected $middleware = [
-    \Barryvdh\Cors\HandlePreflight::class,
-];
-```
-
-Add the middleware to your group or routes you want to allow CORS for:
-
-```php
-protected $middlewareGroups = [
-    'web' => [
-       ..
-    ],
-
-    'api' => [
-        ..
-        \Barryvdh\Cors\HandleCors::class,
-    ],
-];
-```
-
-Optionally alias the HandleCors middleware to `cors` by adding it to your `$routeMiddleware` so you can just use `cors` as middleware:
-
-```php
-protected $routeMiddleware = [
-    ..
-    'cors' => \Barryvdh\Cors\HandleCors::class,
-];
-```
-
-## Lumen
-
-On Laravel Lumen, use `HandlePreflightSimple` as global middleware instead of the regular `HandlePreflight`:
-
-    Barryvdh\Cors\HandlePreflightSimple::class,
-
-And load your configuration file manually:
-
-    $app->configure('cors');
 
 ## Common problems and errors
 In order for the package to work, the request has to be a valid CORS request and needs to include an "Origin" header.

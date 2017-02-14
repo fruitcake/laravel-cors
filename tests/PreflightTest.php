@@ -2,38 +2,8 @@
 
 use Illuminate\Routing\Router;
 
-class HandlePreflightTest extends TestCase
+class PreflightTest extends TestCase
 {
-    protected function resolveApplicationConfiguration($app)
-    {
-        parent::resolveApplicationConfiguration($app);
-
-        $app['config']['cors'] =  [
-            'supportsCredentials' => false,
-            'allowedOrigins' => ['localhost'],
-            'allowedHeaders' => ['X-Custom-1', 'X-Custom-2'],
-            'allowedMethods' => ['GET', 'POST'],
-            'exposedHeaders' => [],
-            'maxAge' => 0,
-        ];
-    }
-
-    /**
-     * Define environment setup.
-     *
-     * @param  Illuminate\Foundation\Application  $app
-     *
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Add the middleware
-        $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
-        $kernel->prependMiddleware(\Barryvdh\Cors\HandlePreflight::class);
-
-        parent::getEnvironmentSetUp($app);
-    }
-
     public function testAllowOriginAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
