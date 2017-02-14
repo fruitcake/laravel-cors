@@ -6,11 +6,6 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
 {
     use \Illuminate\Foundation\Validation\ValidatesRequests;
 
-    protected function getPackageProviders($app)
-    {
-        return [\Barryvdh\Cors\ServiceProvider::class];
-    }
-
     protected function resolveApplicationConfiguration($app)
     {
         parent::resolveApplicationConfiguration($app);

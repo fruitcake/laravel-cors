@@ -6,20 +6,6 @@ use Illuminate\Http\Response;
 
 class HandleCors
 {
-    /**
-     * The CORS service
-     *
-     * @var CorsService
-     */
-    protected $cors;
-
-	/**
-	 * @param CorsService $cors
-	 */
-	public function __construct(CorsService $cors)
-	{
-		$this->cors = $cors;
-	}
 
 	/**
 	 * Handle an incoming request. Based on Asm89\Stack\Cors by asm89
@@ -31,22 +17,24 @@ class HandleCors
 	 */
 	public function handle($request, Closure $next)
 	{
-        if ($request->isMethod('OPTIONS') && $this->cors->isPreflightRequest($request)) {
-            return $this->cors->handlePreflightRequest($request);
+	    $cors = new CorsService(config('cors', []));
+
+        if ($request->isMethod('OPTIONS') && $cors->isPreflightRequest($request)) {
+            return $cors->handlePreflightRequest($request);
         }
 
-		if (! $this->cors->isCorsRequest($request)) {
+		if (! $cors->isCorsRequest($request)) {
 			return $next($request);
 		}
 
-		if ( ! $this->cors->isActualRequestAllowed($request)) {
+		if ( ! $cors->isActualRequestAllowed($request)) {
 			return new Response('Not allowed.', 403);
 		}
 
 		/** @var \Illuminate\Http\Response $response */
 		$response = $next($request);
 
-		return $this->cors->addActualRequestHeaders($response, $request);
+		return $cors->addActualRequestHeaders($response, $request);
 	}
 
 }
