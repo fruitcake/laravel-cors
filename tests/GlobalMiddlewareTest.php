@@ -94,7 +94,7 @@ class GlobalMiddlewareTest extends TestCase
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-1, x-custom-2',
         ]);
-        $this->assertEquals('x-custom-1, x-custom-2', $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
         $this->assertEquals(200, $crawler->getStatusCode());
 
         $this->assertEquals('PONG', $crawler->getContent());
@@ -106,7 +106,7 @@ class GlobalMiddlewareTest extends TestCase
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
-        $this->assertEquals('x-custom-1, x-custom-2', $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
         $this->assertEquals(200, $crawler->getStatusCode());
     }
 

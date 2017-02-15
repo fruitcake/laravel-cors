@@ -150,6 +150,21 @@ class CorsServiceTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_doesnt_return_allow_headers_header_on_valid_allow_all_headers_request()
+    {
+        $app = $this->createStackedApp(array('allowedHeaders' => array('*')));
+        $request = $this->createValidActualRequest();
+        $request->headers->set('Access-Control-Request-Headers', 'Foo, BAR');
+
+        $response = $app->handle($request);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals(null, $response->headers->get('Access-Control-Allow-Headers'));
+    }
+
+    /**
+     * @test
+     */
     public function it_does_not_return_allow_origin_header_on_valid_actual_request_with_origin_not_allowed()
     {
         $app = $this->createStackedApp(array('allowedOrigins' => array('notlocalhost')));

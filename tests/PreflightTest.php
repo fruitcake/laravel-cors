@@ -60,6 +60,7 @@ class PreflightTest extends TestCase
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-1, x-custom-2',
         ]);
         $this->assertEquals('x-custom-1, x-custom-2', $crawler->headers->get('Access-Control-Allow-Headers'));
@@ -70,9 +71,10 @@ class PreflightTest extends TestCase
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
-        $this->assertEquals('x-custom-1, x-custom-2', $crawler->headers->get('Access-Control-Allow-Headers'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals(403, $crawler->getStatusCode());
     }
 }
