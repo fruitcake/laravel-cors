@@ -67,6 +67,19 @@ class PreflightTest extends TestCase
         $this->assertEquals(200, $crawler->getStatusCode());
     }
 
+    public function testAllowAllHeaderAllowed()
+    {
+        config(['cors.allowedHeaders' => ['*']]);
+
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+            'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
+        ]);
+        $this->assertEquals('X-CUSTOM-3', $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals(200, $crawler->getStatusCode());
+    }
+
     public function testAllowHeaderNotAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
