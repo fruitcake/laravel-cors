@@ -11,16 +11,16 @@ class OriginMatcher
             return true;
         }
         $scheme = parse_url($origin, PHP_URL_SCHEME);
-        $host   = parse_url($origin, PHP_URL_HOST);
-        $port   = parse_url($origin, PHP_URL_PORT);
+        $host = parse_url($origin, PHP_URL_HOST);
+        $port = parse_url($origin, PHP_URL_PORT);
 
         $schemePattern = static::parseOriginPattern($pattern, PHP_URL_SCHEME);
-        $hostPattern   = static::parseOriginPattern($pattern, PHP_URL_HOST);
-        $portPattern   = static::parseOriginPattern($pattern, PHP_URL_PORT);
+        $hostPattern = static::parseOriginPattern($pattern, PHP_URL_HOST);
+        $portPattern = static::parseOriginPattern($pattern, PHP_URL_PORT);
 
         $schemeMatches = static::schemeMatches($schemePattern, $scheme);
-        $hostMatches   = static::hostMatches($hostPattern, $host);
-        $portMatches   = static::portMatches($portPattern, $port);
+        $hostMatches = static::hostMatches($hostPattern, $host);
+        $portMatches = static::portMatches($portPattern, $port);
         return $schemeMatches && $hostMatches && $portMatches;
     }
 
@@ -32,7 +32,7 @@ class OriginMatcher
     public static function hostMatches($pattern, $host)
     {
         $patternComponents = array_reverse(explode('.', $pattern));
-        $hostComponents  = array_reverse(explode('.', $host));
+        $hostComponents = array_reverse(explode('.', $host));
         foreach ($patternComponents as $index => $patternComponent) {
             if ($patternComponent === '*') {
                 return true;
@@ -52,11 +52,11 @@ class OriginMatcher
         if ($pattern === "*") {
             return true;
         }
-        if ((string) $pattern === "") {
-            return (string) $port === "";
+        if ((string)$pattern === "") {
+            return (string)$port === "";
         }
         if (preg_match('/\A\d+\z/', $pattern)) {
-            return (string) $pattern === (string) $port;
+            return (string)$pattern === (string)$port;
         }
         if (preg_match('/\A(?P<from>\d+)-(?P<to>\d+)\z/', $pattern, $captured)) {
             return $captured['from'] <= $port && $port <= $captured['to'];
@@ -80,8 +80,8 @@ class OriginMatcher
         }
         $components = [
             'scheme' => $captured['scheme'] ?: null,
-            'host'   => $captured['host'],
-            'port'   => array_key_exists('port', $captured) ? $captured['port'] : null,
+            'host' => $captured['host'],
+            'port' => array_key_exists('port', $captured) ? $captured['port'] : null,
         ];
         switch ($component) {
             case -1:

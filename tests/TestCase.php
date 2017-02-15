@@ -10,7 +10,7 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     {
         parent::resolveApplicationConfiguration($app);
 
-        $app['config']['cors'] =  [
+        $app['config']['cors'] = [
             'supportsCredentials' => false,
             'allowedOrigins' => ['localhost'],
             'allowedHeaders' => ['X-Custom-1', 'X-Custom-2'],
@@ -23,7 +23,7 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     /**
      * Define environment setup.
      *
-     * @param  Illuminate\Foundation\Application  $app
+     * @param  Illuminate\Foundation\Application $app
      *
      * @return void
      */
@@ -39,29 +39,40 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
      */
     protected function addWebRoutes(Router $router)
     {
-        $router->options('web/ping', ['uses' => function () {
-            return '';
-        }]);
+        $router->options('web/ping', [
+            'uses' => function () {
+                return '';
+            }
+        ]);
 
-        $router->get('web/ping', ['as' => 'web.ping', 'uses' => function () {
-            return 'pong';
-        }]);
+        $router->get('web/ping', [
+            'as' => 'web.ping',
+            'uses' => function () {
+                return 'pong';
+            }
+        ]);
 
-        $router->post('web/ping', ['uses' => function () {
-            return 'PONG';
-        }]);
+        $router->post('web/ping', [
+            'uses' => function () {
+                return 'PONG';
+            }
+        ]);
 
-        $router->post('web/error', ['uses' => function () {
-            abort(500);
-        }]);
+        $router->post('web/error', [
+            'uses' => function () {
+                abort(500);
+            }
+        ]);
 
-        $router->post('web/validation', ['uses' => function (\Illuminate\Http\Request $request) {
-            $this->validate($request, [
-                'name' => 'required',
-            ]);
+        $router->post('web/validation', [
+            'uses' => function (\Illuminate\Http\Request $request) {
+                $this->validate($request, [
+                    'name' => 'required',
+                ]);
 
-            return 'ok';
-        }]);
+                return 'ok';
+            }
+        ]);
     }
 
     /**
@@ -69,31 +80,42 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
      */
     protected function addApiRoutes($router)
     {
-        $router->group(['middleware' => \Barryvdh\Cors\HandleCors::class], function() use($router) {
+        $router->group(['middleware' => \Barryvdh\Cors\HandleCors::class], function () use ($router) {
 
-            $router->options('api/ping', ['uses' => function () {
-                return '';
-            }]);
+            $router->options('api/ping', [
+                'uses' => function () {
+                    return '';
+                }
+            ]);
 
-            $router->get('api/ping', ['as' => 'api.ping', 'uses' => function () {
-                return 'pong';
-            }]);
+            $router->get('api/ping', [
+                'as' => 'api.ping',
+                'uses' => function () {
+                    return 'pong';
+                }
+            ]);
 
-            $router->post('api/ping', ['uses' => function () {
-                return 'PONG';
-            }]);
+            $router->post('api/ping', [
+                'uses' => function () {
+                    return 'PONG';
+                }
+            ]);
 
-            $router->post('api/error', ['uses' => function () {
-                abort(500);
-            }]);
+            $router->post('api/error', [
+                'uses' => function () {
+                    abort(500);
+                }
+            ]);
 
-            $router->post('api/validation', ['uses' => function (\Illuminate\Http\Request $request) {
-                $this->validate($request, [
-                    'name' => 'required',
-                ]);
+            $router->post('api/validation', [
+                'uses' => function (\Illuminate\Http\Request $request) {
+                    $this->validate($request, [
+                        'name' => 'required',
+                    ]);
 
-                return 'ok';
-            }]);
+                    return 'ok';
+                }
+            ]);
         });
     }
 

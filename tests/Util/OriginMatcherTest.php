@@ -158,10 +158,10 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
     public function schemeMatchesDataProvider()
     {
         return [
-            ['http', 'http' , true ],
-            [null  , 'http' , true ],
+            ['http', 'http', true],
+            [null, 'http', true],
             ['http', 'https', false],
-            ['ftp' , 'http' , false],
+            ['ftp', 'http', false],
         ];
     }
 
@@ -179,12 +179,12 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
     public function hostMatchesDataProvider()
     {
         return [
-            ['google.com'     , 'google.com'     , true ],
-            ['*.google.com'   , 'maps.google.com', true ],
-            ['maps.google.com', 'google.com'     , false],
-            ['maps.google.com', '*.google.com'   , false],
-            ['google.com'     , 'maps.google.com', false],
-            ['google.com'     , null             , false],
+            ['google.com', 'google.com', true],
+            ['*.google.com', 'maps.google.com', true],
+            ['maps.google.com', 'google.com', false],
+            ['maps.google.com', '*.google.com', false],
+            ['google.com', 'maps.google.com', false],
+            ['google.com', null, false],
         ];
     }
 
@@ -195,26 +195,26 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             $matches,
-            OriginMatcher::portMatches($pattern,$port)
+            OriginMatcher::portMatches($pattern, $port)
         );
     }
 
     public function portMatchesDataProvider()
     {
         return [
-            [null       , null, true ],
-            [null       , ''  , true ],
-            [8080       , 8080, true ],
-            ['8080'     , 8080, true ],
-            ['*'        , null, true ],
-            ['*'        , 8000, true ],
-            ['8000-9000', 8000, true ],
-            ['8000-9000', 8500, true ],
-            ['8000-9000', 9000, true ],
-            [null       , 8080, false],
-            [null       , 0   , false],
-            [8080       , 8090, false],
-            [8000       , null, false],
+            [null, null, true],
+            [null, '', true],
+            [8080, 8080, true],
+            ['8080', 8080, true],
+            ['*', null, true],
+            ['*', 8000, true],
+            ['8000-9000', 8000, true],
+            ['8000-9000', 8500, true],
+            ['8000-9000', 9000, true],
+            [null, 8080, false],
+            [null, 0, false],
+            [8080, 8090, false],
+            [8000, null, false],
             ['8000-8080', 7999, false],
             ['8000-8080', 8081, false],
             ['8000-8080', null, false],
@@ -235,14 +235,14 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
     public function matchesDataProvider()
     {
         return [
-            ['http://google.com'     , 'http://google.com'      , true ],
-            ['google.com'            , 'http://google.com'      , true ],
-            ['http://google.com'     , 'http://google.com'      , true ],
-            ['http://google.com:8000', 'http://google.com:8000' , true ],
-            ['*.google.com'          , 'http://google.com'      , true ],
-            ['*.google.com:8000'     , 'http://google.com:8000' , true ],
-            ['*.google.com'          , 'http://maps.google.com' , true ],
-            ['http://*.google.com'   , 'https://maps.google.com', false],
+            ['http://google.com', 'http://google.com', true],
+            ['google.com', 'http://google.com', true],
+            ['http://google.com', 'http://google.com', true],
+            ['http://google.com:8000', 'http://google.com:8000', true],
+            ['*.google.com', 'http://google.com', true],
+            ['*.google.com:8000', 'http://google.com:8000', true],
+            ['*.google.com', 'http://maps.google.com', true],
+            ['http://*.google.com', 'https://maps.google.com', false],
         ];
     }
 }

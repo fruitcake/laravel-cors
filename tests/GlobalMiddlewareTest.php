@@ -1,14 +1,12 @@
 <?php
 
-use Illuminate\Routing\Router;
-
 class GlobalMiddlewareTest extends TestCase
 {
 
     /**
      * Define environment setup.
      *
-     * @param  Illuminate\Foundation\Application  $app
+     * @param  Illuminate\Foundation\Application $app
      *
      * @return void
      */
