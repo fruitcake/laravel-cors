@@ -72,7 +72,10 @@ class CorsService
             return $response;
         }
 
-        $response->headers->set('Access-Control-Allow-Origin', $request->headers->get('Origin'));
+        $allowOrigin = $this->options['allowedOrigins'] === true && !$this->options['supportsCredentials']
+            ? '*'
+            : $request->headers->get('Origin');
+        $response->headers->set('Access-Control-Allow-Origin', $allowOrigin);
 
         if (!$response->headers->has('Vary')) {
             $response->headers->set('Vary', 'Origin');
@@ -114,7 +117,10 @@ class CorsService
             $response->headers->set('Access-Control-Allow-Credentials', 'true');
         }
 
-        $response->headers->set('Access-Control-Allow-Origin', $request->headers->get('Origin'));
+        $allowOrigin = $this->options['allowedOrigins'] === true && !$this->options['supportsCredentials']
+            ? '*'
+            : $request->headers->get('Origin');
+        $response->headers->set('Access-Control-Allow-Origin', $allowOrigin);
 
         if ($this->options['maxAge']) {
             $response->headers->set('Access-Control-Max-Age', $this->options['maxAge']);
