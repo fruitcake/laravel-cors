@@ -19,13 +19,13 @@ class HandleCors
 	{
 	    $cors = new CorsService(config('cors', []));
 
-        if ($request->isMethod('OPTIONS') && $cors->isPreflightRequest($request)) {
-            return $cors->handlePreflightRequest($request);
+        if (! $cors->isCorsRequest($request)) {
+            return $next($request);
         }
 
-		if (! $cors->isCorsRequest($request)) {
-			return $next($request);
-		}
+        if ($cors->isPreflightRequest($request)) {
+            return $cors->handlePreflightRequest($request);
+        }
 
 		if ( ! $cors->isActualRequestAllowed($request)) {
 			return new Response('Not allowed.', 403);
