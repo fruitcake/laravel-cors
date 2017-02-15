@@ -88,13 +88,6 @@ class CorsService
         if ($this->options['exposedHeaders']) {
             $response->headers->set('Access-Control-Expose-Headers', implode(', ', $this->options['exposedHeaders']));
         }
-
-        if ($this->options['allowedHeaders']) {
-            $allowHeaders = $this->options['allowedHeaders'] === true
-                ? strtoupper($request->headers->get('Access-Control-Request-Headers'))
-                : implode(', ', $this->options['allowedHeaders']);
-            $response->headers->set('Access-Control-Allow-Headers', $allowedHeaders);
-        }
         
         return $response;
     }
