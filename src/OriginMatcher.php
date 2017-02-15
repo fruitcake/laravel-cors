@@ -1,7 +1,10 @@
 <?php
 
-namespace Barryvdh\Cors\Util;
+namespace Barryvdh\Cors;
 
+/**
+ * Fork of asm89/stack-cors
+ */
 class OriginMatcher
 {
 

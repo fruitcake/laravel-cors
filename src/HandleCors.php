@@ -1,7 +1,6 @@
 <?php namespace Barryvdh\Cors;
 
 use Closure;
-use Barryvdh\Cors\Stack\CorsService;
 use Illuminate\Http\Response;
 
 class HandleCors

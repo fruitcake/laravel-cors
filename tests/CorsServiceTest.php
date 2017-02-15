@@ -1,11 +1,13 @@
 <?php
 
-use Barryvdh\Cors\Stack\Cors;
-use Barryvdh\Cors\Stack\CorsService;
+use Barryvdh\Cors\CorsService;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Fork of asm89/stack-cors
+ */
 class CorsServiceTest extends PHPUnit_Framework_TestCase
 {
     /**

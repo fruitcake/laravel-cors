@@ -64,19 +64,7 @@ protected $routeMiddleware = [
 ];
 ```
 
-## Lumen
-
-On Laravel Lumen, load your configuration file manually:
-
-    $app->configure('cors');
-    
 ## Configuration
-
-To use custom options, add the Cors\ServiceProvider to your config/app.php providers array:
-
-```php
-Barryvdh\Cors\ServiceProvider::class,
-```
 
 The defaults are set in `config/cors.php`. Copy this file to your own config directory to modify the values. You can publish the config using this command:
 
@@ -86,6 +74,7 @@ The defaults are set in `config/cors.php`. Copy this file to your own config dir
 
 > **Note:** If you are explicitly whitelisting headers, you must include `Origin` or requests will fail to be recognized as CORS.
 
+    
 ```php
 return [
      /*
@@ -111,6 +100,11 @@ return [
 
 > **Note:** Because of [http method overriding](http://symfony.com/doc/current/reference/configuration/framework.html#http-method-override) in Laravel, allowing POST methods will also enable the API users to perform PUT and DELETE requests as well.
 
+### Lumen
+
+On Laravel Lumen, load your configuration file manually:
+
+    $app->configure('cors');
 
 ## Common problems and errors (Pre Laravel 5.3)
 In order for the package to work, the request has to be a valid CORS request and needs to include an "Origin" header.

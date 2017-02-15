@@ -1,6 +1,6 @@
 <?php
 
-use Barryvdh\Cors\Util\OriginMatcher;
+use Barryvdh\Cors\OriginMatcher;
 
 class OriginMatcherTest extends PHPUnit_Framework_TestCase
 {

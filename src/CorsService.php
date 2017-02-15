@@ -1,13 +1,12 @@
 <?php
 
-namespace Barryvdh\Cors\Stack;
+namespace Barryvdh\Cors;
 
-use Barryvdh\Cors\Util\OriginMatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Based on asm89/stack-cors
+ * Fork of asm89/stack-cors
  */
 class CorsService
 {
