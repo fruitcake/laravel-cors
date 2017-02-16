@@ -4,6 +4,32 @@ use Illuminate\Routing\Router;
 
 class GroupMiddlewareTest extends TestCase
 {
+    /**
+     * Define environment setup.
+     *
+     * @param  Illuminate\Foundation\Application $app
+     *
+     * @return void
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        // Add the middleware
+        $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
+        $kernel->prependMiddleware(\Barryvdh\Cors\HandlePreflight::class);
+
+        parent::getEnvironmentSetUp($app);
+    }
+
+    public function testOptionsAllowOriginAllowed()
+    {
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+        ]);
+
+        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals(200, $crawler->getStatusCode());
+    }
 
     public function testAllowOriginAllowed()
     {

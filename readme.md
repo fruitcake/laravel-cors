@@ -34,15 +34,21 @@ To allow CORS for all your routes, add the `HandleCors` middleware to the global
 
 ```php
 protected $middleware = [
+    ..
     \Barryvdh\Cors\HandleCors::class,
 ];
 ```
 
 ## Group middleware
 
-If you want to allow CORS on a specific middleware group or route, you should add the HandleCors middleware to your group:
+If you want to allow CORS on a specific middleware group or route, you should add the HandlePreflight to your global middleware **AND** HandleCors middleware to your group:
 
 ```php
+protected $middleware = [
+    ..
+    \Barryvdh\Cors\HandlePreflight::class,
+];
+
 protected $middlewareGroups = [
     'web' => [
        ..
@@ -55,14 +61,6 @@ protected $middlewareGroups = [
 ];
 ```
 
-Optionally alias the HandleCors middleware to `cors` by adding it to your `$routeMiddleware` so you can just use `cors` as middleware:
-
-```php
-protected $routeMiddleware = [
-    ..
-    'cors' => \Barryvdh\Cors\HandleCors::class,
-];
-```
 
 ## Configuration
 

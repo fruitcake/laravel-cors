@@ -39,12 +39,6 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
      */
     protected function addWebRoutes(Router $router)
     {
-        $router->options('web/ping', [
-            'uses' => function () {
-                return '';
-            }
-        ]);
-
         $router->get('web/ping', [
             'as' => 'web.ping',
             'uses' => function () {
@@ -81,12 +75,6 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     protected function addApiRoutes($router)
     {
         $router->group(['middleware' => \Barryvdh\Cors\HandleCors::class], function () use ($router) {
-
-            $router->options('api/ping', [
-                'uses' => function () {
-                    return '';
-                }
-            ]);
 
             $router->get('api/ping', [
                 'as' => 'api.ping',

@@ -1,9 +1,23 @@
 <?php
 
-use Illuminate\Routing\Router;
-
 class PreflightTest extends TestCase
 {
+    /**
+     * Define environment setup.
+     *
+     * @param  Illuminate\Foundation\Application $app
+     *
+     * @return void
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        // Add the middleware
+        $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
+        $kernel->prependMiddleware(\Barryvdh\Cors\HandlePreflight::class);
+
+        parent::getEnvironmentSetUp($app);
+    }
+
     public function testAllowOriginAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
@@ -43,7 +57,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'PUT',
         ]);
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Methods'));
-        $this->assertEquals(405, $crawler->getStatusCode());
+        $this->assertEquals(403, $crawler->getStatusCode());
     }
 
     public function testAllowMethodsForWeb()
@@ -53,7 +67,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Methods'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(403, $crawler->getStatusCode());
     }
 
     public function testAllowHeaderAllowed()
