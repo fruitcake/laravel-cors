@@ -8,36 +8,32 @@ use Illuminate\Routing\Router;
 class HandlePreflight
 {
 
-	/**
-	 * Handle an incoming request. Based on Asm89\Stack\Cors by asm89
-	 * @see https://github.com/asm89/stack-cors/blob/master/src/Asm89/Stack/Cors.php
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
-	 * @return mixed
-	 */
-	public function handle($request, Closure $next)
-	{
-	    $cors = new CorsService(config('cors', []));
-
-        /** @var \Illuminate\Http\Response $response */
-        $response = $next($request);
+    /**
+     * Handle an incoming Preflight request.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        $cors = new CorsService(config('cors', []));
 
         if ($cors->isPreflightRequest($request)) {
-            if ($this->hasMatchingCorsRoute($request)) {
-                return $cors->handlePreflightRequest($request);
-            } else {
+            if ( ! $this->hasMatchingCorsRoute($request)) {
                 return new Response('Not allowed.', 403);
             }
+
+            return $cors->handlePreflightRequest($request);
         }
 
-        return $response;
-	}
+        return $next($request);
+    }
 
     /**
      * Verify the current OPTIONS request matches a CORS-enabled route
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return boolean
      */
     private function hasMatchingCorsRoute($request)
