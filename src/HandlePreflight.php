@@ -5,6 +5,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Arr;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HandlePreflight
@@ -47,7 +48,7 @@ class HandlePreflight
         try {
             /** @var Route[] $routes */
             $route = app(Router::class)->getRoutes()->match($request);
-        } catch (NotFoundHttpException $e) {
+        } catch (HttpException $e) {
             return false;
         }
 
