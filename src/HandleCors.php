@@ -14,6 +14,7 @@ class HandleCors
 
 	/**
 	 * @param CorsService $cors
+	 * @param ExceptionHandler $exceptionHandler
 	 */
 	public function __construct(CorsService $cors)
 	{
