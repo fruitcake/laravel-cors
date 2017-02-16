@@ -57,7 +57,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'PUT',
         ]);
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Methods'));
-        $this->assertEquals(405, $crawler->getStatusCode());
+        $this->assertEquals(403, $crawler->getStatusCode());
     }
 
     public function testAllowMethodsForWeb()
