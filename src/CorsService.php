@@ -19,27 +19,19 @@ class CorsService
 
     private function normalizeOptions(array $options = array())
     {
-
-        $options += array(
-            'supportsCredentials' => false,
-            'allowedOrigins' => ['*'],
-            'allowedHeaders' => ['*'],
-            'allowedMethods' => ['*'],
-            'exposedHeaders' => [],
-            'maxAge' => 0,
-        );
+        // Set defaults from the config file
+        $options += require __DIR__ .'/../config/cors.php';
 
         // normalize array('*') to true
-        if (in_array('*', $options['allowedOrigins'])) {
+        if ($options['allowedOrigins'] === true || in_array('*', $options['allowedOrigins'])) {
             $options['allowedOrigins'] = true;
         }
-        if (in_array('*', $options['allowedHeaders'])) {
+
+        if ($options['allowedHeaders'] === true || in_array('*', $options['allowedHeaders'])) {
             $options['allowedHeaders'] = true;
-        } else {
-            $options['allowedHeaders'] = $options['allowedHeaders'];
         }
 
-        if (in_array('*', $options['allowedMethods'])) {
+        if ($options['allowedMethods'] === true || in_array('*', $options['allowedMethods'])) {
             $options['allowedMethods'] = true;
         } else {
             $options['allowedMethods'] = array_map('strtoupper', $options['allowedMethods']);
