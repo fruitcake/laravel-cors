@@ -4,6 +4,8 @@ use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Arr;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HandlePreflight
 {
@@ -38,18 +40,18 @@ class HandlePreflight
      */
     private function hasMatchingCorsRoute($request)
     {
-        $method = $request->header('Access-Control-Request-Method');
+        // Check if CORS is added as a route middleware
+        $request = clone $request;
+        $request->setMethod($request->header('Access-Control-Request-Method'));
 
-        /** @var Route[] $routes */
-        $routes = app(Router::class)->getRoutes()->get($method);
-
-        foreach ($routes as $route) {
-            if ($route->matches($request, false)) {
-                return in_array(HandleCors::class, $route->middleware());
-            }
+        try {
+            /** @var Route[] $routes */
+            $route = app(Router::class)->getRoutes()->match($request);
+        } catch (NotFoundHttpException $e) {
+            return false;
         }
 
-        return false;
+        return in_array(HandleCors::class, $route->middleware());
     }
 
 }
