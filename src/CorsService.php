@@ -36,7 +36,7 @@ class CorsService
         if (in_array('*', $options['allowedHeaders'])) {
             $options['allowedHeaders'] = true;
         } else {
-            $options['allowedHeaders'] = array_map('strtolower', $options['allowedHeaders']);
+            $options['allowedHeaders'] = $options['allowedHeaders'];
         }
 
         if (in_array('*', $options['allowedMethods'])) {
@@ -125,7 +125,7 @@ class CorsService
         $response->headers->set('Access-Control-Allow-Methods', $allowMethods);
 
         $allowHeaders = $this->options['allowedHeaders'] === true
-            ? strtoupper($request->headers->get('Access-Control-Request-Headers'))
+            ? $request->headers->get('Access-Control-Request-Headers')
             : implode(', ', $this->options['allowedHeaders']);
         $response->headers->set('Access-Control-Allow-Headers', $allowHeaders);
 
@@ -144,11 +144,12 @@ class CorsService
 
         // if allowedHeaders has been set to true ('*' allow all flag) just skip this check
         if ($this->options['allowedHeaders'] !== true && $request->headers->has('Access-Control-Request-Headers')) {
+            $allowedHeaders = array_map('strtolower', $this->options['allowedHeaders']);
             $headers = strtolower($request->headers->get('Access-Control-Request-Headers'));
             $requestHeaders = explode(',', $headers);
 
             foreach ($requestHeaders as $header) {
-                if (!in_array(trim($header), $this->options['allowedHeaders'])) {
+                if (!in_array(trim($header), $allowedHeaders)) {
                     return $this->createBadRequestResponse(403, 'Header not allowed');
                 }
             }

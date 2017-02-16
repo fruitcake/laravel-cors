@@ -144,7 +144,7 @@ class CorsServiceTest extends PHPUnit_Framework_TestCase
         $response = $app->handle($request);
 
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertEquals('FOO, BAR', $response->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals('Foo, BAR', $response->headers->get('Access-Control-Allow-Headers'));
     }
 
     /**
