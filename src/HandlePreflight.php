@@ -45,14 +45,19 @@ class HandlePreflight
         $request = clone $request;
         $request->setMethod($request->header('Access-Control-Request-Method'));
 
+        /** @var Router $router */
+        $router = app(Router::class);
         try {
-            /** @var Route[] $routes */
-            $route = app(Router::class)->getRoutes()->match($request);
+            $route = $router->getRoutes()->match($request);
         } catch (HttpException $e) {
             return false;
         }
 
-        return in_array(HandleCors::class, $route->middleware());
+        // Find route aliases
+        $aliases = array_keys($router->getMiddleware(), HandleCors::class, true);
+
+        // Check for aliases and the actual class
+        return !empty(array_intersect($aliases + [HandleCors::class], $route->middleware()));
     }
 
 }
