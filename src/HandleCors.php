@@ -1,7 +1,11 @@
 <?php namespace Barryvdh\Cors;
 
 use Closure;
+use Exception;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Response;
+use Throwable;
 
 class HandleCors
 {
@@ -30,10 +34,24 @@ class HandleCors
 			return new Response('Not allowed.', 403);
 		}
 
-		/** @var \Illuminate\Http\Response $response */
-		$response = $next($request);
+		try {
+            /** @var \Illuminate\Http\Response $response */
+            $response = $next($request);
 
-		return $cors->addActualRequestHeaders($response, $request);
+            return $cors->addActualRequestHeaders($response, $request);
+        } catch (Exception $e) {
+            $this->addKernelHandledEvent($cors);
+        } catch (Throwable $e) {
+            $this->addKernelHandledEvent($cors);
+        }
 	}
+
+	protected function addKernelHandledEvent(CorsService $cors)
+    {
+        $event = version_compare(app()->version(), '5.4', '<') ? 'kernel.handled' : RequestHandled::class;
+        app(Dispatcher::class)->listen($event, function($request, $response) use ($cors) {
+            $cors->addActualRequestHeaders($response, $request);
+        });
+    }
 
 }
