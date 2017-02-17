@@ -37,13 +37,17 @@ class HandleCors
 		try {
             /** @var \Illuminate\Http\Response $response */
             $response = $next($request);
-
-            return $cors->addActualRequestHeaders($response, $request);
         } catch (Exception $e) {
             $this->addKernelHandledEvent($cors);
+
+            throw $e;
         } catch (Throwable $e) {
             $this->addKernelHandledEvent($cors);
+
+            throw $e;
         }
+
+        return $cors->addActualRequestHeaders($response, $request);
 	}
 
 	protected function addKernelHandledEvent(CorsService $cors)
