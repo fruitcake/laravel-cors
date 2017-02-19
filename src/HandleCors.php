@@ -9,8 +9,15 @@ use Throwable;
 
 class HandleCors
 {
+    /** @var Dispatcher $events */
+    protected $events;
 
-	/**
+    public function __construct(Dispatcher $events)
+    {
+        $this->events = $events;
+    }
+
+    /**
 	 * Handle an incoming request. Based on Asm89\Stack\Cors by asm89
 	 * @see https://github.com/asm89/stack-cors/blob/master/src/Asm89/Stack/Cors.php
 	 *
@@ -34,28 +41,17 @@ class HandleCors
 			return new Response('Not allowed.', 403);
 		}
 
-		try {
-            /** @var \Illuminate\Http\Response $response */
-            $response = $next($request);
-        } catch (Exception $e) {
-            $this->addKernelHandledEvent($cors);
-
-            throw $e;
-        } catch (Throwable $e) {
-            $this->addKernelHandledEvent($cors);
-
-            throw $e;
+		// Add the headers on the Request Handled event
+		if (class_exists(RequestHandled::class)) {
+            $this->events->listen(RequestHandled::class, function(RequestHandled $event) use ($cors) {
+                $cors->addActualRequestHeaders($event->response, $event->request);
+            });
+        } else {
+            $this->events->listen('kernel.handled', function($request, $response) use ($cors) {
+                $cors->addActualRequestHeaders($response, $request);
+            });
         }
 
-        return $cors->addActualRequestHeaders($response, $request);
+        return $next($request);
 	}
-
-	protected function addKernelHandledEvent(CorsService $cors)
-    {
-        $event = version_compare(app()->version(), '5.4', '<') ? 'kernel.handled' : RequestHandled::class;
-        app(Dispatcher::class)->listen($event, function($request, $response) use ($cors) {
-            $cors->addActualRequestHeaders($response, $request);
-        });
-    }
-
 }
