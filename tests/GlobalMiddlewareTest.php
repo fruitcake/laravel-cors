@@ -2,7 +2,6 @@
 
 class GlobalMiddlewareTest extends TestCase
 {
-
     /**
      * Define environment setup.
      *

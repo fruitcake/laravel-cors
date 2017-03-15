@@ -10,6 +10,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class HandlePreflight
 {
+    /** @var CorsService $cors */
+    protected $cors;
+
+    public function __construct(CorsService $cors)
+    {
+        $this->cors = $cors;
+    }
 
     /**
      * Handle an incoming Preflight request.
@@ -20,21 +27,19 @@ class HandlePreflight
      */
     public function handle($request, Closure $next)
     {
-        $cors = new CorsService(config('cors', []));
-
-        if ($cors->isPreflightRequest($request)) {
-            if ( ! $this->hasMatchingCorsRoute($request)) {
+        if ($this->cors->isPreflightRequest($request)) {
+            if (! $this->isLumen() && ! $this->hasMatchingCorsRoute($request)) {
                 return new Response('Not allowed.', 403);
             }
 
-            return $cors->handlePreflightRequest($request);
+            return $this->cors->handlePreflightRequest($request);
         }
 
         return $next($request);
     }
 
     /**
-     * Verify the current OPTIONS request matches a CORS-enabled route
+     * Verify the current OPTIONS request matches a CORS-enabled route. Only possible on Laravel (not Lumen)
      *
      * @param  \Illuminate\Http\Request $request
      * @return boolean
@@ -58,6 +63,11 @@ class HandlePreflight
 
         // Check for aliases and the actual class
         return !empty(array_intersect($aliases + [HandleCors::class], $route->middleware()));
+    }
+
+    protected function isLumen()
+    {
+        return str_contains(app()->version(), 'Lumen');
     }
 
 }

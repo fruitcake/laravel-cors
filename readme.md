@@ -27,6 +27,9 @@ Require the `barryvdh/laravel-cors` package in your composer.json and update you
 
     $ composer require barryvdh/laravel-cors:"1.x@dev"
 
+Add the Cors\ServiceProvider to your `config/app.php` providers array:
+
+    Barryvdh\Cors\ServiceProvider::class,
 
 ## Global usage
 
@@ -41,14 +44,9 @@ protected $middleware = [
 
 ## Group middleware
 
-If you want to allow CORS on a specific middleware group or route, you should add the HandlePreflight to your global middleware **AND** HandleCors middleware to your group:
+If you want to allow CORS on a specific middleware group or route, add the HandleCors middleware to your group:
 
 ```php
-protected $middleware = [
-    ..
-    \Barryvdh\Cors\HandlePreflight::class,
-];
-
 protected $middlewareGroups = [
     'web' => [
        ..

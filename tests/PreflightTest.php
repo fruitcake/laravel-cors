@@ -2,22 +2,6 @@
 
 class PreflightTest extends TestCase
 {
-    /**
-     * Define environment setup.
-     *
-     * @param  Illuminate\Foundation\Application $app
-     *
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Add the middleware
-        $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
-        $kernel->prependMiddleware(\Barryvdh\Cors\HandlePreflight::class);
-
-        parent::getEnvironmentSetUp($app);
-    }
-
     public function testAllowOriginAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [

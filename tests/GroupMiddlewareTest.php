@@ -1,25 +1,7 @@
 <?php
 
-use Illuminate\Routing\Router;
-
 class GroupMiddlewareTest extends TestCase
 {
-    /**
-     * Define environment setup.
-     *
-     * @param  Illuminate\Foundation\Application $app
-     *
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Add the middleware
-        $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
-        $kernel->prependMiddleware(\Barryvdh\Cors\HandlePreflight::class);
-
-        parent::getEnvironmentSetUp($app);
-    }
-
     public function testOptionsAllowOriginAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [

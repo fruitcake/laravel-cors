@@ -20,6 +20,11 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
         ];
     }
 
+    protected function getPackageProviders($app)
+    {
+        return [\Barryvdh\Cors\ServiceProvider::class];
+    }
+
     /**
      * Define environment setup.
      *

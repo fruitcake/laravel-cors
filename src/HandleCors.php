@@ -10,11 +10,15 @@ use Throwable;
 
 class HandleCors
 {
+    /** @var CorsService $cors */
+    protected $cors;
+
     /** @var Dispatcher $events */
     protected $events;
 
-    public function __construct(Dispatcher $events)
+    public function __construct(CorsService $cors, Dispatcher $events)
     {
+        $this->cors = $cors;
         $this->events = $events;
     }
 
@@ -28,47 +32,44 @@ class HandleCors
 	 */
 	public function handle($request, Closure $next)
 	{
-	    $cors = new CorsService(config('cors', []));
-
-        if (! $cors->isCorsRequest($request)) {
+        if (! $this->cors->isCorsRequest($request)) {
             return $next($request);
         }
 
-        if ($cors->isPreflightRequest($request)) {
-            return $cors->handlePreflightRequest($request);
+        if ($this->cors->isPreflightRequest($request)) {
+            return $this->cors->handlePreflightRequest($request);
         }
 
-		if ( ! $cors->isActualRequestAllowed($request)) {
+		if ( ! $this->cors->isActualRequestAllowed($request)) {
 			return new Response('Not allowed.', 403);
 		}
 
 		// Add the headers on the Request Handled event as fallback in case of exceptions
 		if (class_exists(RequestHandled::class)) {
-            $this->events->listen(RequestHandled::class, function(RequestHandled $event) use ($cors) {
-                $this->addHeaders($cors, $event->request, $event->response);
+            $this->events->listen(RequestHandled::class, function(RequestHandled $event) {
+                $this->addHeaders($event->request, $event->response);
             });
         } else {
-            $this->events->listen('kernel.handled', function(Request $request, Response $response) use ($cors) {
-                $this->addHeaders($cors, $request, $response);
+            $this->events->listen('kernel.handled', function(Request $request, Response $response) {
+                $this->addHeaders($request, $response);
             });
         }
 
         $response = $next($request);
 
-        return $this->addHeaders($cors, $request, $response);
+        return $this->addHeaders($request, $response);
     }
 
     /**
-     * @param CorsService $cors
      * @param Request $request
      * @param Response $response
      * @return Response
      */
-	protected function addHeaders(CorsService $cors, Request $request, Response $response)
+	protected function addHeaders(Request $request, Response $response)
     {
         // Prevent double checking
         if ( ! $response->headers->has('Access-Control-Allow-Origin')) {
-            $response = $cors->addActualRequestHeaders($response, $request);
+            $response = $this->cors->addActualRequestHeaders($response, $request);
         }
 
         return $response;
