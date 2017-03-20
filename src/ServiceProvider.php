@@ -32,12 +32,12 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
-        $this->publishes([$this->configPath() => config_path('cors.php')]);
-
         // Lumen is limited, so always add the preflight.
         if ($this->isLumen()) {
-            $this->app->middleware(HandlePreflight::class);
+            $this->app->middleware([HandlePreflight::class]);
         } else {
+            $this->publishes([$this->configPath() => config_path('cors.php')]);
+
             /** @var \Illuminate\Foundation\Http\Kernel $kernel */
             $kernel = $this->app->make(Kernel::class);
 
