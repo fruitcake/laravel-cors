@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## v0.9.0 (2016-03-2017)
 ### Breaking changes
+ - The `cors` alias is no longer added by default. Use the full class or add the alias yourself.
  - The Lumen ServiceProvider has been removed. Both Laravel and Lumen should use `Barryvdh\Cors\ServiceProvider::class`.
  
 ### Added
