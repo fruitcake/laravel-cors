@@ -102,6 +102,22 @@ return [
 On Laravel Lumen, load your configuration file manually:
 
     $app->configure('cors');
+    
+## Global usage for Lumen
+To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware
+
+```php
+    $app->middleware([
+        \Barryvdh\Cors\HandleCors::class
+```
+
+## Group middleware for Lumen
+If you want to allow CORS on a specific middleware group or route, add the HandleCors middleware to your group:
+
+```php
+    $app->routeMiddleware([
+        'auth' => App\Http\Middleware\Authenticate::class,
+```
 
 ## Common problems and errors (Pre Laravel 5.3)
 In order for the package to work, the request has to be a valid CORS request and needs to include an "Origin" header.
