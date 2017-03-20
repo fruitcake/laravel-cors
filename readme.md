@@ -116,7 +116,7 @@ If you want to allow CORS on a specific middleware group or route, add the Handl
 
 ```php
     $app->routeMiddleware([
-        'auth' => App\Http\Middleware\Authenticate::class,
+        'cors' => \Barryvdh\Cors\HandleCors::class,
 ```
 
 ## Common problems and errors (Pre Laravel 5.3)
