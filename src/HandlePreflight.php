@@ -58,11 +58,14 @@ class HandlePreflight
             return false;
         }
 
-        // Find route aliases
-        $aliases = array_keys($router->getMiddleware(), HandleCors::class, true);
+        // change of method name in laravel 5.3
+        if (method_exists($router, 'gatherRouteMiddleware')) {
+            $middleware = $router->gatherRouteMiddleware($route);
+        } else {
+            $middleware = $router->gatherRouteMiddlewares($route);
+        }
 
-        // Check for aliases and the actual class
-        return !empty(array_intersect($aliases + [HandleCors::class], $route->middleware()));
+        return in_array(HandleCors::class, $middleware);
     }
 
     protected function isLumen()
