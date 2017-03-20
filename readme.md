@@ -6,7 +6,6 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 
 Based on https://github.com/asm89/stack-cors
-For Laravel 4, please use the [0.2 branch](https://github.com/barryvdh/laravel-cors/tree/0.2)!
 
 ## About
 
@@ -25,7 +24,7 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
 
-    $ composer require barryvdh/laravel-cors:"1.x@dev"
+    $ composer require barryvdh/laravel-cors
 
 Add the Cors\ServiceProvider to your `config/app.php` providers array:
 
