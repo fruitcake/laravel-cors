@@ -1,28 +1,36 @@
 language: php
 
 php:
-  - 5.5.9
   - 5.5
   - 5.6
   - 7.0
-  - hhvm
+  - 7.1
 
 env:
   global:
-    - setup=basic
+    - setup=stable
+    - laravel=5.x
 
 matrix:
   include:
-    - php: 5.5.9
+    - php: 5.5
       env: setup=lowest
-    - php: 5.5.9
-      env: setup=stable
+    - php: 5.5
+      env: laravel=5.1.x
+    - php: 5.6
+      env: laravel=5.2.x
+    - php: 5.6
+      env: laravel=5.3.x
 
 sudo: false
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 install:
-  - if [[ $setup = 'basic' ]]; then travis_retry composer install --no-interaction --prefer-source; fi
-  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-stable; fi
-  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-source --no-interaction --prefer-lowest --prefer-stable; fi
+  - composer require laravel/framework:${laravel} --no-update
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable; fi
+  - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
 
 script: vendor/bin/phpunit

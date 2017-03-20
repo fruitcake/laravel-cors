@@ -18,14 +18,20 @@
     "autoload": {
         "psr-4": {
             "Barryvdh\\Cors\\": "src/"
-        }
+        },
+        "classmap": [
+            "tests"
+        ]
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.8-dev"
+            "dev-develop": "1.0-dev"
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8|^5.2"
-    }
+        "phpunit/phpunit": "^4.8|^5.2",
+        "orchestra/testbench": "3.x"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

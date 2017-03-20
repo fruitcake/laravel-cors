@@ -1,8 +1,6 @@
 <?php namespace Barryvdh\Cors;
 
-use Barryvdh\Cors\Stack\CorsService;
 use Illuminate\Contracts\Http\Kernel;
-use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
@@ -31,25 +29,32 @@ class ServiceProvider extends BaseServiceProvider
     /**
      * Add the Cors middleware to the router.
      *
-     * @param Kernel $kernel
      */
-    public function boot(Request $request, Kernel $kernel)
+    public function boot()
     {
         $this->publishes([$this->configPath() => config_path('cors.php')]);
 
-        if (method_exists($this->app['router'], 'aliasMiddleware')) {
-            $this->app['router']->aliasMiddleware('cors', HandleCors::class);
+        // Lumen is limited, so always add the preflight.
+        if ($this->isLumen()) {
+            $this->app->middleware(HandlePreflight::class);
         } else {
-            $this->app['router']->middleware('cors', HandleCors::class);
-        }
+            /** @var \Illuminate\Foundation\Http\Kernel $kernel */
+            $kernel = $this->app->make(Kernel::class);
 
-        if ($request->isMethod('OPTIONS')) {
-            $kernel->prependMiddleware(HandlePreflight::class);
+            // When the HandleCors middleware is not attached globally, add the PreflightCheck
+            if ( ! $kernel->hasMiddleware(HandleCors::class)) {
+                $kernel->pushMiddleware(HandlePreflight::class);
+            }
         }
     }
 
     protected function configPath()
     {
         return __DIR__ . '/../config/cors.php';
+    }
+
+    protected function isLumen()
+    {
+        return str_contains($this->app->version(), 'Lumen');
     }
 }

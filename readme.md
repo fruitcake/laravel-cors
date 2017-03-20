@@ -1,12 +1,17 @@
-# CORS in Laravel 5
-Based on https://github.com/asm89/stack-cors
+# CORS Middleware for Laravel 5
 
-### For Laravel 4, please use the [0.2 branch](https://github.com/barryvdh/laravel-cors/tree/0.2)!
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+[![Build Status][ico-travis]][link-travis]
+[![Total Downloads][ico-downloads]][link-downloads]
+
+Based on https://github.com/asm89/stack-cors
+For Laravel 4, please use the [0.2 branch](https://github.com/barryvdh/laravel-cors/tree/0.2)!
 
 ## About
 
 The `laravel-cors` package allows you to send [Cross-Origin Resource Sharing](http://enable-cors.org/)
-headers with ACL-style per-url configuration.
+headers with Laravel middleware configuration.
 
 If you want to have have a global overview of CORS workflow, you can  browse
 this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
@@ -15,6 +20,45 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 * Handles CORS pre-flight OPTIONS requests
 * Adds CORS headers to your responses
+
+## Installation
+
+Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
+
+    $ composer require barryvdh/laravel-cors:"1.x@dev"
+
+Add the Cors\ServiceProvider to your `config/app.php` providers array:
+
+    Barryvdh\Cors\ServiceProvider::class,
+
+## Global usage
+
+To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware (`$middleware` in your `Kernel.php`)
+
+```php
+protected $middleware = [
+    ..
+    \Barryvdh\Cors\HandleCors::class,
+];
+```
+
+## Group middleware
+
+If you want to allow CORS on a specific middleware group or route, add the HandleCors middleware to your group:
+
+```php
+protected $middlewareGroups = [
+    'web' => [
+       ..
+    ],
+
+    'api' => [
+        ..
+        \Barryvdh\Cors\HandleCors::class,
+    ],
+];
+```
+
 
 ## Configuration
 
@@ -26,6 +70,7 @@ The defaults are set in `config/cors.php`. Copy this file to your own config dir
 
 > **Note:** If you are explicitly whitelisting headers, you must include `Origin` or requests will fail to be recognized as CORS.
 
+    
 ```php
 return [
      /*
@@ -40,70 +85,38 @@ return [
      */
     'supportsCredentials' => false,
     'allowedOrigins' => ['*'],
-    'allowedHeaders' => ['*'], // ex : ['Content-Type', 'Accept']
+    'allowedHeaders' => ['Content-Type', 'X-Requested-With'],
     'allowedMethods' => ['*'], // ex: ['GET', 'POST', 'PUT',  'DELETE']
     'exposedHeaders' => [],
     'maxAge' => 0,
-    'hosts' => [],
 ]
 ```
 
-`allowedOrigins`, `allowedHeaders` and `allowedMethods` can be set to `array('*')` to accept any value, the
-allowed methods however have to be explicitly listed.
+`allowedOrigins`, `allowedHeaders` and `allowedMethods` can be set to `array('*')` to accept any value.
+
+> **Note:** Try to be a specific as possible. You can start developing with loose constraints, but it's better to be as strict as possible!
 
 > **Note:** Because of [http method overriding](http://symfony.com/doc/current/reference/configuration/framework.html#http-method-override) in Laravel, allowing POST methods will also enable the API users to perform PUT and DELETE requests as well.
 
-## Installation
+### Lumen
 
-Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
-
-    $ composer require barryvdh/laravel-cors
-
-Add the Cors\ServiceProvider to your config/app.php providers array:
-
-```php
-Barryvdh\Cors\ServiceProvider::class,
-```
-
-## Usage
-
-The ServiceProvider adds a route middleware you can use, called `cors`. You can apply this to a route or group to add CORS support.
-
-```php
-Route::group(['middleware' => 'cors'], function(Router $router){
-    $router->get('api', 'ApiController@index');
-});
-```
-
-If you want CORS to apply for all your routes, add it as global middleware in `app/http/Kernel.php`:
-
-```php
-protected $middleware = [
-    ....
-    \Barryvdh\Cors\HandleCors::class
-];
-```
-
-## Lumen
-
-On Laravel Lumen, use LumenServiceProvider:
-
-    'Barryvdh\Cors\LumenServiceProvider',
-
-And load your configuration file manually:
+On Laravel Lumen, load your configuration file manually:
 
     $app->configure('cors');
 
-## Common problems and errors
+## Common problems and errors (Pre Laravel 5.3)
 In order for the package to work, the request has to be a valid CORS request and needs to include an "Origin" header.
 
 When an error occurs, the middleware isn't run completely. So when this happens, you won't see the actual result, but will get a CORS error instead.
 
 This could be a CSRF token error or just a simple problem.
 
+> **Note:** This should be working in Laravel 5.3+
+
 ### Disabling CSRF protection for your API
 
-In `App\Http\Middleware\VerifyCsrfToken`, add your routes to the exceptions:
+If possible, use a different route group with CSRF protection enabled. 
+Otherwise you can disable CSRF for certain requests in `App\Http\Middleware\VerifyCsrfToken`:
 
 ```php
 protected $except = [
@@ -111,32 +124,21 @@ protected $except = [
 ];
 ```
     
-### Debugging errors
-
-A simple but hacky method is to just always send the CORS headers. This isn't recommended for production, but it will show you the actual errors.
-
-Add this to the top of `public/index.php`:
-
-```php
-header("Access-Control-Allow-Origin: *");
-```
-
-Don't forget to remove that in production, so you can specify what routes/headers/origins are allowed.
-    
-You can add the CORS headers to the Errors also, in your Exception Handler:
-
-```php
-public function render($request, Exception $e)
-{
-    $response = parent::render($request, $e);
-
-    if ($request->is('api/*')) {
-        app('Barryvdh\Cors\Stack\CorsService')->addActualRequestHeaders($response, $request);
-    }
-
-    return $response;
-}
-```
 ## License
 
 Released under the MIT License, see LICENSE.
+
+[ico-version]: https://img.shields.io/packagist/v/barryvdh/laravel-cors.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/barryvdh/laravel-cors/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/barryvdh/laravel-cors.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/barryvdh/laravel-cors.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/barryvdh/laravel-cors.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/barryvdh/laravel-cors
+[link-travis]: https://travis-ci.org/barryvdh/laravel-cors
+[link-scrutinizer]: https://scrutinizer-ci.com/g/barryvdh/laravel-cors/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/barryvdh/laravel-cors
+[link-downloads]: https://packagist.org/packages/barryvdh/laravel-cors
+[link-author]: https://github.com/barryvdh
+[link-contributors]: ../../contributors
