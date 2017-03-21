@@ -22,50 +22,51 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 ## Installation
 
-Require the `barryvdh/laravel-cors` package in your composer.json and update your dependencies.
-
-    $ composer require barryvdh/laravel-cors
+Require the `barryvdh/laravel-cors` package in your `composer.json` and update your dependencies:
+```sh
+$ composer require barryvdh/laravel-cors
+```
 
 Add the Cors\ServiceProvider to your `config/app.php` providers array:
-
-    Barryvdh\Cors\ServiceProvider::class,
+```php
+Barryvdh\Cors\ServiceProvider::class,
+```
 
 ## Global usage
 
-To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware (`$middleware` in your `Kernel.php`)
+To allow CORS for all your routes, add the `HandleCors` middleware in the `$middleware` property of  `app/Http/Kernel.php` class:
 
 ```php
 protected $middleware = [
-    ..
+    // ...
     \Barryvdh\Cors\HandleCors::class,
 ];
 ```
 
 ## Group middleware
 
-If you want to allow CORS on a specific middleware group or route, add the HandleCors middleware to your group:
+If you want to allow CORS on a specific middleware group or route, add the `HandleCors` middleware to your group:
 
 ```php
 protected $middlewareGroups = [
     'web' => [
-       ..
+       // ...
     ],
 
     'api' => [
-        ..
+        // ...
         \Barryvdh\Cors\HandleCors::class,
     ],
 ];
 ```
 
-
 ## Configuration
 
 The defaults are set in `config/cors.php`. Copy this file to your own config directory to modify the values. You can publish the config using this command:
-
-    php artisan vendor:publish --provider="Barryvdh\Cors\ServiceProvider"
-
-> **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the allowedHeaders to include those headers. You can also set it to `array('*')` to allow all custom headers.
+```sh
+$ php artisan vendor:publish --provider="Barryvdh\Cors\ServiceProvider"
+```
+> **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the `allowedHeaders` to include those headers. You can also set it to `array('*')` to allow all custom headers.
 
 > **Note:** If you are explicitly whitelisting headers, you must include `Origin` or requests will fail to be recognized as CORS.
 
@@ -77,7 +78,6 @@ return [
      | Laravel CORS
      |--------------------------------------------------------------------------
      |
-
      | allowedOrigins, allowedHeaders and allowedMethods can be set to array('*')
      | to accept any value.
      |
@@ -100,23 +100,27 @@ return [
 ### Lumen
 
 On Laravel Lumen, load your configuration file manually:
-
-    $app->configure('cors');
-    
-## Global usage for Lumen
-To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware
-
 ```php
-    $app->middleware([
-        \Barryvdh\Cors\HandleCors::class
+$app->configure('cors');
+```
+
+## Global usage for Lumen
+To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware:
+```php
+$app->middleware([
+    // ...
+    \Barryvdh\Cors\HandleCors::class,
+];
 ```
 
 ## Group middleware for Lumen
-If you want to allow CORS on a specific middleware group or route, add the HandleCors middleware to your group:
+If you want to allow CORS on a specific middleware group or route, add the `HandleCors` middleware to your group:
 
 ```php
-    $app->routeMiddleware([
-        'cors' => \Barryvdh\Cors\HandleCors::class,
+$app->routeMiddleware([
+    // ...
+    'cors' => \Barryvdh\Cors\HandleCors::class,
+];
 ```
 
 ## Common problems and errors (Pre Laravel 5.3)
@@ -126,7 +130,7 @@ When an error occurs, the middleware isn't run completely. So when this happens,
 
 This could be a CSRF token error or just a simple problem.
 
-> **Note:** This should be working in Laravel 5.3+
+> **Note:** This should be working in Laravel 5.3+.
 
 ### Disabling CSRF protection for your API
 
@@ -135,13 +139,13 @@ Otherwise you can disable CSRF for certain requests in `App\Http\Middleware\Veri
 
 ```php
 protected $except = [
-  'api/*'
+    'api/*'
 ];
 ```
     
 ## License
 
-Released under the MIT License, see LICENSE.
+Released under the MIT License, see [LICENSE](LICENSE).
 
 [ico-version]: https://img.shields.io/packagist/v/barryvdh/laravel-cors.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
