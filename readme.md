@@ -99,9 +99,15 @@ return [
 
 ### Lumen
 
-On Laravel Lumen, load your configuration file manually:
+On Laravel Lumen, load your configuration file manually in `bootstrap/app.php`:
 ```php
 $app->configure('cors');
+```
+
+And register the ServiceProvider:
+
+```php
+$app->register(Barryvdh\Cors\ServiceProvider::class);
 ```
 
 ## Global usage for Lumen
