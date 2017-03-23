@@ -148,34 +148,6 @@ protected $except = [
     'api/*'
 ];
 ```
-
-### Debugging errors
-
-A simple but hacky method is to just always send the CORS headers. This isn't recommended for production, but it will show you the actual errors.
-
-Add this to the top of `public/index.php`:
-
-```php
-header("Access-Control-Allow-Origin: *");
-```
-
-Don't forget to remove that in production, so you can specify what routes/headers/origins are allowed.
-    
-You can add the CORS headers to the Errors also, in your Exception Handler:
-
-```php
-public function render($request, Exception $e)
-{
-    $response = parent::render($request, $e);
-
-    if ($request->is('api/*')) {
-        app('Barryvdh\Cors\CorsService')->addActualRequestHeaders($response, $request);
-    }
-
-    return $response;
-}
-```
-> **Note:** namespace are changed after 0.8.6 (`Barryvdh\Cors\Stack` not exists anymore)
     
 ## License
 
