@@ -43,7 +43,7 @@ class ServiceProvider extends BaseServiceProvider
 
             // When the HandleCors middleware is not attached globally, add the PreflightCheck
             if ( ! $kernel->hasMiddleware(HandleCors::class)) {
-                $kernel->pushMiddleware(HandlePreflight::class);
+                $kernel->prependMiddleware(HandlePreflight::class);
             }
         }
     }
