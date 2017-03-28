@@ -25,13 +25,12 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.10-dev",
-            "dev-develop": "1.0-dev"
+            "dev-master": "1.0-dev"
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8|^5.2",
-        "orchestra/testbench": "3.x"
+        "phpunit/phpunit": "^5.2",
+        "orchestra/testbench": "3.x",
     },
     "minimum-stability": "dev",
     "prefer-stable": true
