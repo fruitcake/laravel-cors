@@ -192,5 +192,4 @@ class CorsService
         $requestMethod = strtoupper($request->headers->get('Access-Control-Request-Method'));
         return in_array($requestMethod, $this->options['allowedMethods']);
     }
-
 }

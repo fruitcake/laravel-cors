@@ -233,8 +233,10 @@ class CorsServiceTest extends PHPUnit_Framework_TestCase
         $response = $app->handle($request);
 
         $this->assertTrue($response->headers->has('Access-Control-Expose-Headers'));
-        $this->assertEquals('x-exposed-header, x-another-exposed-header',
-            $response->headers->get('Access-Control-Expose-Headers'));
+        $this->assertEquals(
+            'x-exposed-header, x-another-exposed-header',
+            $response->headers->get('Access-Control-Expose-Headers')
+        );
     }
 
     /**
@@ -399,8 +401,10 @@ class CorsServiceTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($response->headers->has('Access-Control-Allow-Headers'));
         // the response will have the "allowedHeaders" value passed to Cors rather than the request one
-        $this->assertEquals('x-allowed-header, x-other-allowed-header',
-            $response->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals(
+            'x-allowed-header, x-other-allowed-header',
+            $response->headers->get('Access-Control-Allow-Headers')
+        );
     }
 
     /**
@@ -464,14 +468,15 @@ class CorsServiceTest extends PHPUnit_Framework_TestCase
 
     private function createStackedApp(array $options = array(), array $responseHeaders = array())
     {
-        $passedOptions = array_merge(array(
+        $passedOptions = array_merge(
+            array(
             'allowedHeaders' => array('x-allowed-header', 'x-other-allowed-header'),
             'allowedMethods' => array('delete', 'get', 'post', 'put'),
             'allowedOrigins' => array('localhost'),
             'exposedHeaders' => false,
             'maxAge' => false,
             'supportsCredentials' => false,
-        ),
+            ),
             $options
         );
 

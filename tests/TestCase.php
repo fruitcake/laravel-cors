@@ -122,5 +122,4 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
     {
         return version_compare($this->app->version(), $version, $operator);
     }
-
 }

@@ -21,7 +21,7 @@ class ServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom($this->configPath(), 'cors');
 
-        $this->app->singleton(CorsService::class, function($app){
+        $this->app->singleton(CorsService::class, function ($app) {
             return new CorsService($app['config']->get('cors'));
         });
     }
@@ -42,7 +42,7 @@ class ServiceProvider extends BaseServiceProvider
             $kernel = $this->app->make(Kernel::class);
 
             // When the HandleCors middleware is not attached globally, add the PreflightCheck
-            if ( ! $kernel->hasMiddleware(HandleCors::class)) {
+            if (! $kernel->hasMiddleware(HandleCors::class)) {
                 $kernel->prependMiddleware(HandlePreflight::class);
             }
         }

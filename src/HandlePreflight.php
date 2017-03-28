@@ -29,7 +29,6 @@ class HandlePreflight
     {
         if ($this->cors->isPreflightRequest($request)) {
             if (! $this->isLumen()) {
-
                 $route = $this->findRouteForMethod($request);
 
                 if (! $route) {

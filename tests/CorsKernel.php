@@ -33,7 +33,6 @@ class CorsKernel implements HttpKernelInterface
     {
         $this->app = $app;
         $this->cors = new CorsService(array_merge($this->defaultOptions, $options));
-
     }
 
     public function handle(Request $request, $type = HttpKernelInterface::MASTER_REQUEST, $catch = true)
