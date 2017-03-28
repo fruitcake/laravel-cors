@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 5.5
   - 5.6
   - 7.0
   - 7.1
@@ -13,14 +12,12 @@ env:
 
 matrix:
   include:
-    - php: 5.5
-      env: setup=lowest
-    - php: 5.5
-      env: laravel=5.1.x
     - php: 5.6
-      env: laravel=5.2.x
+      env: setup=lowest
     - php: 5.6
       env: laravel=5.3.x
+    - php: 7.0
+      env: laravel=5.5.x
 
 sudo: false
 
@@ -29,7 +26,7 @@ cache:
     - $HOME/.composer/cache
 
 install:
-  - composer require laravel/framework:${laravel} --no-update
+  - composer require illuminate/support:${laravel} --no-update
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
 

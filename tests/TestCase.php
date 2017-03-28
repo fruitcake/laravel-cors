@@ -94,6 +94,12 @@ abstract class TestCase extends Orchestra\Testbench\TestCase
                 }
             ]);
 
+            $router->put('api/ping', [
+                'uses' => function () {
+                    return 'PONG';
+                }
+            ]);
+
             $router->post('api/error', [
                 'uses' => function () {
                     abort(500);

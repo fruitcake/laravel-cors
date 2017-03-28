@@ -28,8 +28,17 @@ class HandlePreflight
     public function handle($request, Closure $next)
     {
         if ($this->cors->isPreflightRequest($request)) {
-            if (! $this->isLumen() && ! $this->hasMatchingCorsRoute($request)) {
-                return new Response('Not allowed.', 403);
+            if (! $this->isLumen()) {
+
+                $route = $this->findRouteForMethod($request);
+
+                if (! $route) {
+                    return new Response('Not found.', 404);
+                }
+
+                if (! $this->hasMatchingCorsRoute($route)) {
+                    return new Response('Not allowed.', 403);
+                }
             }
 
             return $this->cors->handlePreflightRequest($request);
@@ -39,38 +48,51 @@ class HandlePreflight
     }
 
     /**
-     * Verify the current OPTIONS request matches a CORS-enabled route. Only possible on Laravel (not Lumen)
+     * Find the current route for the requested method. Only possible on Laravel (not Lumen)
      *
      * @param  \Illuminate\Http\Request $request
-     * @return boolean
+     * @return Route|null
      */
-    private function hasMatchingCorsRoute($request)
+    protected function findRouteForMethod($request)
     {
-        // Check if CORS is added as a route middleware
-        $request = clone $request;
-        $request->setMethod($request->header('Access-Control-Request-Method'));
+        $method = $request->header('Access-Control-Request-Method');
 
         /** @var Router $router */
         $router = app(Router::class);
-        try {
-            $route = $router->getRoutes()->match($request);
-        } catch (HttpException $e) {
-            return false;
-        }
 
-        // change of method name in laravel 5.3
-        if (method_exists($router, 'gatherRouteMiddleware')) {
-            $middleware = $router->gatherRouteMiddleware($route);
-        } else {
-            $middleware = $router->gatherRouteMiddlewares($route);
-        }
+        $routes = $router->getRoutes()->get($method);
 
-        return in_array(HandleCors::class, $middleware);
+        return $this->matchAgainstRoutes($routes, $request);
     }
 
+    /**
+     * Verify the matching ROUTE is CORS-enabled.
+     *
+     * @param  Route $route
+     * @return boolean
+     */
+    protected function hasMatchingCorsRoute($route)
+    {
+        return in_array(HandleCors::class, $route->middleware());
+    }
+
+    /**
+     * @param array $routes
+     * @param $request
+     * @return Route|null
+     */
+    protected function matchAgainstRoutes(array $routes, $request)
+    {
+        return Arr::first($routes, function ($value) use ($request) {
+            return $value->matches($request, false);
+        });
+    }
+
+    /**
+     * @return bool
+     */
     protected function isLumen()
     {
         return str_contains(app()->version(), 'Lumen');
     }
-
 }
