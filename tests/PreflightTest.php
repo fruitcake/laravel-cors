@@ -71,7 +71,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'X-Custom-1, X-Custom-2',
         ]);
-        $this->assertEquals('X-Custom-1, X-Custom-2', $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals('x-custom-1, x-custom-2', $crawler->headers->get('Access-Control-Allow-Headers'));
         $this->assertEquals(200, $crawler->getStatusCode());
     }
 
@@ -84,7 +84,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'X-Custom-3',
         ]);
-        $this->assertEquals('X-Custom-3', $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals('X-CUSTOM-3', $crawler->headers->get('Access-Control-Allow-Headers'));
         $this->assertEquals(200, $crawler->getStatusCode());
     }
 
