@@ -13,7 +13,8 @@
         "php": ">=5.5.9",
         "illuminate/support": "5.3.x|5.4.x|5.5.x",
         "symfony/http-foundation": "~3.1",
-        "symfony/http-kernel": "~3.1"
+        "symfony/http-kernel": "~3.1",
+        "asm89/stack-cors": "^1"
     },
     "autoload": {
         "psr-4": {

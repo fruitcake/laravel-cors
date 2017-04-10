@@ -1,6 +1,6 @@
 <?php
 
-use Barryvdh\Cors\CorsService;
+use Asm89\Stack\CorsService;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
