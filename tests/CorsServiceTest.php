@@ -74,6 +74,36 @@ class CorsServiceTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function it_returns_allow_origin_header_on_allow_wildcard_origin_request()
+    {
+        $app      = $this->createStackedApp(array('allowedOrigins' => array('*.example.com')));
+        $request  = new Request();
+        $request->headers->set('Origin', 'http://foo.example.com');
+
+        $response = $app->handle($request);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertTrue($response->headers->has('Access-Control-Allow-Origin'));
+        $this->assertEquals('http://foo.example.com', $response->headers->get('Access-Control-Allow-Origin'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_return_allow_origin_header_on_invalid_allow_wildcard_origin_request()
+    {
+        $app      = $this->createStackedApp(array('allowedOrigins' => array('*.example.com')));
+        $request  = new Request();
+        $request->headers->set('Origin', 'http://otherexample.com');
+
+        $response = $app->handle($request);
+
+        $this->assertFalse($response->headers->has('Access-Control-Allow-Origin'));
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_allow_all_origin_header()
     {
         $app = $this->createStackedApp(array('allowedOrigins' => array('*')));
