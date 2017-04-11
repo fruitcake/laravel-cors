@@ -35,5 +35,4 @@ class HandlePreflight
 
         return $response;
     }
-
 }
