@@ -27,71 +27,13 @@ class HandlePreflight
      */
     public function handle($request, Closure $next)
     {
+        $response = $next($request);
+
         if ($this->cors->isPreflightRequest($request)) {
-            if (! $this->isLumen()) {
-                $route = $this->findRouteForMethod($request);
-
-                if (! $route) {
-                    return new Response('Not found.', 404);
-                }
-
-                if (! $this->hasMatchingCorsRoute($route)) {
-                    return new Response('Not allowed.', 403);
-                }
-            }
-
-            return $this->cors->handlePreflightRequest($request);
+            return $this->cors->addPreflightRequestHeaders($response, $request);
         }
 
         return $next($request);
     }
 
-    /**
-     * Find the current route for the requested method. Only possible on Laravel (not Lumen)
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return Route|null
-     */
-    protected function findRouteForMethod($request)
-    {
-        $method = $request->header('Access-Control-Request-Method');
-
-        /** @var Router $router */
-        $router = app(Router::class);
-
-        $routes = $router->getRoutes()->get($method);
-
-        return $this->matchAgainstRoutes($routes, $request);
-    }
-
-    /**
-     * Verify the matching ROUTE is CORS-enabled.
-     *
-     * @param  Route $route
-     * @return boolean
-     */
-    protected function hasMatchingCorsRoute($route)
-    {
-        return in_array(HandleCors::class, $route->middleware());
-    }
-
-    /**
-     * @param array $routes
-     * @param $request
-     * @return Route|null
-     */
-    protected function matchAgainstRoutes(array $routes, $request)
-    {
-        return Arr::first($routes, function ($value) use ($request) {
-            return $value->matches($request, false);
-        });
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isLumen()
-    {
-        return str_contains(app()->version(), 'Lumen');
-    }
 }
