@@ -163,7 +163,13 @@ class CorsService
 
     private function isSameHost(Request $request)
     {
-        return $request->headers->get('Origin') === $request->getSchemeAndHttpHost();
+        $scheme = $request->getScheme();
+
+        if (strtolower($request->server->get('HTTP_X_FORWARDED_PROTO')) === 'https') {
+            $scheme = 'https';
+        }
+
+        return $request->headers->get('Origin') === ($scheme . '://' . $request->getHttpHost());
     }
 
     private function checkOrigin(Request $request)
