@@ -4,7 +4,8 @@ use Closure;
 use Exception;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Foundation\Http\Events\RequestHandled;
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response as LaravelResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -41,7 +42,7 @@ class HandleCors
         }
 
         if (! $this->cors->isActualRequestAllowed($request)) {
-            return new Response('Not allowed.', 403);
+            return new LaravelResponse('Not allowed.', 403);
         }
 
         // Add the headers on the Request Handled event as fallback in case of exceptions
