@@ -104,10 +104,10 @@ On Laravel Lumen, load your configuration file manually in `bootstrap/app.php`:
 $app->configure('cors');
 ```
 
-And register the ServiceProvider:
+And register the LumenServiceProvider:
 
 ```php
-$app->register(Barryvdh\Cors\ServiceProvider::class);
+$app->register(Barryvdh\Cors\LumenServiceProvider::class);
 ```
 
 ## Global usage for Lumen
