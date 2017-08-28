@@ -24,13 +24,13 @@ class PreflightTest extends TestCase
         $this->assertEquals(403, $crawler->getStatusCode());
     }
 
-    public function testAllowNotFound()
+    public function testAllowNotFoundUsesConfig()
     {
         $crawler = $this->call('OPTIONS', 'api/pang', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
-        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Methods'));
+        $this->assertEquals('GET, POST', $crawler->headers->get('Access-Control-Allow-Methods'));
         $this->assertEquals(404, $crawler->getStatusCode());
     }
 
@@ -60,8 +60,8 @@ class PreflightTest extends TestCase
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
-        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Methods'));
-        $this->assertEquals(403, $crawler->getStatusCode());
+        $this->assertEquals('GET, POST', $crawler->headers->get('Access-Control-Allow-Methods'));
+        $this->assertEquals(200, $crawler->getStatusCode());
     }
 
     public function testAllowHeaderAllowed()

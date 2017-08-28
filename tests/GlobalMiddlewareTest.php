@@ -37,7 +37,7 @@ class GlobalMiddlewareTest extends TestCase
         ]);
 
         $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(404, $crawler->getStatusCode());
     }
 
     public function testOptionsAllowOriginNotAllowed()

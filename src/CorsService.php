@@ -93,16 +93,16 @@ class CorsService
 
     public function handlePreflightRequest(Request $request)
     {
+        $response = new Response();
+
+        return $this->addPreflightRequestHeaders($response, $request);
+    }
+
+    public function addPreflightRequestHeaders(Response $response, Request $request)
+    {
         if (true !== $check = $this->checkPreflightRequestConditions($request)) {
             return $check;
         }
-
-        return $this->buildPreflightCheckResponse($request);
-    }
-
-    private function buildPreflightCheckResponse(Request $request)
-    {
-        $response = new Response();
 
         if ($this->options['supportsCredentials']) {
             $response->headers->set('Access-Control-Allow-Credentials', 'true');
