@@ -72,7 +72,17 @@ class HandlePreflight
      */
     protected function hasMatchingCorsRoute($route)
     {
-        return in_array(HandleCors::class, $route->middleware());
+        /** @var Router $router */
+        $router = app(Router::class);
+
+        // change of method name in laravel 5.3
+        if (method_exists($router, 'gatherRouteMiddleware')) {
+            $middleware = $router->gatherRouteMiddleware($route);
+        } else {
+            $middleware = $router->gatherRouteMiddlewares($route);
+        }
+
+        return in_array(HandleCors::class, $middleware);
     }
 
     /**
