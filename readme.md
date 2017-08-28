@@ -116,7 +116,7 @@ To allow CORS for all your routes, add the `HandleCors` middleware to the global
 $app->middleware([
     // ...
     \Barryvdh\Cors\HandleCors::class,
-];
+]);
 ```
 
 ## Group middleware for Lumen
@@ -126,7 +126,7 @@ If you want to allow CORS on a specific middleware group or route, add the `Hand
 $app->routeMiddleware([
     // ...
     'cors' => \Barryvdh\Cors\HandleCors::class,
-];
+]);
 ```
 
 ## Common problems and errors (Pre Laravel 5.3)
