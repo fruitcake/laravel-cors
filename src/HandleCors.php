@@ -43,7 +43,7 @@ class HandleCors
         }
 
         if (! $this->cors->isActualRequestAllowed($request)) {
-            return new LaravelResponse('Not allowed.', 403);
+            return new LaravelResponse('Not allowed in CORS policy.', 403);
         }
 
         // Add the headers on the Request Handled event as fallback in case of exceptions
