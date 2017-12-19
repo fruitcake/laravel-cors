@@ -38,8 +38,7 @@ class HandleCors
         }
 
         if ($this->cors->isPreflightRequest($request)) {
-            $response = $next($request);
-            return $this->cors->addPreflightRequestHeaders($response, $request);
+            return $this->cors->handlePreflightRequest($request);
         }
 
         if (! $this->cors->isActualRequestAllowed($request)) {
