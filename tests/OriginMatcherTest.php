@@ -188,6 +188,16 @@ class OriginMatcherTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testShouldThrowExceptionBecausePatternIsInvalid()
+    {
+        OriginMatcher::portMatches('*$~`', '*$~`');
+    }
+
+
     /**
      * @dataProvider portMatchesDataProvider
      */

@@ -18,6 +18,16 @@ class GlobalMiddlewareTest extends TestCase
         parent::getEnvironmentSetUp($app);
     }
 
+    public function testShouldReturnNullOnHeaderAssessControlAllowOriginBecauseDontHaveHttpOriginOnRequest()
+    {
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+        ]);
+
+        $this->assertNull($crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals(200, $crawler->getStatusCode());
+    }
+
     public function testOptionsAllowOriginAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
