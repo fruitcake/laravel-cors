@@ -32,6 +32,6 @@ class HandlePreflight
             return $this->cors->addPreflightRequestHeaders($response, $request);
         }
 
-        return $response = $next($request);
+        return $next($request);
     }
 }
