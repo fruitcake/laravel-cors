@@ -69,6 +69,11 @@ class CorsService
             return $response;
         }
 
+        if ($response->getStatusCode() == 405) {
+            $response->setContent('');
+            $response->setStatusCode(200);
+        }
+
         $allowOrigin = $this->options['allowedOrigins'] === true && !$this->options['supportsCredentials']
             ? '*'
             : $request->headers->get('Origin');
