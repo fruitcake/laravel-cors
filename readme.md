@@ -27,7 +27,9 @@ Require the `barryvdh/laravel-cors` package in your `composer.json` and update y
 $ composer require barryvdh/laravel-cors
 ```
 
-Add the Cors\ServiceProvider to your `config/app.php` providers array:
+For laravel >=5.5 that's all. This package supports Laravel new [Package Discovery](https://laravel.com/docs/5.5/packages#package-discovery).
+
+If you are using Laravel < 5.5, you also need to add Cors\ServiceProvider to your `config/app.php` providers array:
 ```php
 Barryvdh\Cors\ServiceProvider::class,
 ```
