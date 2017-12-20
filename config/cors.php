@@ -14,6 +14,7 @@ return [
    
     'supportsCredentials' => false,
     'allowedOrigins' => ['*'],
+    'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],
     'exposedHeaders' => [],

@@ -23,7 +23,17 @@ class ServiceProvider extends BaseServiceProvider
         $this->mergeConfigFrom($this->configPath(), 'cors');
 
         $this->app->singleton(CorsService::class, function ($app) {
-            return new CorsService($app['config']->get('cors'));
+            $options = $app['config']->get('cors');
+
+            if (isset($options['allowedOrigins'])) {
+                foreach ($options['allowedOrigins'] as $origin) {
+                    if (strpos($origin, '*') !== false) {
+                        $options['allowedOriginsPatterns'][] = $this->convertWildcardToPattern($origin);
+                    }
+                }
+            }
+
+            return new CorsService($options);
         });
     }
 
@@ -57,5 +67,24 @@ class ServiceProvider extends BaseServiceProvider
     protected function isLumen()
     {
         return str_contains($this->app->version(), 'Lumen');
+    }
+
+    /**
+     * Create a pattern for a wildcard, based on Str::is() from Laravel
+     *
+     * @see https://github.com/laravel/framework/blob/5.5/src/Illuminate/Support/Str.php
+     * @param $pattern
+     * @return string
+     */
+    protected function convertWildcardToPattern($pattern)
+    {
+        $pattern = preg_quote($pattern, '#');
+
+        // Asterisks are translated into zero-or-more regular expression wildcards
+        // to make it convenient to check if the strings starts with the given
+        // pattern such as "library/*", making any string check convenient.
+        $pattern = str_replace('\*', '.*', $pattern);
+
+        return '#^'.$pattern.'\z#u';
     }
 }
