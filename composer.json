@@ -19,10 +19,12 @@
     "autoload": {
         "psr-4": {
             "Barryvdh\\Cors\\": "src/"
-        },
-        "classmap": [
-            "tests"
-        ]
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Barryvdh\\Cors\\Tests\\": "tests/"
+        }
     },
     "extra": {
         "branch-alias": {

@@ -1,8 +1,10 @@
 <?php
 
+namespace Barryvdh\Cors\Tests;
+
 use Illuminate\Routing\Router;
 
-abstract class TestCase extends Orchestra\Testbench\TestCase
+abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
     use \Illuminate\Foundation\Validation\ValidatesRequests;
 
