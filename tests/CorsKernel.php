@@ -1,5 +1,7 @@
 <?php
 
+namespace Barryvdh\Cors\Tests;
+
 use Asm89\Stack\CorsService;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpFoundation\Request;

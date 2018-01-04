@@ -1,5 +1,7 @@
 <?php
 
+namespace Barryvdh\Cors\Tests;
+
 class PreflightTest extends TestCase
 {
     public function testAllowOriginAllowed()

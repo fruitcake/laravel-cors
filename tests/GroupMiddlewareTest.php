@@ -1,5 +1,7 @@
 <?php
 
+namespace Barryvdh\Cors\Tests;
+
 class GroupMiddlewareTest extends TestCase
 {
     public function testOptionsAllowOriginAllowed()
