@@ -18,6 +18,10 @@ matrix:
       env: laravel=5.3.x
     - php: 7.0
       env: laravel=5.4.x
+    - php: 7.1
+      env: laravel=5.6.x
+    - php: 7.1
+      env: laravel=5.7.x
 
 sudo: false
 
