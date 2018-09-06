@@ -17,7 +17,7 @@ matrix:
     - php: 7.1
       env:
         - laravel=5.5.x
-        - testbench=3.6.x
+        - testbench=3.5.x
     - php: 7.1
       env:
         - laravel=5.6.x
