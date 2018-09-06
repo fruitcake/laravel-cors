@@ -35,6 +35,7 @@ cache:
 
 install:
   - composer require illuminate/support:${laravel} --no-update
+  - composer require laravel/framework:${laravel} --no-update
   - composer require orchestra/testbench:${testbench} --no-update
   - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-stable; fi
   - if [[ $setup = 'lowest' ]]; then travis_retry composer update --prefer-dist --no-interaction --prefer-lowest --prefer-stable; fi
