@@ -1,8 +1,9 @@
 <?php namespace Barryvdh\Cors;
 
-use Closure;
 use Asm89\Stack\CorsService;
+use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as LaravelResponse;
@@ -57,7 +58,9 @@ class HandleCors
 
         $response = $next($request);
 
-        return $this->addHeaders($request, $response);
+        return $this->addHeaders($request, $response instanceof Responsable
+            ? $response->toResponse($request)
+            : $response);
     }
 
     /**
