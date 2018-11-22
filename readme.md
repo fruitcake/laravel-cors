@@ -90,7 +90,7 @@ return [
     'allowedMethods' => ['*'], // ex: ['GET', 'POST', 'PUT',  'DELETE']
     'exposedHeaders' => [],
     'maxAge' => 0,
-]
+];
 ```
 
 `allowedOrigins`, `allowedHeaders` and `allowedMethods` can be set to `array('*')` to accept any value.
