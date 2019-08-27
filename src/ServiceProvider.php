@@ -3,6 +3,7 @@
 use Asm89\Stack\CorsService;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Support\Str;
 
 class ServiceProvider extends BaseServiceProvider
 {
@@ -66,7 +67,7 @@ class ServiceProvider extends BaseServiceProvider
 
     protected function isLumen()
     {
-        return str_contains($this->app->version(), 'Lumen');
+        return Str::contains($this->app->version(), 'Lumen');
     }
 
     /**
