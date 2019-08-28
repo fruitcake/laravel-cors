@@ -47,16 +47,18 @@ class ServiceProvider extends BaseServiceProvider
         // Lumen is limited, so always add the preflight.
         if ($this->isLumen()) {
             $this->app->middleware([HandlePreflight::class]);
-        } else {
-            $this->publishes([$this->configPath() => config_path('cors.php')]);
 
-            /** @var \Illuminate\Foundation\Http\Kernel $kernel */
-            $kernel = $this->app->make(Kernel::class);
+            return;
+        }
 
-            // When the HandleCors middleware is not attached globally, add the PreflightCheck
-            if (! $kernel->hasMiddleware(HandleCors::class)) {
-                $kernel->prependMiddleware(HandlePreflight::class);
-            }
+        $this->publishes([$this->configPath() => config_path('cors.php')]);
+
+        /** @var \Illuminate\Foundation\Http\Kernel $kernel */
+        $kernel = $this->app->make(Kernel::class);
+
+        // When the HandleCors middleware is not attached globally, add the PreflightCheck
+        if (! $kernel->hasMiddleware(HandleCors::class)) {
+            $kernel->prependMiddleware(HandlePreflight::class);
         }
     }
 
