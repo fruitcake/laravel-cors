@@ -12,8 +12,8 @@
     "require": {
         "php": ">=7",
         "illuminate/support": "^5.5|^6",
-        "symfony/http-foundation": "^3.1|^4",
-        "symfony/http-kernel": "^3.1|^4",
+        "symfony/http-foundation": "^3.3|^4",
+        "symfony/http-kernel": "^3.3|^4",
         "asm89/stack-cors": "^1.2"
     },
     "autoload": {
@@ -37,9 +37,9 @@
         }
     },
     "require-dev": {
-        "laravel/framework": "^5.5",
-        "phpunit/phpunit": "^4.8|^5.2|^7.0",
-        "orchestra/testbench": "3.3.x|3.4.x|3.5.x|3.6.x|3.7.x",
+        "laravel/framework": "^5.5|^6",
+        "phpunit/phpunit": "^6.0|^7.0|^8.0",
+        "orchestra/testbench": "^3.5|^4.0",
         "squizlabs/php_codesniffer": "^2.3"
     },
     "scripts": {
