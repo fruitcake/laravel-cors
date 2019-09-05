@@ -134,10 +134,6 @@ class GlobalMiddlewareTest extends TestCase
 
     public function testError()
     {
-        if ($this->checkVersion('5.3', '<')) {
-            $this->markTestSkipped('Catching exceptions is not possible on Laravel 5.1');
-        }
-
         $crawler = $this->call('POST', 'web/error', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
@@ -149,10 +145,6 @@ class GlobalMiddlewareTest extends TestCase
 
     public function testValidationException()
     {
-        if ($this->checkVersion('5.3', '<')) {
-            $this->markTestSkipped('Catching exceptions is not possible on Laravel 5.1');
-        }
-
         $crawler = $this->call('POST', 'web/validation', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',

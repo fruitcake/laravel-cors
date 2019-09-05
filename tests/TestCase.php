@@ -119,9 +119,4 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             ]);
         });
     }
-
-    protected function checkVersion($version, $operator = ">=")
-    {
-        return version_compare($this->app->version(), $version, $operator);
-    }
 }

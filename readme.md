@@ -134,16 +134,6 @@ $app->routeMiddleware([
     'cors' => \Barryvdh\Cors\HandleCors::class,
 ]);
 ```
-
-## Common problems and errors (Pre Laravel 5.3)
-In order for the package to work, the request has to be a valid CORS request and needs to include an "Origin" header.
-
-When an error occurs, the middleware isn't run completely. So when this happens, you won't see the actual result, but will get a CORS error instead.
-
-This could be a CSRF token error or just a simple problem.
-
-> **Note:** This should be working in Laravel 5.3+.
-
 ### Disabling CSRF protection for your API
 
 If possible, use a different route group with CSRF protection enabled. 
