@@ -2,12 +2,16 @@
 
 use Asm89\Stack\CorsService;
 use Closure;
+use Exception;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as LaravelResponse;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class HandleCors
 {
@@ -17,10 +21,14 @@ class HandleCors
     /** @var Dispatcher $events */
     protected $events;
 
-    public function __construct(CorsService $cors, Dispatcher $events)
+    /** @var ExceptionHandler $exceptionHandler */
+    protected $exceptionHandler;
+
+    public function __construct(CorsService $cors, Dispatcher $events, ExceptionHandler $exceptionHandler)
     {
         $this->cors = $cors;
         $this->events = $events;
+        $this->exceptionHandler = $exceptionHandler;
     }
 
     /**
@@ -56,7 +64,16 @@ class HandleCors
             });
         }
 
-        $response = $next($request);
+        try {
+            $response = $next($request);
+        } catch (Throwable $e) {
+            if (! ($e instanceof Exception)) {
+                $e = new FatalThrowableError($e);
+            }
+
+            $this->exceptionHandler->report($e);
+            $response = $this->exceptionHandler->render($request, $e);
+        }
 
         return $this->addHeaders($request, $response instanceof Responsable
             ? $response->toResponse($request)
