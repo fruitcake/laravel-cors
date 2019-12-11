@@ -34,7 +34,9 @@ class ServiceProvider extends BaseServiceProvider
                 }
             }
 
-            return new CorsService($options);
+            return $app->makeWith(IlluminateCorsService::class, [
+                    'options' => $options,
+                ]);
         });
     }
 
