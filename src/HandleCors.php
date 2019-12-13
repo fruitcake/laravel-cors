@@ -1,4 +1,6 @@
-<?php namespace Barryvdh\Cors;
+<?php
+
+namespace Barryvdh\Cors;
 
 use Asm89\Stack\CorsService;
 use Closure;

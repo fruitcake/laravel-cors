@@ -1,4 +1,6 @@
-<?php namespace Barryvdh\Cors;
+<?php
+
+namespace Barryvdh\Cors;
 
 /**
  * Class LumenServiceProvider

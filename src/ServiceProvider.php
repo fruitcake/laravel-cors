@@ -1,4 +1,6 @@
-<?php namespace Barryvdh\Cors;
+<?php
+
+namespace Barryvdh\Cors;
 
 use Asm89\Stack\CorsService;
 use Illuminate\Contracts\Http\Kernel;
@@ -88,6 +90,6 @@ class ServiceProvider extends BaseServiceProvider
         // pattern such as "library/*", making any string check convenient.
         $pattern = str_replace('\*', '.*', $pattern);
 
-        return '#^'.$pattern.'\z#u';
+        return '#^' . $pattern . '\z#u';
     }
 }

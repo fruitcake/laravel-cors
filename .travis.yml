@@ -81,4 +81,4 @@ install:
 
 script:
   - vendor/bin/phpunit
-  - vendor/bin/phpcs --standard=psr2 src/
+  - vendor/bin/phpcs --standard=psr12 src/
