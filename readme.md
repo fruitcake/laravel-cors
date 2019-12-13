@@ -38,23 +38,6 @@ protected $middleware = [
 ];
 ```
 
-## Group middleware
-
-If you want to allow CORS on a specific middleware group or route, add the `HandleCors` middleware to your group:
-
-```php
-protected $middlewareGroups = [
-    'web' => [
-       // ...
-    ],
-
-    'api' => [
-        // ...
-        \Barryvdh\Cors\HandleCors::class,
-    ],
-];
-```
-
 > Note: Adding this to a group will make it harder to add CORS headers to all requests (eg. 404/500 errors). Make sure you add a `fallback` route to your group.
 
 ## Configuration
@@ -116,15 +99,6 @@ $app->middleware([
 ]);
 ```
 
-## Group middleware for Lumen
-If you want to allow CORS on a specific middleware group or route, add the `HandleCors` middleware to your group:
-
-```php
-$app->routeMiddleware([
-    // ...
-    'cors' => \Barryvdh\Cors\HandleCors::class,
-]);
-```
 ### Disabling CSRF protection for your API
 
 If possible, use a different route group with CSRF protection enabled. 

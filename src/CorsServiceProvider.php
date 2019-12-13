@@ -44,37 +44,22 @@ class CorsServiceProvider extends BaseServiceProvider
     }
 
     /**
-     * Add the Cors middleware to the router.
+     * Register the config for publishing
      *
      */
     public function boot()
     {
-        // Lumen is limited, so always add the preflight.
-        if ($this->isLumen()) {
-            $this->app->middleware([HandlePreflight::class]);
-
-            return;
-        }
-
         $this->publishes([$this->configPath() => config_path('cors.php')]);
-
-        /** @var \Illuminate\Foundation\Http\Kernel $kernel */
-        $kernel = $this->app->make(Kernel::class);
-
-        // When the HandleCors middleware is not attached globally, add the PreflightCheck
-        if (! $kernel->hasMiddleware(HandleCors::class)) {
-            $kernel->prependMiddleware(HandlePreflight::class);
-        }
     }
 
+    /**
+     * Set the config path
+     * 
+     * @return string
+     */
     protected function configPath()
     {
         return __DIR__ . '/../config/cors.php';
-    }
-
-    protected function isLumen()
-    {
-        return Str::contains($this->app->version(), 'Lumen');
     }
 
     /**
