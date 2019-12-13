@@ -11,9 +11,9 @@
     ],
     "require": {
         "php": ">=7",
-        "illuminate/support": "^5.5|^6",
-        "symfony/http-foundation": "^3.3|^4",
-        "symfony/http-kernel": "^3.3|^4",
+        "illuminate/support": "^5.5|^6|^7",
+        "symfony/http-foundation": "^3.3|^4|^5",
+        "symfony/http-kernel": "^3.3|^4|^5",
         "asm89/stack-cors": "^1.2"
     },
     "autoload": {
@@ -28,7 +28,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.11-dev"
+            "dev-master": "1.0-dev"
         },
         "laravel": {
             "providers": [
@@ -37,10 +37,10 @@
         }
     },
     "require-dev": {
-        "laravel/framework": "^5.5|^6",
+        "laravel/framework": "^5.5|^6|^7",
         "phpunit/phpunit": "^6.0|^7.0|^8.0",
         "orchestra/testbench": "^3.5|^4.0",
-        "squizlabs/php_codesniffer": "^2.3"
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "scripts": {
         "test": "phpunit",
