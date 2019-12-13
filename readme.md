@@ -1,4 +1,4 @@
-# CORS Middleware for Laravel 5/6
+# CORS Middleware for Laravel
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
@@ -24,18 +24,7 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 Require the `barryvdh/laravel-cors` package in your `composer.json` and update your dependencies:
 ```sh
-$ composer require barryvdh/laravel-cors
-```
-
-For laravel >=5.5 that's all. This package supports Laravel new [Package Discovery](https://laravel.com/docs/5.5/packages#package-discovery).
-
-If you are using Laravel < 5.5, you need to install v0.11.0:
-```
-composer require barryvdh/laravel-cors:0.11.0
-```
-You also need to add Cors\ServiceProvider to your `config/app.php` providers array:
-```php
-Barryvdh\Cors\ServiceProvider::class,
+composer require barryvdh/laravel-cors
 ```
 
 ## Global usage
@@ -65,6 +54,8 @@ protected $middlewareGroups = [
     ],
 ];
 ```
+
+> Note: Adding this to a group will make it harder to add CORS headers to all requests (eg. 404/500 errors). Make sure you add a `fallback` route to your group.
 
 ## Configuration
 
