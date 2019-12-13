@@ -17,7 +17,7 @@ class PreflightTest extends TestCase
 
     public function testAllowWildcardOriginAllowed()
     {
-        config(['cors.allowedOrigins' => ['*.laravel.com']]);
+        config(['cors.allowed_origins' => ['*.laravel.com']]);
 
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
             'HTTP_ORIGIN' => 'blog.laravel.com',
@@ -91,7 +91,7 @@ class PreflightTest extends TestCase
 
     public function testAllowAllHeaderAllowed()
     {
-        config(['cors.allowedHeaders' => ['*']]);
+        config(['cors.allowed_headers' => ['*']]);
 
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',

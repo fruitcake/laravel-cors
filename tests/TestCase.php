@@ -13,18 +13,18 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         parent::resolveApplicationConfiguration($app);
 
         $app['config']['cors'] = [
-            'supportsCredentials' => false,
-            'allowedOrigins' => ['localhost'],
-            'allowedHeaders' => ['X-Custom-1', 'X-Custom-2'],
-            'allowedMethods' => ['GET', 'POST'],
-            'exposedHeaders' => [],
-            'maxAge' => 0,
+            'supports_credentials' => false,
+            'allowed_origins' => ['localhost'],
+            'allowed_headers' => ['X-Custom-1', 'X-Custom-2'],
+            'allowed_methods' => ['GET', 'POST'],
+            'exposed_headers' => [],
+            'max_age' => 0,
         ];
     }
 
     protected function getPackageProviders($app)
     {
-        return [\Barryvdh\Cors\ServiceProvider::class];
+        return [\Barryvdh\Cors\CorsServiceProvider::class];
     }
 
     /**

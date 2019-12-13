@@ -7,15 +7,8 @@ use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Illuminate\Support\Str;
 
-class ServiceProvider extends BaseServiceProvider
+class CorsServiceProvider extends BaseServiceProvider
 {
-    /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
     /**
      * Register the service provider.
      *
@@ -26,13 +19,23 @@ class ServiceProvider extends BaseServiceProvider
         $this->mergeConfigFrom($this->configPath(), 'cors');
 
         $this->app->singleton(CorsService::class, function ($app) {
-            $options = $app['config']->get('cors');
+            $config = $app['config']->get('cors');
 
-            if (isset($options['allowedOrigins'])) {
-                foreach ($options['allowedOrigins'] as $origin) {
-                    if (strpos($origin, '*') !== false) {
-                        $options['allowedOriginsPatterns'][] = $this->convertWildcardToPattern($origin);
-                    }
+            // Convert case to supported options
+            $options = [
+                'supportsCredentials' => $config['supports_credentials'],
+                'allowedOrigins' => $config['allowed_origins'],
+                'allowedOriginsPatterns' => $config['allowed_origins_patterns'],
+                'allowedHeaders' => $config['allowed_headers'],
+                'allowedMethods' => $config['allowed_methods'],
+                'exposedHeaders' => $config['exposed_headers'],
+                'maxAge' => $config['max_age'],
+            ];
+
+            // Transform wildcard pattern
+            foreach ($options['allowedOrigins'] as $origin) {
+                if (strpos($origin, '*') !== false) {
+                    $options['allowedOriginsPatterns'][] = $this->convertWildcardToPattern($origin);
                 }
             }
 

@@ -32,7 +32,7 @@
         },
         "laravel": {
             "providers": [
-                "Barryvdh\\Cors\\ServiceProvider"
+                "Barryvdh\\Cors\\CorsServiceProvider"
             ]
         }
     },
