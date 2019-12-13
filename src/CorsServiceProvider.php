@@ -3,9 +3,7 @@
 namespace Barryvdh\Cors;
 
 use Asm89\Stack\CorsService;
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
-use Illuminate\Support\Str;
 
 class CorsServiceProvider extends BaseServiceProvider
 {
@@ -54,7 +52,7 @@ class CorsServiceProvider extends BaseServiceProvider
 
     /**
      * Set the config path
-     * 
+     *
      * @return string
      */
     protected function configPath()

@@ -2,6 +2,7 @@
 
 namespace Barryvdh\Cors\Tests;
 
+use Barryvdh\Cors\HandleCors;
 use Illuminate\Routing\Router;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
@@ -13,6 +14,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         parent::resolveApplicationConfiguration($app);
 
         $app['config']['cors'] = [
+            'paths' => 'api*',
             'supports_credentials' => false,
             'allowed_origins' => ['localhost'],
             'allowed_headers' => ['X-Custom-1', 'X-Custom-2'],
@@ -36,7 +38,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function getEnvironmentSetUp($app)
     {
+        /** @var Router $router */
         $router = $app['router'];
+        $router->middleware(HandleCors::class);
         $this->addWebRoutes($router);
         $this->addApiRoutes($router);
     }
@@ -81,42 +85,39 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function addApiRoutes($router)
     {
-        $router->group(['middleware' => \Barryvdh\Cors\HandleCors::class], function () use ($router) {
+        $router->get('api/ping', [
+            'as' => 'api.ping',
+            'uses' => function () {
+                return 'pong';
+            }
+        ]);
 
-            $router->get('api/ping', [
-                'as' => 'api.ping',
-                'uses' => function () {
-                    return 'pong';
-                }
-            ]);
+        $router->post('api/ping', [
+            'uses' => function () {
+                return 'PONG';
+            }
+        ]);
 
-            $router->post('api/ping', [
-                'uses' => function () {
-                    return 'PONG';
-                }
-            ]);
+        $router->put('api/ping', [
+            'uses' => function () {
+                return 'PONG';
+            }
+        ]);
 
-            $router->put('api/ping', [
-                'uses' => function () {
-                    return 'PONG';
-                }
-            ]);
+        $router->post('api/error', [
+            'uses' => function () {
+                abort(500);
+            }
+        ]);
 
-            $router->post('api/error', [
-                'uses' => function () {
-                    abort(500);
-                }
-            ]);
+        $router->post('api/validation', [
+            'uses' => function (\Illuminate\Http\Request $request) {
+                $this->validate($request, [
+                    'name' => 'required',
+                ]);
 
-            $router->post('api/validation', [
-                'uses' => function (\Illuminate\Http\Request $request) {
-                    $this->validate($request, [
-                        'name' => 'required',
-                    ]);
-
-                    return 'ok';
-                }
-            ]);
-        });
+                return 'ok';
+            }
+        ]);
     }
 }
