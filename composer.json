@@ -40,7 +40,8 @@
         "laravel/framework": "^5.5|^6|^7",
         "phpunit/phpunit": "^6.0|^7.0|^8.0",
         "orchestra/testbench": "^3.5|^4.0",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpro/grumphp": "^0.17.0"
     },
     "scripts": {
         "test": "phpunit",
