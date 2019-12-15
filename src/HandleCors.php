@@ -2,14 +2,10 @@
 
 namespace Barryvdh\Cors;
 
-use Asm89\Stack\CorsService;
 use Closure;
-use Illuminate\Config\Repository;
-use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Foundation\Http\Events\RequestHandled;
+use Asm89\Stack\CorsService;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response as LaravelResponse;
+use Illuminate\Config\Repository;
 use Symfony\Component\HttpFoundation\Response;
 
 class HandleCors
@@ -24,16 +20,12 @@ class HandleCors
     /** @var CorsService $cors */
     protected $cors;
 
-    /** @var Dispatcher $events */
-    protected $events;
-
     /** @var \Illuminate\Contracts\Config\Repository */
     protected $config;
 
-    public function __construct(CorsService $cors, Dispatcher $events, Repository $config)
+    public function __construct(CorsService $cors, Repository $config)
     {
         $this->cors = $cors;
-        $this->events = $events;
         $this->config = $config;
     }
 
@@ -47,43 +39,42 @@ class HandleCors
      */
     public function handle($request, Closure $next)
     {
-        $paths = $this->paths ?: $this->config->get('cors.paths', []);
-
-        // When it doesn't match, skip the CORS flow
-        if (! $this->isMatchingPath((array) $paths, $request)) {
+        // Check if we're dealing with CORS and if we should handle it
+        if (! $this->shouldRun($request)) {
             return $next($request);
         }
 
-        // Check if we're dealing with CORS
-        if (! $this->cors->isCorsRequest($request)) {
-            return $next($request);
-        }
-
-        // For Preflight, return Preflight response
+        // For Preflight, return the Preflight response
         if ($this->cors->isPreflightRequest($request)) {
             return $this->cors->handlePreflightRequest($request);
         }
 
+        // If the request is not allowed, return 403
         if (! $this->cors->isActualRequestAllowed($request)) {
-            return new LaravelResponse('Not allowed in CORS policy.', 403);
+            return new Response('Not allowed in CORS policy.', 403);
         }
 
+        // Handle the request
         $response = $next($request);
 
-        return $this->addHeaders($request, $response instanceof Responsable
-            ? $response->toResponse($request)
-            : $response);
+        // Add the CORS headers to the Response
+        return $this->addHeaders($request, $response);
     }
 
     /**
      * Determine if the request has a URI that should pass through the CORS flow.
      *
-     * @param  array $paths
      * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
-    protected function isMatchingPath(array $paths, $request)
+    protected function shouldRun($request)
     {
+        if (! $this->cors->isCorsRequest($request) ) {
+            return false;
+        }
+
+        $paths = $this->paths ?: $this->config->get('cors.paths', []);
+
         foreach ($paths as $path) {
             if ($path !== '/') {
                 $path = trim($path, '/');

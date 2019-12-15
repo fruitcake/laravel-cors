@@ -14,7 +14,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         parent::resolveApplicationConfiguration($app);
 
         $app['config']['cors'] = [
-            'paths' => 'api*',
+            'paths' => ['api/*'],
             'supports_credentials' => false,
             'allowed_origins' => ['localhost'],
             'allowed_headers' => ['X-Custom-1', 'X-Custom-2'],
@@ -50,32 +50,9 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function addWebRoutes(Router $router)
     {
-        $router->get('web/ping', [
-            'as' => 'web.ping',
-            'uses' => function () {
-                return 'pong';
-            }
-        ]);
-
         $router->post('web/ping', [
             'uses' => function () {
                 return 'PONG';
-            }
-        ]);
-
-        $router->post('web/error', [
-            'uses' => function () {
-                abort(500);
-            }
-        ]);
-
-        $router->post('web/validation', [
-            'uses' => function (\Illuminate\Http\Request $request) {
-                $this->validate($request, [
-                    'name' => 'required',
-                ]);
-
-                return 'ok';
             }
         ]);
     }
@@ -85,13 +62,6 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
      */
     protected function addApiRoutes($router)
     {
-        $router->get('api/ping', [
-            'as' => 'api.ping',
-            'uses' => function () {
-                return 'pong';
-            }
-        ]);
-
         $router->post('api/ping', [
             'uses' => function () {
                 return 'PONG';
