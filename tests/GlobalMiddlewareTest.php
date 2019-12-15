@@ -2,20 +2,23 @@
 
 namespace Barryvdh\Cors\Tests;
 
+use Barryvdh\Cors\HandleCors;
+use Illuminate\Contracts\Http\Kernel;
+
 class GlobalMiddlewareTest extends TestCase
 {
     /**
      * Define environment setup.
      *
-     * @param  Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application $app
      *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
         // Add the middleware
-        $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
-        $kernel->prependMiddleware(\Barryvdh\Cors\HandleCors::class);
+        $kernel = $app->make(Kernel::class);
+        $kernel->prependMiddleware(HandleCors::class);
 
         parent::getEnvironmentSetUp($app);
     }

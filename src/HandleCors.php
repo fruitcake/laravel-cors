@@ -69,7 +69,7 @@ class HandleCors
      */
     protected function shouldRun($request)
     {
-        if (! $this->cors->isCorsRequest($request) ) {
+        if (! $this->cors->isCorsRequest($request)) {
             return false;
         }
 

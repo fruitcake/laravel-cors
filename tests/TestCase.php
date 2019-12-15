@@ -2,12 +2,15 @@
 
 namespace Barryvdh\Cors\Tests;
 
+use Illuminate\Http\Request;
 use Barryvdh\Cors\HandleCors;
 use Illuminate\Routing\Router;
+use Barryvdh\Cors\CorsServiceProvider;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
 {
-    use \Illuminate\Foundation\Validation\ValidatesRequests;
+    use ValidatesRequests;
 
     protected function resolveApplicationConfiguration($app)
     {
@@ -26,13 +29,13 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
 
     protected function getPackageProviders($app)
     {
-        return [\Barryvdh\Cors\CorsServiceProvider::class];
+        return [CorsServiceProvider::class];
     }
 
     /**
      * Define environment setup.
      *
-     * @param  Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application $app
      *
      * @return void
      */
@@ -81,7 +84,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         ]);
 
         $router->post('api/validation', [
-            'uses' => function (\Illuminate\Http\Request $request) {
+            'uses' => function (Request $request) {
                 $this->validate($request, [
                     'name' => 'required',
                 ]);
