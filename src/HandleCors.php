@@ -1,6 +1,6 @@
 <?php
 
-namespace Barryvdh\Cors;
+namespace Fruitcake\Cors;
 
 use Closure;
 use Asm89\Stack\CorsService;

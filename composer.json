@@ -1,9 +1,13 @@
 {
-    "name": "barryvdh/laravel-cors",
+    "name": "fruitcake/laravel-cors",
     "description": "Adds CORS (Cross-Origin Resource Sharing) headers support in your Laravel application",
     "keywords": ["laravel", "cors", "crossdomain", "api"],
     "license": "MIT",
     "authors": [
+        {
+            "name": "Fruitcake",
+            "homepage": "https://fruitcake.nl"
+        },
         {
             "name": "Barry vd. Heuvel",
             "email": "barryvdh@gmail.com"
@@ -25,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Barryvdh\\Cors\\": "src/"
+            "Fruitcake\\Cors\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Barryvdh\\Cors\\Tests\\": "tests/"
+            "Fruitcake\\Cors\\Tests\\": "tests/"
         }
     },
     "extra": {
@@ -39,7 +43,7 @@
         },
         "laravel": {
             "providers": [
-                "Barryvdh\\Cors\\CorsServiceProvider"
+                "Fruitcake\\Cors\\CorsServiceProvider"
             ]
         }
     },

@@ -22,9 +22,9 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 ## Installation
 
-Require the `barryvdh/laravel-cors` package in your `composer.json` and update your dependencies:
+Require the `fruitcake/laravel-cors` package in your `composer.json` and update your dependencies:
 ```sh
-composer require barryvdh/laravel-cors
+composer require fruitcake/laravel-cors
 ```
 
 ## Global usage
@@ -34,7 +34,7 @@ To allow CORS for all your routes, add the `HandleCors` middleware in the `$midd
 ```php
 protected $middleware = [
     // ...
-    \Barryvdh\Cors\HandleCors::class,
+    \Fruitcake\Cors\HandleCors::class,
 ];
 ```
 
@@ -44,7 +44,7 @@ protected $middleware = [
 
 The defaults are set in `config/cors.php`. Copy this file to your own config directory to modify the values. You can publish the config using this command:
 ```sh
-$ php artisan vendor:publish --provider="Barryvdh\Cors\ServiceProvider"
+$ php artisan vendor:publish --provider="Fruitcake\Cors\ServiceProvider"
 ```
 > **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the `allowedHeaders` to include those headers. You can also set it to `array('*')` to allow all custom headers.
 
@@ -87,7 +87,7 @@ $app->configure('cors');
 And register the ServiceProvider:
 
 ```php
-$app->register(Barryvdh\Cors\ServiceProvider::class);
+$app->register(\Fruitcake\Cors\ServiceProvider::class);
 ```
 
 ## Global usage for Lumen
@@ -95,7 +95,7 @@ To allow CORS for all your routes, add the `HandleCors` middleware to the global
 ```php
 $app->middleware([
     // ...
-    \Barryvdh\Cors\HandleCors::class,
+    \Fruitcake\Cors\HandleCors::class,
 ]);
 ```
 
@@ -114,17 +114,17 @@ protected $except = [
 
 Released under the MIT License, see [LICENSE](LICENSE).
 
-[ico-version]: https://img.shields.io/packagist/v/barryvdh/laravel-cors.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/fruitcake/laravel-cors.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/barryvdh/laravel-cors/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/barryvdh/laravel-cors.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/barryvdh/laravel-cors.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/barryvdh/laravel-cors.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/fruitcake/laravel-cors/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/fruitcake/laravel-cors.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/fruitcake/laravel-cors.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/fruitcake/laravel-cors.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/barryvdh/laravel-cors
-[link-travis]: https://travis-ci.org/barryvdh/laravel-cors
-[link-scrutinizer]: https://scrutinizer-ci.com/g/barryvdh/laravel-cors/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/barryvdh/laravel-cors
-[link-downloads]: https://packagist.org/packages/barryvdh/laravel-cors
-[link-author]: https://github.com/barryvdh
+[link-packagist]: https://packagist.org/packages/fruitcake/laravel-cors
+[link-travis]: https://travis-ci.org/fruitcake/laravel-cors
+[link-scrutinizer]: https://scrutinizer-ci.com/g/fruitcake/laravel-cors/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/fruitcake/laravel-cors
+[link-downloads]: https://packagist.org/packages/fruitcake/laravel-cors
+[link-author]: https://github.com/fruitcake
 [link-contributors]: ../../contributors

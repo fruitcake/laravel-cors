@@ -1,8 +1,8 @@
 <?php
 
-namespace Barryvdh\Cors\Tests;
+namespace Fruitcake\Cors\Tests;
 
-use Barryvdh\Cors\HandleCors;
+use Fruitcake\Cors\HandleCors;
 use Illuminate\Contracts\Http\Kernel;
 
 class GlobalMiddlewareTest extends TestCase

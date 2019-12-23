@@ -1,11 +1,11 @@
 <?php
 
-namespace Barryvdh\Cors\Tests;
+namespace Fruitcake\Cors\Tests;
 
 use Illuminate\Http\Request;
-use Barryvdh\Cors\HandleCors;
 use Illuminate\Routing\Router;
-use Barryvdh\Cors\CorsServiceProvider;
+use Fruitcake\Cors\HandleCors;
+use Fruitcake\Cors\CorsServiceProvider;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase

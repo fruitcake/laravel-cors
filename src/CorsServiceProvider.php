@@ -1,6 +1,6 @@
 <?php
 
-namespace Barryvdh\Cors;
+namespace Fruitcake\Cors;
 
 use Asm89\Stack\CorsService;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
