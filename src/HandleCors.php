@@ -11,7 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 class HandleCors
 {
     /**
-     * The paths to add CORS headers to.
+     * You can enable CORS for 1 or multiple paths.
+     * Example: ['api/*']
      *
      * @var array
      */
@@ -31,11 +32,10 @@ class HandleCors
 
     /**
      * Handle an incoming request. Based on Asm89\Stack\Cors by asm89
-     * @see https://github.com/asm89/stack-cors/blob/master/src/Asm89/Stack/Cors.php
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @return mixed
+     * @return Response
      */
     public function handle($request, Closure $next)
     {
@@ -69,10 +69,12 @@ class HandleCors
      */
     protected function shouldRun($request)
     {
+        // Check if this is an actual CORS request
         if (! $this->cors->isCorsRequest($request)) {
             return false;
         }
 
+        // Get the paths from the config or the middleware
         $paths = $this->paths ?: $this->config->get('cors.paths', []);
 
         foreach ($paths as $path) {
@@ -89,13 +91,14 @@ class HandleCors
     }
 
     /**
+     * Add the headers to the Response, if they don't exist yet.
+     *
      * @param Request $request
      * @param Response $response
      * @return Response
      */
     protected function addHeaders(Request $request, Response $response)
     {
-        // Prevent double checking
         if (! $response->headers->has('Access-Control-Allow-Origin')) {
             $response = $this->cors->addActualRequestHeaders($response, $request);
         }

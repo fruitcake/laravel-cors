@@ -22,8 +22,8 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
             'allowed_origins' => ['localhost'],
             'allowed_headers' => ['X-Custom-1', 'X-Custom-2'],
             'allowed_methods' => ['GET', 'POST'],
-            'exposed_headers' => [],
-            'max_age' => 0,
+            'exposed_headers' => false,
+            'max_age' => false,
         ];
     }
 
