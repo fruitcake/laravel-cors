@@ -1,21 +1,24 @@
 <?php
 
-namespace Barryvdh\Cors\Tests;
+namespace Fruitcake\Cors\Tests;
+
+use Fruitcake\Cors\HandleCors;
+use Illuminate\Contracts\Http\Kernel;
 
 class GlobalMiddlewareTest extends TestCase
 {
     /**
      * Define environment setup.
      *
-     * @param  Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application $app
      *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
         // Add the middleware
-        $kernel = $app->make(\Illuminate\Contracts\Http\Kernel::class);
-        $kernel->prependMiddleware(\Barryvdh\Cors\HandleCors::class);
+        $kernel = $app->make(Kernel::class);
+        $kernel->prependMiddleware(HandleCors::class);
 
         parent::getEnvironmentSetUp($app);
     }
@@ -55,31 +58,6 @@ class GlobalMiddlewareTest extends TestCase
     public function testOptionsAllowOriginNotAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'otherhost',
-            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
-        ]);
-
-        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(403, $crawler->getStatusCode());
-    }
-
-
-    public function testAllowOriginAllowed()
-    {
-        $crawler = $this->call('POST', 'web/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
-            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
-        ]);
-
-        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(200, $crawler->getStatusCode());
-
-        $this->assertEquals('PONG', $crawler->getContent());
-    }
-
-    public function testAllowOriginNotAllowed()
-    {
-        $crawler = $this->call('POST', 'web/ping', [], [], [], [
             'HTTP_ORIGIN' => 'otherhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
@@ -134,7 +112,7 @@ class GlobalMiddlewareTest extends TestCase
 
     public function testError()
     {
-        $crawler = $this->call('POST', 'web/error', [], [], [], [
+        $crawler = $this->call('POST', 'api/error', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
@@ -145,7 +123,7 @@ class GlobalMiddlewareTest extends TestCase
 
     public function testValidationException()
     {
-        $crawler = $this->call('POST', 'web/validation', [], [], [], [
+        $crawler = $this->call('POST', 'api/validation', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
