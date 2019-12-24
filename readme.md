@@ -24,7 +24,7 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 Require the `barryvdh/laravel-cors` package in your `composer.json` and update your dependencies:
 ```sh
-$ composer require barryvdh/laravel-cors
+$ composer require barryvdh/laravel-cors:^0.11
 ```
 
 For laravel >=5.5 that's all. This package supports Laravel new [Package Discovery](https://laravel.com/docs/5.5/packages#package-discovery).
