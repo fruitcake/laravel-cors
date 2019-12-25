@@ -41,7 +41,7 @@ class GlobalMiddlewareTest extends TestCase
         ]);
 
         $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testOptionsAllowOriginAllowedNonExistingRoute()
@@ -52,7 +52,7 @@ class GlobalMiddlewareTest extends TestCase
         ]);
 
         $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testOptionsAllowOriginNotAllowed()
