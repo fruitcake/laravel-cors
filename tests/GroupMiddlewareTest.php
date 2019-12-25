@@ -7,7 +7,7 @@ use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
-class GlobalMiddlewareTest extends AbstractTest
+class GroupMiddlewareTest extends AbstractTest
 {
     /**
      * Define environment setup.
@@ -19,12 +19,8 @@ class GlobalMiddlewareTest extends AbstractTest
     protected function getEnvironmentSetUp($app)
     {
         // Add the middleware
-        /** @var Kernel $kernel */
-        $kernel = $app->make(Kernel::class);
-        $kernel->prependMiddleware(HandleCors::class);
-
         Route::group([], __DIR__ . '/routes/web.php');
-        Route::group([], __DIR__ . '/routes/api.php');
+        Route::middleware([HandleCors::class])->group(__DIR__ . '/routes/api.php');
 
         parent::getEnvironmentSetUp($app);
     }
