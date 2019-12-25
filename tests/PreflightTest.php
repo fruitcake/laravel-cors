@@ -12,7 +12,7 @@ class PreflightTest extends TestCase
         ]);
 
         $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testAllowWildcardOriginAllowed()
@@ -24,7 +24,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
         $this->assertEquals('blog.laravel.com', $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testAllowOriginNotAllowed()
@@ -45,7 +45,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
         $this->assertEquals('GET, POST', $crawler->headers->get('Access-Control-Allow-Methods'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testAllowMethodAllowed()
@@ -55,7 +55,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
         $this->assertEquals('GET, POST', $crawler->headers->get('Access-Control-Allow-Methods'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testAllowMethodNotAllowed()
@@ -75,7 +75,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
         $this->assertEquals('GET, POST', $crawler->headers->get('Access-Control-Allow-Methods'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testAllowHeaderAllowed()
@@ -86,7 +86,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'X-Custom-1, X-Custom-2',
         ]);
         $this->assertEquals('x-custom-1, x-custom-2', $crawler->headers->get('Access-Control-Allow-Headers'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testAllowAllHeaderAllowed()
@@ -99,7 +99,7 @@ class PreflightTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'X-Custom-3',
         ]);
         $this->assertEquals('X-CUSTOM-3', $crawler->headers->get('Access-Control-Allow-Headers'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testAllowHeaderNotAllowed()
