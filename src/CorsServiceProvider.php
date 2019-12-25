@@ -3,7 +3,9 @@
 namespace Fruitcake\Cors;
 
 use Asm89\Stack\CorsService;
+use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Laravel\Lumen\Application as LumenApplication;
 
 class CorsServiceProvider extends BaseServiceProvider
 {
@@ -47,7 +49,11 @@ class CorsServiceProvider extends BaseServiceProvider
      */
     public function boot()
     {
-        $this->publishes([$this->configPath() => config_path('cors.php')]);
+        if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
+            $this->publishes([$this->configPath() => config_path('cors.php')]);
+        } elseif ($this->app instanceof LumenApplication) {
+            $this->app->configure('cors');
+        }
     }
 
     /**
@@ -64,7 +70,7 @@ class CorsServiceProvider extends BaseServiceProvider
      * Create a pattern for a wildcard, based on Str::is() from Laravel
      *
      * @see https://github.com/laravel/framework/blob/5.5/src/Illuminate/Support/Str.php
-     * @param $pattern
+     * @param string $pattern
      * @return string
      */
     protected function convertWildcardToPattern($pattern)
