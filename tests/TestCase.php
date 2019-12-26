@@ -43,7 +43,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
     {
         /** @var Router $router */
         $router = $app['router'];
-        $router->middleware(HandleCors::class);
+
         $this->addWebRoutes($router);
         $this->addApiRoutes($router);
     }
