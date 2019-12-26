@@ -59,7 +59,7 @@ class HandleCors
      * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
-    protected function shouldRun($request)
+    protected function shouldRun(Request $request): bool
     {
         // Check if this is an actual CORS request
         if (! $this->cors->isCorsRequest($request)) {
@@ -75,7 +75,7 @@ class HandleCors
      * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
-    protected function isMatchingPath($request)
+    protected function isMatchingPath(Request $request): bool
     {
         // Get the paths from the config or the middleware
         $paths = $this->config->get('cors.paths', []);
@@ -92,7 +92,7 @@ class HandleCors
 
         return false;
     }
-    
+
     /**
      * Add the headers to the Response, if they don't exist yet.
      *
@@ -100,7 +100,7 @@ class HandleCors
      * @param Response $response
      * @return Response
      */
-    protected function addHeaders(Request $request, Response $response)
+    protected function addHeaders(Request $request, Response $response): Response
     {
         if (! $response->headers->has('Access-Control-Allow-Origin')) {
             $response = $this->cors->addActualRequestHeaders($response, $request);
