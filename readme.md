@@ -19,6 +19,7 @@ this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
 * Handles CORS pre-flight OPTIONS requests
 * Adds CORS headers to your responses
+* Match routes to only add CORS to certain Requests
 
 ## Installation
 
@@ -44,9 +45,9 @@ protected $middleware = [
 
 The defaults are set in `config/cors.php`. Copy this file to your own config directory to modify the values. You can publish the config using this command:
 ```sh
-$ php artisan vendor:publish --provider="Fruitcake\Cors\ServiceProvider"
+$ php artisan vendor:publish --provider="Fruitcake\Cors\CorsServiceProvider"
 ```
-> **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the `allowedHeaders` to include those headers. You can also set it to `array('*')` to allow all custom headers.
+> **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the `allowed_headers` to include those headers. You can also set it to `['*']` to allow all custom headers.
 
 > **Note:** If you are explicitly whitelisting headers, you must include `Origin` or requests will fail to be recognized as CORS.
 
@@ -62,16 +63,16 @@ return [
      | to accept any value.
      |
      */
-    'supportsCredentials' => false,
-    'allowedOrigins' => ['*'],
-    'allowedHeaders' => ['Content-Type', 'X-Requested-With'],
-    'allowedMethods' => ['*'], // ex: ['GET', 'POST', 'PUT',  'DELETE']
-    'exposedHeaders' => [],
-    'maxAge' => 0,
+    'supports_credentials' => false,
+    'allowed_origins' => ['*'],
+    'allowed_headers' => ['Content-Type', 'X-Requested-With'],
+    'allowed_methods' => ['*'], // ex: ['GET', 'POST', 'PUT',  'DELETE']
+    'exposed_headers' => [],
+    'max_age' => 0,
 ];
 ```
 
-`allowedOrigins`, `allowedHeaders` and `allowedMethods` can be set to `array('*')` to accept any value.
+`allowed_origins`, `allowed_headers` and `allowed_methods` can be set to `['*']` to accept any value.
 
 > **Note:** Try to be a specific as possible. You can start developing with loose constraints, but it's better to be as strict as possible!
 
