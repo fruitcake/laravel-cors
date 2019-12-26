@@ -10,14 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HandleCors
 {
-    /**
-     * You can enable CORS for 1 or multiple paths.
-     * Example: ['api/*']
-     *
-     * @var array
-     */
-    protected $paths;
-
     /** @var CorsService $cors */
     protected $cors;
 
@@ -74,8 +66,19 @@ class HandleCors
             return false;
         }
 
+        return $this->isMatchingPath($request);
+    }
+
+    /**
+     * The the path from the config, to see if the CORS Service should run
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function isMatchingPath($request)
+    {
         // Get the paths from the config or the middleware
-        $paths = $this->paths ?: $this->config->get('cors.paths', []);
+        $paths = $this->config->get('cors.paths', []);
 
         foreach ($paths as $path) {
             if ($path !== '/') {
@@ -89,7 +92,7 @@ class HandleCors
 
         return false;
     }
-
+    
     /**
      * Add the headers to the Response, if they don't exist yet.
      *
