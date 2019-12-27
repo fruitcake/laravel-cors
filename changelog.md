@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  - Adding the middleware on Route groups is no longer supported. You can use the new `paths` option to match your routes
  - The config file has been changed from `camelCase` to `snake_case`, please update your own config.
  - The deprecated Lumen ServiceProvider has been removed.
+ - There is no need to manually configure the `cors` config in Lumen.
  
 ### Added
  - The `paths` option is added to match certain routes only, while still using global middleware. This allows for better error handling.

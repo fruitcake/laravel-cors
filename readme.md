@@ -39,13 +39,17 @@ protected $middleware = [
 ];
 ```
 
-> Note: Adding this to a group will make it harder to add CORS headers to all requests (eg. 404/500 errors). Make sure you add a `fallback` route to your group.
+Now update the config to define the paths you want to run the CORS service on, (see Configuration below):
+
+```php 
+'paths' => ['api/*'],
+```
 
 ## Configuration
 
-The defaults are set in `config/cors.php`. Copy this file to your own config directory to modify the values. You can publish the config using this command:
+The defaults are set in `config/cors.php`. Publish the config to copy the file to your own config:
 ```sh
-$ php artisan vendor:publish --provider="Fruitcake\Cors\CorsServiceProvider"
+php artisan vendor:publish --provider="Fruitcake\Cors\CorsServiceProvider"
 ```
 > **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the `allowed_headers` to include those headers. You can also set it to `['*']` to allow all custom headers.
 
@@ -53,23 +57,52 @@ $ php artisan vendor:publish --provider="Fruitcake\Cors\CorsServiceProvider"
 
     
 ```php
+<?php
+
 return [
-     /*
-     |--------------------------------------------------------------------------
-     | Laravel CORS
-     |--------------------------------------------------------------------------
-     |
-     | allowedOrigins, allowedHeaders and allowedMethods can be set to array('*')
-     | to accept any value.
-     |
+
+    /*
+     * You can enable CORS for 1 or multiple paths.
+     * Example: ['api/*']
+     */
+    'paths' => [],
+
+    /*
+    * Matches the request method. `[*]` allows all methods.
+    */
+    'allowed_methods' => ['*'],
+
+    /*
+     * Matches the request origin. `[*]` allows all origins.
+     */
+    'allowed_origins' => ['*'],
+
+    /*
+     * Matches the request origin with, similar to `Request::is()`
+     */
+    'allowed_origins_patterns' => [],
+
+    /*
+     * Sets the Access-Control-Allow-Headers response header. `[*]` allows all headers.
+     */
+    'allowed_headers' => ['*'],
+
+    /*
+     * Sets the Access-Control-Expose-Headers response header.
+     */
+    'exposed_headers' => false,
+
+    /*
+     * Sets the Access-Control-Max-Age response header.
+     */
+    'max_age' => false,
+
+    /*
+     * Sets the Access-Control-Allow-Credentials header.
      */
     'supports_credentials' => false,
-    'allowed_origins' => ['*'],
-    'allowed_headers' => ['Content-Type', 'X-Requested-With'],
-    'allowed_methods' => ['*'], // ex: ['GET', 'POST', 'PUT',  'DELETE']
-    'exposed_headers' => [],
-    'max_age' => 0,
 ];
+
 ```
 
 `allowed_origins`, `allowed_headers` and `allowed_methods` can be set to `['*']` to accept any value.
@@ -80,19 +113,14 @@ return [
 
 ### Lumen
 
-On Laravel Lumen, load your configuration file manually in `bootstrap/app.php`:
-```php
-$app->configure('cors');
-```
-
-And register the ServiceProvider:
+On Laravel Lumen, just register the ServiceProvider manually:
 
 ```php
 $app->register(\Fruitcake\Cors\ServiceProvider::class);
 ```
 
 ## Global usage for Lumen
-To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware:
+To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware and set the `paths` property in the config.
 ```php
 $app->middleware([
     // ...
