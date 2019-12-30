@@ -58,7 +58,7 @@ before_script:
     - phpenv config-rm xdebug.ini || true
 
 before_install:
-- travis_retry composer remove phpro/grumphp --no-interaction --no-update
+- travis_retry composer remove phpro/grumphp --no-interaction --no-update --dev
 - travis_retry composer require "laravel/framework:${LARAVEL}" "orchestra/testbench:${TESTBENCH}" --no-interaction --no-update
 
 install:
