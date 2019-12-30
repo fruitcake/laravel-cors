@@ -5,7 +5,6 @@ namespace Fruitcake\Cors;
 use Closure;
 use Asm89\Stack\CorsService;
 use Illuminate\Http\Request;
-use Illuminate\Config\Repository;
 use Symfony\Component\HttpFoundation\Response;
 
 class HandleCors
@@ -13,13 +12,9 @@ class HandleCors
     /** @var CorsService $cors */
     protected $cors;
 
-    /** @var \Illuminate\Contracts\Config\Repository */
-    protected $config;
-
-    public function __construct(CorsService $cors, Repository $config)
+    public function __construct(CorsService $cors)
     {
         $this->cors = $cors;
-        $this->config = $config;
     }
 
     /**
@@ -78,7 +73,7 @@ class HandleCors
     protected function isMatchingPath(Request $request): bool
     {
         // Get the paths from the config or the middleware
-        $paths = $this->config->get('cors.paths', []);
+        $paths = app('config')->get('cors.paths', []);
 
         foreach ($paths as $path) {
             if ($path !== '/') {
