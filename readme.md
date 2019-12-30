@@ -49,7 +49,7 @@ Now update the config to define the paths you want to run the CORS service on, (
 
 The defaults are set in `config/cors.php`. Publish the config to copy the file to your own config:
 ```sh
-php artisan vendor:publish --provider="Fruitcake\Cors\CorsServiceProvider"
+php artisan vendor:publish --tag="cors"
 ```
 > **Note:** When using custom headers, like `X-Auth-Token` or `X-Requested-With`, you must set the `allowed_headers` to include those headers. You can also set it to `['*']` to allow all custom headers.
 
