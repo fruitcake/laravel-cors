@@ -2,6 +2,8 @@ language: php
 
 matrix:
   include:
+    - php: 7.0
+      env: LARAVEL='5.5.*' TESTBENCH='3.5.*' COMPOSER_FLAGS='--prefer-lowest'
     - php: 7.1
       env: LARAVEL='5.8.*' TESTBENCH='3.8.*' COMPOSER_FLAGS='--prefer-lowest'
     - php: 7.1
