@@ -50,7 +50,7 @@ class CorsServiceProvider extends BaseServiceProvider
     public function boot()
     {
         if ($this->app instanceof LaravelApplication && $this->app->runningInConsole()) {
-            $this->publishes([$this->configPath() => config_path('cors.php')], ['cors']);
+            $this->publishes([$this->configPath() => config_path('cors.php')], 'cors');
         } elseif ($this->app instanceof LumenApplication) {
             $this->app->configure('cors');
         }
