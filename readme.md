@@ -116,7 +116,7 @@ return [
 On Laravel Lumen, just register the ServiceProvider manually:
 
 ```php
-$app->register(\Fruitcake\Cors\ServiceProvider::class);
+$app->register(\Fruitcake\Cors\CorsServiceProvider::class);
 ```
 
 ## Global usage for Lumen
