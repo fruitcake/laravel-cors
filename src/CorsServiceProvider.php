@@ -39,7 +39,7 @@ class CorsServiceProvider extends BaseServiceProvider
                 }
             }
 
-            return new CorsService($options);
+            return new CorsService($options, $app);
         });
     }
 
