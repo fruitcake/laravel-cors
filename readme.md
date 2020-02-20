@@ -19,6 +19,7 @@ When upgrading from 0.x versions, there are some breaking changes:
  - The vendor name has changed (see installation/usage)
  - Group middleware is no longer supported.
  - A new 'paths' property is used to enable/disable CORS on certain routes. This is empty by default!
+ - The casing on the props in `cors.php` has changed from camelCase to snake_case, so if you already have a `cors.php` file you will need to update the props in there to match the new casing.
 
 ## Features
 
