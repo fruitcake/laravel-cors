@@ -25,17 +25,6 @@ abstract class AbstractTest extends TestCase
         $this->assertEquals(204, $crawler->getStatusCode());
     }
 
-    public function testOptionsAllowOriginAllowedNonExistingRoute()
-    {
-        $crawler = $this->call('OPTIONS', 'api/pang', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
-            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
-        ]);
-
-        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(204, $crawler->getStatusCode());
-    }
-
     public function testOptionsAllowOriginNotAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
