@@ -5,29 +5,21 @@ namespace Fruitcake\Cors;
 use Closure;
 use Asm89\Stack\CorsService;
 use Illuminate\Http\Request;
-use Illuminate\Config\Repository;
+use Illuminate\Contracts\Container\Container;
 use Symfony\Component\HttpFoundation\Response;
 
 class HandleCors
 {
-    /**
-     * You can enable CORS for 1 or multiple paths.
-     * Example: ['api/*']
-     *
-     * @var array
-     */
-    protected $paths;
-
     /** @var CorsService $cors */
     protected $cors;
 
-    /** @var \Illuminate\Contracts\Config\Repository */
-    protected $config;
-
-    public function __construct(CorsService $cors, Repository $config)
+    /** @var \Illuminate\Contracts\Container\Container $container */
+    protected $container;
+    
+    public function __construct(CorsService $cors, Container $container)
     {
         $this->cors = $cors;
-        $this->config = $config;
+        $this->container = $container;
     }
 
     /**
@@ -67,15 +59,26 @@ class HandleCors
      * @param  \Illuminate\Http\Request  $request
      * @return bool
      */
-    protected function shouldRun($request)
+    protected function shouldRun(Request $request): bool
     {
         // Check if this is an actual CORS request
         if (! $this->cors->isCorsRequest($request)) {
             return false;
         }
 
+        return $this->isMatchingPath($request);
+    }
+
+    /**
+     * The the path from the config, to see if the CORS Service should run
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function isMatchingPath(Request $request): bool
+    {
         // Get the paths from the config or the middleware
-        $paths = $this->paths ?: $this->config->get('cors.paths', []);
+        $paths = $this->container['config']->get('cors.paths', []);
 
         foreach ($paths as $path) {
             if ($path !== '/') {
@@ -97,7 +100,7 @@ class HandleCors
      * @param Response $response
      * @return Response
      */
-    protected function addHeaders(Request $request, Response $response)
+    protected function addHeaders(Request $request, Response $response): Response
     {
         if (! $response->headers->has('Access-Control-Allow-Origin')) {
             $response = $this->cors->addActualRequestHeaders($response, $request);

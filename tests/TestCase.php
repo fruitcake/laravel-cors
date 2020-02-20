@@ -2,8 +2,6 @@
 
 namespace Fruitcake\Cors\Tests;
 
-use Illuminate\Routing\Router;
-use Fruitcake\Cors\HandleCors;
 use Fruitcake\Cors\CorsServiceProvider;
 
 abstract class TestCase extends \Orchestra\Testbench\TestCase
