@@ -127,11 +127,64 @@ class GlobalMiddlewareTest extends TestCase
         $this->assertEquals(200, $crawler->getStatusCode());
     }
 
+    public function testAllowHeaderAllowedOptions()
+    {
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+            'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-1, x-custom-2',
+        ]);
+        $this->assertEquals('x-custom-1, x-custom-2', $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals(204, $crawler->getStatusCode());
+
+        $this->assertEquals('', $crawler->getContent());
+    }
+
+    public function testAllowHeaderAllowedWildcardOptions()
+    {
+        $this->app['config']->set('cors.allowed_headers', ['*']);
+
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+            'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
+        ]);
+        $this->assertEquals('X-CUSTOM-3', $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals(204, $crawler->getStatusCode());
+
+        $this->assertEquals('', $crawler->getContent());
+    }
+
+    public function testAllowHeaderNotAllowedOptions()
+    {
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+            'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
+        ]);
+        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals(403, $crawler->getStatusCode());
+    }
+
     public function testAllowHeaderAllowed()
     {
         $crawler = $this->call('POST', 'web/ping', [], [], [], [
             'HTTP_ORIGIN' => 'localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-1, x-custom-2',
+        ]);
+        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals(200, $crawler->getStatusCode());
+
+        $this->assertEquals('PONG', $crawler->getContent());
+    }
+
+    public function testAllowHeaderAllowedWildcard()
+    {
+        $this->app['config']->set('cors.allowed_headers', ['*']);
+
+        $crawler = $this->call('POST', 'web/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
         $this->assertEquals(200, $crawler->getStatusCode());
