@@ -173,7 +173,6 @@ class GlobalMiddlewareTest extends TestCase
     public function testInvalidExposedHeadersException()
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectDeprecationMessage('exposed_headers');
 
         $this->app['config']->set('cors.exposed_headers', true);
 
@@ -185,7 +184,6 @@ class GlobalMiddlewareTest extends TestCase
     public function testInvalidOriginsException()
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectDeprecationMessage('allowed_origins');
 
         $this->app['config']->set('cors.allowed_origins', true);
 
@@ -197,7 +195,7 @@ class GlobalMiddlewareTest extends TestCase
     public function testInvalidMaxAgeException()
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectDeprecationMessage('max_age');
+        
         $this->app['config']->set('cors.max_age', true);
 
         $this->call('POST', 'api/validation', [], [], [], [
