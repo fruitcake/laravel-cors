@@ -44,6 +44,45 @@ class GlobalMiddlewareTest extends TestCase
         $this->assertEquals(204, $crawler->getStatusCode());
     }
 
+    public function testAllowAllOrigins()
+    {
+        $this->app['config']->set('cors.allowed_origins', ['*']);
+
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'laravel.com',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+        ]);
+
+        $this->assertEquals('laravel.com', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals(204, $crawler->getStatusCode());
+    }
+
+    public function testAllowAllOriginsWildcard()
+    {
+        $this->app['config']->set('cors.allowed_origins', ['*.laravel.com']);
+
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'test.laravel.com',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+        ]);
+
+        $this->assertEquals('test.laravel.com', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals(204, $crawler->getStatusCode());
+    }
+
+    public function testAllowAllOriginsWildcardNoMatch()
+    {
+        $this->app['config']->set('cors.allowed_origins', ['*.laravel.com']);
+
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'test.symfony.com',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+        ]);
+
+        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals(403, $crawler->getStatusCode());
+    }
+
     public function testOptionsAllowOriginAllowedNonExistingRoute()
     {
         $crawler = $this->call('OPTIONS', 'api/pang', [], [], [], [
@@ -129,5 +168,40 @@ class GlobalMiddlewareTest extends TestCase
         ]);
         $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
         $this->assertEquals(302, $crawler->getStatusCode());
+    }
+
+    public function testInvalidExposedHeadersException()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectDeprecationMessage('exposed_headers');
+
+        $this->app['config']->set('cors.exposed_headers', true);
+
+        $this->call('POST', 'api/validation', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+        ]);
+    }
+
+    public function testInvalidOriginsException()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectDeprecationMessage('allowed_origins');
+
+        $this->app['config']->set('cors.allowed_origins', true);
+
+        $this->call('POST', 'api/validation', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+        ]);
+    }
+
+    public function testInvalidMaxAgeException()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->expectDeprecationMessage('max_age');
+        $this->app['config']->set('cors.max_age', true);
+
+        $this->call('POST', 'api/validation', [], [], [], [
+            'HTTP_ORIGIN' => 'localhost',
+        ]);
     }
 }
