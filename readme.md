@@ -119,18 +119,26 @@ return [
 
 ### Lumen
 
-On Laravel Lumen, just register the ServiceProvider manually:
+On Lumen, just register the ServiceProvider manually in your `bootstrap/app.php` file:
 
 ```php
-$app->register(\Fruitcake\Cors\CorsServiceProvider::class);
+$app->register(Fruitcake\Cors\CorsServiceProvider::class);
+```
+
+Also copy the [cors.php](https://github.com/fruitcake/laravel-cors/blob/master/config/cors.php) config file to `config/cors.php` and put it into action:
+
+```php
+$app->configure('cors');
 ```
 
 ## Global usage for Lumen
+
 To allow CORS for all your routes, add the `HandleCors` middleware to the global middleware and set the `paths` property in the config.
+
 ```php
 $app->middleware([
     // ...
-    \Fruitcake\Cors\HandleCors::class,
+    Fruitcake\Cors\HandleCors::class,
 ]);
 ```
 
