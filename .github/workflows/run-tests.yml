@@ -20,6 +20,8 @@ jobs:
             dependency-version: prefer-stable
           - laravel: 6.*
             testbench: 4.*
+            php: 7.4
+            dependency-version: prefer-stable
           - laravel: 5.8.*
             testbench: 3.8.*
             php: 7.3
