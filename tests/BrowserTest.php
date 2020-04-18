@@ -93,6 +93,7 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         $this->browse(function ($browser) {
             $browser->visit('js/runner.html')
                 ->waitUntil('completed', 10)
+                ->pause(1000)
                 ->assertSee('passes: 8');
         });
     }
