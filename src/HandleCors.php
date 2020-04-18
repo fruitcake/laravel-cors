@@ -38,19 +38,23 @@ class HandleCors
 
         // For Preflight, return the Preflight response
         if ($this->cors->isPreflightRequest($request)) {
-            return $this->cors->handlePreflightRequest($request);
-        }
+            $response = $this->cors->handlePreflightRequest($request);
 
-        // If the request is not allowed, return 403
-        if (! $this->cors->isActualRequestAllowed($request)) {
-            return new Response('Not allowed in CORS policy.', 403);
+            $this->cors->varyHeader($response, 'Access-Control-Request-Method');
+
+            return $response;
         }
 
         // Handle the request
         $response = $next($request);
 
+        // For OPTIONS (but not Preflight) vary the Request-Method header
+        if ($request->getMethod() === 'OPTIONS') {
+            $this->cors->varyHeader($response, 'Access-Control-Request-Method');
+        }
+
         // Add the CORS headers to the Response
-        return $this->addHeaders($request, $response);
+        return $this->cors->addActualRequestHeaders($response, $request);
     }
 
     /**
@@ -61,11 +65,6 @@ class HandleCors
      */
     protected function shouldRun(Request $request): bool
     {
-        // Check if this is an actual CORS request
-        if (! $this->cors->isCorsRequest($request)) {
-            return false;
-        }
-
         return $this->isMatchingPath($request);
     }
 
@@ -91,21 +90,5 @@ class HandleCors
         }
 
         return false;
-    }
-
-    /**
-     * Add the headers to the Response, if they don't exist yet.
-     *
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     */
-    protected function addHeaders(Request $request, Response $response): Response
-    {
-        if (! $response->headers->has('Access-Control-Allow-Origin')) {
-            $response = $this->cors->addActualRequestHeaders($response, $request);
-        }
-
-        return $response;
     }
 }

@@ -23,14 +23,14 @@ class GlobalMiddlewareTest extends TestCase
         parent::getEnvironmentSetUp($app);
     }
 
-    public function testShouldReturnNullOnHeaderAssessControlAllowOriginBecauseDontHaveHttpOriginOnRequest()
+    public function testShouldReturnHeaderAssessControlAllowOriginWhenDontHaveHttpOriginOnRequest()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
-        $this->assertNull($crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(200, $crawler->getStatusCode());
+        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testOptionsAllowOriginAllowed()
@@ -53,7 +53,7 @@ class GlobalMiddlewareTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
-        $this->assertEquals('laravel.com', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals('*', $crawler->headers->get('Access-Control-Allow-Origin'));
         $this->assertEquals(204, $crawler->getStatusCode());
     }
 
@@ -80,7 +80,6 @@ class GlobalMiddlewareTest extends TestCase
         ]);
 
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(403, $crawler->getStatusCode());
     }
 
     public function testOptionsAllowOriginAllowedNonExistingRoute()
@@ -101,8 +100,7 @@ class GlobalMiddlewareTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
-        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Origin'));
-        $this->assertEquals(403, $crawler->getStatusCode());
+        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
     }
 
     public function testAllowMethodAllowed()
@@ -149,7 +147,7 @@ class GlobalMiddlewareTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
-        $this->assertEquals('X-CUSTOM-3', $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals('*', $crawler->headers->get('Access-Control-Allow-Headers'));
         $this->assertEquals(204, $crawler->getStatusCode());
 
         $this->assertEquals('', $crawler->getContent());
@@ -162,8 +160,7 @@ class GlobalMiddlewareTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
-        $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
-        $this->assertEquals(403, $crawler->getStatusCode());
+        $this->assertEquals('x-custom-1, x-custom-2', $crawler->headers->get('Access-Control-Allow-Headers'));
     }
 
     public function testAllowHeaderAllowed()
