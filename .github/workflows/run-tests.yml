@@ -1,0 +1,64 @@
+on:
+  push:
+  schedule:
+  - cron: '0 0 * * *'
+
+jobs:
+  php-tests:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        php: [7.4, 7.3, 7.2, 7.1]
+        laravel: [7.*, 6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
+        dependency-version: [prefer-lowest, prefer-stable]
+        os: [ubuntu-latest]
+        include:
+        - laravel: 7.*
+          testbench: 5.*
+        - laravel: 6.*
+          testbench: 4.*
+        - laravel: 5.8.*
+          testbench: 3.8.*
+        - laravel: 5.7.*
+          testbench: 3.7.*
+        - laravel: 5.6.*
+          testbench: 3.6.*
+        - laravel: 5.5.*
+          testbench: 3.5.*
+        - laravel: 5.5.*
+          testbench: 3.5.*
+          php: 7.0
+        exclude:
+        - laravel: 5.7.*
+          php: 7.4
+        - laravel: 5.6.*
+          php: 7.4
+        - laravel: 5.5.*
+          php: 7.4
+
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v1
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+        coverage: none
+
+    - name: Install dependencies
+      run: |
+        composer remove phpro/grumphp --no-interaction --no-update --dev
+        composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+        composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+
+    - name: Execute tests
+      run: vendor/bin/phpunit
+
+    - name: Execute tests
+      run: vendor/bin/phpcs --standard=psr12 src/
+
