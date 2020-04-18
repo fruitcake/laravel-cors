@@ -61,4 +61,3 @@ jobs:
 
       - name: Code style
         run: vendor/bin/phpcs --standard=psr12 src/
-
