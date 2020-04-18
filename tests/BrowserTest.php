@@ -92,7 +92,7 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         \Orchestra\Testbench\Dusk\Options::withoutUI();
         $this->browse(function ($browser) {
             $browser->visit('js/runner.html')
-                ->waitUntil('completed', 30)
+                ->waitUntil('completed', 10)
                 ->assertSee('passes: 8');
         });
     }
