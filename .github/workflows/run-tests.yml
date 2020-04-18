@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         php: [7.4, 7.3, 7.2]
-        laravel: [7.*, 6.*]
+        laravel: [7.*]
         testbench: [5.*]
         dependency-version: [prefer-lowest, prefer-stable]
         include:
@@ -20,7 +20,7 @@ jobs:
             dependency-version: prefer-stable
           - laravel: 6.*
             testbench: 4.*
-            php: 7.4
+            php: 7.3
             dependency-version: prefer-stable
           - laravel: 5.8.*
             testbench: 3.8.*
