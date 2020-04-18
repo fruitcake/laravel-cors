@@ -21,7 +21,7 @@ jobs:
           - laravel: 5.5.*
             php: 7.4
 
-    name: PHP${{ matrix.php }} - ${{ matrix.os }} - ${{ matrix.dependency-version }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
     steps:
     - name: Checkout code
@@ -31,10 +31,12 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php }}
-        extensions: mbstring
+        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
 
     - name: Install dependencies
       run: |
+        composer remove phpro/grumphp --no-interaction --no-update --dev
+        composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
         composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
     - name: Execute Unit Tests
@@ -42,4 +44,3 @@ jobs:
 
     - name: Check PSR-12 Codestyle
       run: vendor/bin/phpcs --standard=psr12 src/
-      if: matrix.os == 'ubuntu-latest'
