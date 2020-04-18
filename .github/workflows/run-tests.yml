@@ -11,7 +11,7 @@ jobs:
       matrix:
         php: [7.4, 7.3, 7.2, 7.1]
         laravel: [7.*]
-        testbench: 5.*
+        testbench: [5.*]
         dependency-version: [prefer-lowest, prefer-stable]
         os: [ubuntu-latest]
         include:
