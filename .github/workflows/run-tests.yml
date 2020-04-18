@@ -63,7 +63,9 @@ jobs:
         composer remove phpro/grumphp --no-interaction --no-update --dev
         composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/testbench-dusk:${{ matrix.testbench }}" --no-interaction --no-update
         composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
-        composer run dusk-updater update
+
+    - name: Update Dusk Chromedriver
+      run: vendor/bin/dusk-updater update
 
     - name: Execute Unit Tests
       run: vendor/bin/phpunit
