@@ -1,8 +1,8 @@
 # CORS Middleware for Laravel
 
-[![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
+![.github/workflows/run-tests.yml](https://github.com/fruitcake/laravel-cors/workflows/.github/workflows/run-tests.yml/badge.svg)
 [![Total Downloads][ico-downloads]][link-downloads]
+[![Software License][ico-license]](LICENSE.md)
 
 Based on https://github.com/asm89/stack-cors
 
