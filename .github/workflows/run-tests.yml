@@ -66,5 +66,12 @@ jobs:
     - name: Execute Unit Tests
       run: vendor/bin/phpunit
 
+    - name: Upload Failed Screenshots
+      uses: actions/upload-artifact@v2-preview
+      if: failure()
+      with:
+        name: screenshots
+        path: tests/Browser/screenshots/*
+
     - name: Check PSR-12 Codestyle
       run: vendor/bin/phpcs --standard=psr12 src/
