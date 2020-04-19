@@ -21,7 +21,7 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
             'paths' => ['*'],
             'supports_credentials' => false,
             'allowed_origins' => ['http://127.0.0.1:9292'],
-            'allowed_headers' => ['X-Requested-With', 'XMLHTTPRequest'],
+            'allowed_headers' => ['X-Requested-With'],
             'allowed_methods' => ['*'],
             'exposed_headers' => [],
             'max_age' => 0,
@@ -52,6 +52,9 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
 
         $this->addRunnerRoutes($router);
         $this->addWebRoutes($router);
+
+        \Orchestra\Testbench\Dusk\Options::withoutUI();
+
     }
 
     /**
@@ -89,11 +92,20 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
 
     public function testJsRunner()
     {
-        \Orchestra\Testbench\Dusk\Options::withoutUI();
         $this->browse(function ($browser) {
             $browser->visit('js/runner.html')
                 ->waitUntil('completed', 10)
-                ->pause(1000)
+                ->pause(100)
+                ->assertSee('passes: 8');
+        });
+    }
+
+    public function testFetch()
+    {
+        $this->browse(function ($browser) {
+            $browser->visit('js/fetch.html')
+                ->waitUntil('completed', 10)
+                ->pause(100)
                 ->assertSee('passes: 8');
         });
     }
