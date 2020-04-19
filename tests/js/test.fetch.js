@@ -87,7 +87,7 @@
     return it('should not allow post resource with wrong header', function(done) {
       const headers = new Headers();
       headers.append('X-Custom-Header', 'Nope');
-      return fetch(`http://${CORS_SERVER}/cors`, {
+      return fetch(`http://${CORS_SERVER}/invalid`, {
         method: 'POST',
         mode: 'cors',
         headers: headers

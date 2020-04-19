@@ -6,6 +6,7 @@ use Fruitcake\Cors\CorsServiceProvider;
 use Fruitcake\Cors\HandleCors;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\File;
 
 class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
 {
@@ -83,13 +84,23 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         $router->any('cors', function () {
             return 'OK!';
         });
+
+        $router->any('invalid', function () {
+            File::put(__DIR__ .'/Browser/invalid.flag', '1');
+            throw new \Exception('Should not reach this');
+        });
     }
 
     public function testFetch()
     {
+        File::delete(__DIR__ .'/Browser/invalid.flag');
+
         $this->browse(function ($browser) {
             $browser->visit('js/fetch.html')
-                ->waitForText('passes: 8');
+                ->waitForText('passes: 8')
+                ->assertSee('passes: 8');
         });
+
+        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
     }
 }
