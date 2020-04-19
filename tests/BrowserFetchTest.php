@@ -5,14 +5,14 @@ namespace Fruitcake\Cors\Tests;
 use Fruitcake\Cors\CorsServiceProvider;
 use Fruitcake\Cors\HandleCors;
 use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\File;
 
-class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
+class BrowserFetchTest extends \Orchestra\Testbench\Dusk\TestCase
 {
     protected static $baseServeHost = '127.0.0.1';
     protected static $baseServePort = 9292;
-
 
     protected function resolveApplicationConfiguration($app)
     {
@@ -22,7 +22,7 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
             'paths' => ['*'],
             'supports_credentials' => false,
             'allowed_origins' => ['http://127.0.0.1:9292'],
-            'allowed_headers' => ['X-Requested-With'],
+            'allowed_headers' => ['X-Requested-With', 'Authorization'],
             'allowed_methods' => ['*'],
             'exposed_headers' => [],
             'max_age' => 0,
@@ -85,6 +85,13 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
             return 'OK!';
         });
 
+        $router->any('auth', function (Request $request) {
+            $auth = $request->header('Authorization');
+            list ($type, $token) = explode (' ', $auth, 2);
+
+            return $token;
+        });
+
         $router->any('invalid', function () {
             File::put(__DIR__ .'/Browser/invalid.flag', '1');
             throw new \Exception('Should not reach this');
@@ -97,8 +104,8 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
 
         $this->browse(function ($browser) {
             $browser->visit('js/fetch.html')
-                ->waitForText('passes: 8')
-                ->assertSee('passes: 8');
+                ->waitForText('passes: 9')
+                ->assertSee('passes: 9');
         });
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));

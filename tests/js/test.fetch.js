@@ -83,6 +83,19 @@
       });
     });
 
+    it('should not allow post resource with credentials', function(done) {
+      const headers = new Headers();
+      headers.append('Authorization', 'Bearer 123');
+      return fetch(`http://${CORS_SERVER}/invalid`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: headers,
+        credentials: 'include'
+      }).catch(function(error) {
+        console.log(error);
+        return done();
+      });
+    });
 
     return it('should not allow post resource with wrong header', function(done) {
       const headers = new Headers();
