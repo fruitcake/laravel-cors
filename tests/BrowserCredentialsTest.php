@@ -104,7 +104,7 @@ class BrowserCredentialsTest extends \Orchestra\Testbench\Dusk\TestCase
 
         $this->browse(function ($browser) {
             $browser->visit('js/credentials.html')
-                ->waitForText('passes: 6')
+                ->waitForText('passes: 6', 10)
                 ->assertSee('passes: 6');
         });
 

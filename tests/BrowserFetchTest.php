@@ -104,7 +104,7 @@ class BrowserFetchTest extends \Orchestra\Testbench\Dusk\TestCase
 
         $this->browse(function ($browser) {
             $browser->visit('js/fetch.html')
-                ->waitForText('passes: 9')
+                ->waitForText('passes: 9', 10)
                 ->assertSee('passes: 9');
         });
 
