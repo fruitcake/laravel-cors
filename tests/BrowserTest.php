@@ -54,7 +54,6 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         $this->addWebRoutes($router);
 
         \Orchestra\Testbench\Dusk\Options::withoutUI();
-
     }
 
     /**
@@ -90,9 +89,7 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
     {
         $this->browse(function ($browser) {
             $browser->visit('js/fetch.html')
-                ->waitUntil('completed', 10)
-                ->pause(100)
-                ->assertSee('passes: 8');
+                ->waitForText('passes: 8');
         });
     }
 }
