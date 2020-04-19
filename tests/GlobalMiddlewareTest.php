@@ -191,15 +191,4 @@ class GlobalMiddlewareTest extends TestCase
             'HTTP_ORIGIN' => 'localhost',
         ]);
     }
-
-    public function testInvalidMaxAgeException()
-    {
-        $this->expectException(\RuntimeException::class);
-        
-        $this->app['config']->set('cors.max_age', true);
-
-        $this->call('POST', 'api/validation', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
-        ]);
-    }
 }

@@ -31,10 +31,6 @@ class CorsServiceProvider extends BaseServiceProvider
                 }
             }
 
-            if ($config['max_age'] !== false && !is_numeric($config['max_age'])) {
-                throw new \RuntimeException('CORS config `max_age` should be an integer or `false`');
-            }
-
             // Convert case to supported options
             $options = [
                 'supportsCredentials' => $config['supports_credentials'],
