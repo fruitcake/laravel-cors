@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\File;
 class BrowserCredentialsTest extends \Orchestra\Testbench\Dusk\TestCase
 {
     protected static $baseServeHost = '127.0.0.1';
-    protected static $baseServePort = 9292;
+    protected static $baseServePort = 9293;
 
     protected function resolveApplicationConfiguration($app)
     {
@@ -21,7 +21,7 @@ class BrowserCredentialsTest extends \Orchestra\Testbench\Dusk\TestCase
         $app['config']['cors'] = [
             'paths' => ['*'],
             'supports_credentials' => true,
-            'allowed_origins' => ['http://127.0.0.1:9292'],
+            'allowed_origins' => ['http://127.0.0.1:9293'],
             'allowed_headers' => ['X-Requested-With', 'Authorization'],
             'allowed_methods' => ['GET', 'POST', 'PUT'],
             'exposed_headers' => [],
@@ -104,7 +104,7 @@ class BrowserCredentialsTest extends \Orchestra\Testbench\Dusk\TestCase
 
         $this->browse(function ($browser) {
             $browser->visit('js/credentials.html')
-                ->waitForText('passes: 6', 10)
+                ->waitForText('passes: 6')
                 ->assertSee('passes: 6');
         });
 
