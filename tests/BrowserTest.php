@@ -53,7 +53,7 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         $this->addRunnerRoutes($router);
         $this->addWebRoutes($router);
 
-        \Orchestra\Testbench\Dusk\Options::withoutUI();
+//        \Orchestra\Testbench\Dusk\Options::withoutUI();
 
     }
 
@@ -77,26 +77,12 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
      */
     protected function addWebRoutes(Router $router)
     {
-        $router->any('static.txt', function () {
-            return 'hello world';
-        });
-
         $router->any('/', function () {
             return 'Hello world';
         });
 
         $router->any('cors', function () {
             return 'OK!';
-        });
-    }
-
-    public function testJsRunner()
-    {
-        $this->browse(function ($browser) {
-            $browser->visit('js/runner.html')
-                ->waitUntil('completed', 10)
-                ->pause(100)
-                ->assertSee('passes: 8');
         });
     }
 
