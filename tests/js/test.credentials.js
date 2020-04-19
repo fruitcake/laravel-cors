@@ -57,6 +57,20 @@
     it('should not allow delete resource with credentials', function(done) {
       const headers = new Headers();
       headers.append('Authorization', 'Bearer 123');
+      return fetch(`http://${CORS_SERVER}/auth`, {
+        method: 'DELETE',
+        mode: 'cors',
+        headers: headers,
+        credentials: 'include'
+      }).catch(function(error) {
+        console.log(error);
+        return done();
+      });
+    });
+
+    it('should not reach delete resource with credentials', function(done) {
+      const headers = new Headers();
+      headers.append('Authorization', 'Bearer 123');
       return fetch(`http://${CORS_SERVER}/invalid`, {
         method: 'DELETE',
         mode: 'cors',

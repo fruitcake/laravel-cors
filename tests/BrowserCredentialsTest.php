@@ -104,8 +104,8 @@ class BrowserCredentialsTest extends \Orchestra\Testbench\Dusk\TestCase
 
         $this->browse(function ($browser) {
             $browser->visit('js/credentials.html')
-                ->waitForText('passes: 5')
-                ->assertSee('passes: 5');
+                ->waitForText('passes: 6')
+                ->assertSee('passes: 6');
         });
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid_credentials.flag'));
