@@ -53,7 +53,7 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         $this->addRunnerRoutes($router);
         $this->addWebRoutes($router);
 
-//        \Orchestra\Testbench\Dusk\Options::withoutUI();
+        \Orchestra\Testbench\Dusk\Options::withoutUI();
 
     }
 
