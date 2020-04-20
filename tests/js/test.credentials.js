@@ -1,7 +1,7 @@
 (function() {
   var CORS_SERVER;
 
-  CORS_SERVER = '127.0.0.1.xip.io:9292';
+  CORS_SERVER = 'localhost:9292';
 
   describe('CORS-CREDENTIALS', function() {
 

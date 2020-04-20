@@ -23,7 +23,7 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
             'supports_credentials' => false,
             'allowed_origins' => ['http://127.0.0.1:9292'],
             'allowed_headers' => ['X-Requested-With', 'Authorization'],
-            'allowed_methods' => ['*'],
+            'allowed_methods' => ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
             'exposed_headers' => [],
             'max_age' => 0,
         ];
@@ -105,6 +105,41 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
             $browser->visit('js/fetch.html')
                 ->waitForText('passes: 9')
                 ->assertSee('passes: 9');
+        });
+
+        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
+    }
+
+    public function testFetchWildcard()
+    {
+        $this->tweakApplication(function ($app) {
+            $app['config']->set('cors.allowed_origins', ['*']);
+            $app['config']->set('cors.allowed_methods', ['*']);
+        });
+
+        File::delete(__DIR__ .'/Browser/invalid.flag');
+
+        $this->browse(function ($browser) {
+            $browser->visit('js/fetch.html')
+                ->waitForText('passes: 9')
+                ->assertSee('passes: 9');
+        });
+
+        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
+    }
+
+    public function testFetchInvalid()
+    {
+        $this->tweakApplication(function ($app) {
+            $app['config']->set('cors.allowed_origins', ['http://example.org']);
+        });
+
+        File::delete(__DIR__ .'/Browser/invalid.flag');
+
+        $this->browse(function ($browser) {
+            $browser->visit('js/invalid.html')
+                ->waitForText('passes: 4')
+                ->assertSee('passes: 4');
         });
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
