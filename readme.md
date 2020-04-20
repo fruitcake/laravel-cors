@@ -14,11 +14,11 @@ headers with Laravel middleware configuration.
 If you want to have a global overview of CORS workflow, you can  browse
 this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
-## Upgrading from 0.x
+## Upgrading from 0.x / barryvdh-laravel-cors
 When upgrading from 0.x versions, there are some breaking changes:
+ - **A new 'paths' property is used to enable/disable CORS on certain routes. This is empty by default, so fill it correctly!**
+ - **Group middleware is no longer supported, use the global middleware**
  - The vendor name has changed (see installation/usage)
- - Group middleware is no longer supported.
- - A new 'paths' property is used to enable/disable CORS on certain routes. This is empty by default!
  - The casing on the props in `cors.php` has changed from camelCase to snake_case, so if you already have a `cors.php` file you will need to update the props in there to match the new casing.
 
 ## Features
