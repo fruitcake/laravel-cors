@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\File;
 
-class BrowserFetchTest extends \Orchestra\Testbench\Dusk\TestCase
+class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
 {
     protected static $baseServeHost = '127.0.0.1';
     protected static $baseServePort = 9292;
@@ -27,7 +27,6 @@ class BrowserFetchTest extends \Orchestra\Testbench\Dusk\TestCase
             'exposed_headers' => [],
             'max_age' => 0,
         ];
-
     }
 
     protected function getPackageProviders($app)
@@ -106,6 +105,25 @@ class BrowserFetchTest extends \Orchestra\Testbench\Dusk\TestCase
             $browser->visit('js/fetch.html')
                 ->waitForText('passes: 9')
                 ->assertSee('passes: 9');
+        });
+
+        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
+    }
+
+    public function testFetchCredentials()
+    {
+        $this->tweakApplication(function ($app) {
+            $app['config']->set('cors.supports_credentials', true);
+            $app['config']->set('cors.allowed_headers', ['X-Requested-With', 'Authorization']);
+            $app['config']->set('cors.allowed_methods', ['GET', 'POST', 'PUT']);
+        });
+
+        File::delete(__DIR__ .'/Browser/invalid.flag');
+
+        $this->browse(function ($browser) {
+            $browser->visit('js/credentials.html')
+                ->waitForText('passes: 6')
+                ->assertSee('passes: 6');
         });
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
