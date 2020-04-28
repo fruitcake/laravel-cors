@@ -6,6 +6,7 @@ use Closure;
 use Asm89\Stack\CorsService;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Symfony\Component\HttpFoundation\Response;
 
 class HandleCors
@@ -44,6 +45,13 @@ class HandleCors
         // If the request is not allowed, return 403
         if (! $this->cors->isActualRequestAllowed($request)) {
             return new Response('Not allowed in CORS policy.', 403);
+        }
+
+        // Add the headers on the Request Handled event as fallback in case of exceptions
+        if ($this->container->bound('events')) {
+            $this->container->make('events')->listen(RequestHandled::class, function (RequestHandled $event) {
+                $this->addHeaders($event->request, $event->response);
+            });
         }
 
         // Handle the request
