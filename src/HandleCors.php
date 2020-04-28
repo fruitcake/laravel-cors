@@ -70,7 +70,7 @@ class HandleCors
      * @param Response $response
      * @return Response
      */
-    protected function addHeaders(Request $request, Response $response)
+    protected function addHeaders(Request $request, Response $response): Response
     {
         if (! $response->headers->has('Access-Control-Allow-Origin')) {
             // Add the CORS headers to the Response
