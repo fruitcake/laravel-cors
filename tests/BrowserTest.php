@@ -141,15 +141,19 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
     }
 
-    public function testPrependMiddleware()
+    public function testPushMiddleware()
     {
         $this->tweakApplication(function ($app) {
             // Add the middleware
+            /** @var Kernel $kernel */
             $kernel = $app->make(Kernel::class);
-            $kernel->prependMiddleware(new class {
+            $kernel->pushMiddleware(new class {
                 public function handle($request, \Closure $next)
                 {
-                    return response()->json(['message' => 'Authorization Required'], 401);
+                    if ($request->is('protected')) {
+                        return response()->json(['message' => 'Authorization Required'], 401);
+                    }
+                    return $next($request);
                 }
             });
         });
@@ -157,33 +161,9 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         File::delete(__DIR__ .'/Browser/invalid.flag');
 
         $this->browse(function ($browser) {
-            $browser->visit('js/fetch.html')
-                ->waitForText('passes: 12')
-                ->assertSee('passes: 12');
-        });
-
-        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
-    }
-
-    public function testAppendMiddleware()
-    {
-        $this->tweakApplication(function ($app) {
-            // Add the middleware
-            $kernel = $app->make(Kernel::class);
-            $kernel->appendMiddleware(new class {
-                public function handle($request, \Closure $next)
-                {
-                    return response()->json(['message' => 'Authorization Required'], 401);
-                }
-            });
-        });
-
-        File::delete(__DIR__ .'/Browser/invalid.flag');
-
-        $this->browse(function ($browser) {
-            $browser->visit('js/fetch.html')
-                ->waitForText('passes: 12')
-                ->assertSee('passes: 12');
+            $browser->visit('js/middleware.html')
+                ->waitForText('passes: 1')
+                ->assertSee('passes: 1');
         });
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));

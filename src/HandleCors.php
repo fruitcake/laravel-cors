@@ -4,6 +4,7 @@ namespace Fruitcake\Cors;
 
 use Closure;
 use Asm89\Stack\CorsService;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Container\Container;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class HandleCors
 
     /** @var \Illuminate\Contracts\Container\Container $container */
     protected $container;
-    
+
     public function __construct(CorsService $cors, Container $container)
     {
         $this->cors = $cors;
@@ -45,16 +46,36 @@ class HandleCors
             return $response;
         }
 
+        // Add the headers on the Request Handled event as fallback in case of exceptions
+        if ($this->container->bound('events')) {
+            $this->container->make('events')->listen(RequestHandled::class, function (RequestHandled $event) {
+                $this->addCorsHeaders($event->request, $event->response);
+            });
+        }
+
         // Handle the request
         $response = $next($request);
 
-        // For OPTIONS (but not Preflight) vary the Request-Method header
         if ($request->getMethod() === 'OPTIONS') {
             $this->cors->varyHeader($response, 'Access-Control-Request-Method');
         }
 
-        // Add the CORS headers to the Response
-        return $this->cors->addActualRequestHeaders($response, $request);
+        return $this->addCorsHeaders($request, $response);
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    protected function addCorsHeaders(Request $request, Response $response)
+    {
+        if (! $response->headers->has('Access-Control-Allow-Origin')) {
+            // Add the CORS headers to the Response
+            $response = $this->cors->addActualRequestHeaders($response, $request);
+        }
+
+        return $response;
     }
 
     /**
