@@ -1,7 +1,7 @@
 # CORS Middleware for Laravel
 
+[![Build Status][ico-actions]][link-actions]
 [![Software License][ico-license]](LICENSE.md)
-[![Build Status][ico-travis]][link-travis]
 [![Total Downloads][ico-downloads]][link-downloads]
 
 Based on https://github.com/asm89/stack-cors
@@ -14,11 +14,11 @@ headers with Laravel middleware configuration.
 If you want to have a global overview of CORS workflow, you can  browse
 this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
-## Upgrading from 0.x
+## Upgrading from 0.x / barryvdh-laravel-cors
 When upgrading from 0.x versions, there are some breaking changes:
+ - **A new 'paths' property is used to enable/disable CORS on certain routes. This is empty by default, so fill it correctly!**
+ - **Group middleware is no longer supported, use the global middleware**
  - The vendor name has changed (see installation/usage)
- - Group middleware is no longer supported.
- - A new 'paths' property is used to enable/disable CORS on certain routes. This is empty by default!
  - The casing on the props in `cors.php` has changed from camelCase to snake_case, so if you already have a `cors.php` file you will need to update the props in there to match the new casing.
 
 ## Features
@@ -159,13 +159,13 @@ Released under the MIT License, see [LICENSE](LICENSE).
 
 [ico-version]: https://img.shields.io/packagist/v/fruitcake/laravel-cors.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/fruitcake/laravel-cors/master.svg?style=flat-square
+[ico-actions]: https://github.com/fruitcake/laravel-cors/workflows/.github/workflows/run-tests.yml/badge.svg
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/fruitcake/laravel-cors.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/fruitcake/laravel-cors.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/fruitcake/laravel-cors.svg?style=flat-square
 
 [link-packagist]: https://packagist.org/packages/fruitcake/laravel-cors
-[link-travis]: https://travis-ci.org/fruitcake/laravel-cors
+[link-actions]: https://github.com/fruitcake/laravel-cors/actions
 [link-scrutinizer]: https://scrutinizer-ci.com/g/fruitcake/laravel-cors/code-structure
 [link-code-quality]: https://scrutinizer-ci.com/g/fruitcake/laravel-cors
 [link-downloads]: https://packagist.org/packages/fruitcake/laravel-cors
