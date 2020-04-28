@@ -95,6 +95,19 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
             File::put(__DIR__ .'/Browser/invalid.flag', '1');
             throw new \Exception('Should not reach this');
         });
+
+        $router->get('error', function () {
+            $foo++;
+        });
+
+        $router->get('abort', function () {
+            abort('400', 'Aborted');
+        });
+
+        $router->get('exception', function () {
+            throw new \RuntimeException('Exception!');
+        });
+
     }
 
     public function testFetch()
@@ -103,8 +116,8 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
 
         $this->browse(function ($browser) {
             $browser->visit('js/fetch.html')
-                ->waitForText('passes: 9')
-                ->assertSee('passes: 9');
+                ->waitForText('passes: 12')
+                ->assertSee('passes: 12');
         });
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
@@ -121,8 +134,8 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
 
         $this->browse(function ($browser) {
             $browser->visit('js/fetch.html')
-                ->waitForText('passes: 9')
-                ->assertSee('passes: 9');
+                ->waitForText('passes: 12')
+                ->assertSee('passes: 12');
         });
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
