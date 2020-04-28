@@ -48,7 +48,7 @@ class HandleCors
         }
 
         // Add the headers on the Request Handled event as fallback in case of exceptions
-        if ($this->container->bound('events')) {
+        if (class_exists(RequestHandled::class) && $this->container->bound('events')) {
             $this->container->make('events')->listen(RequestHandled::class, function (RequestHandled $event) {
                 $this->addHeaders($event->request, $event->response);
             });
