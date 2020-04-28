@@ -49,7 +49,7 @@ class HandleCors
         // Add the headers on the Request Handled event as fallback in case of exceptions
         if ($this->container->bound('events')) {
             $this->container->make('events')->listen(RequestHandled::class, function (RequestHandled $event) {
-                $this->addCorsHeaders($event->request, $event->response);
+                $this->addHeaders($event->request, $event->response);
             });
         }
 
@@ -60,15 +60,17 @@ class HandleCors
             $this->cors->varyHeader($response, 'Access-Control-Request-Method');
         }
 
-        return $this->addCorsHeaders($request, $response);
+        return $this->addHeaders($request, $response);
     }
 
     /**
+     * Add the headers to the Response, if they don't exist yet.
+     *
      * @param Request $request
      * @param Response $response
      * @return Response
      */
-    protected function addCorsHeaders(Request $request, Response $response)
+    protected function addHeaders(Request $request, Response $response)
     {
         if (! $response->headers->has('Access-Control-Allow-Origin')) {
             // Add the CORS headers to the Response
