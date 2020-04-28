@@ -141,6 +141,54 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
     }
 
+    public function testPrependMiddleware()
+    {
+        $this->tweakApplication(function ($app) {
+            // Add the middleware
+            $kernel = $app->make(Kernel::class);
+            $kernel->prependMiddleware(new class {
+                public function handle($request, \Closure $next)
+                {
+                    return response()->json(['message' => 'Authorization Required'], 401);
+                }
+            });
+        });
+
+        File::delete(__DIR__ .'/Browser/invalid.flag');
+
+        $this->browse(function ($browser) {
+            $browser->visit('js/fetch.html')
+                ->waitForText('passes: 12')
+                ->assertSee('passes: 12');
+        });
+
+        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
+    }
+
+    public function testAppendMiddleware()
+    {
+        $this->tweakApplication(function ($app) {
+            // Add the middleware
+            $kernel = $app->make(Kernel::class);
+            $kernel->appendMiddleware(new class {
+                public function handle($request, \Closure $next)
+                {
+                    return response()->json(['message' => 'Authorization Required'], 401);
+                }
+            });
+        });
+
+        File::delete(__DIR__ .'/Browser/invalid.flag');
+
+        $this->browse(function ($browser) {
+            $browser->visit('js/fetch.html')
+                ->waitForText('passes: 12')
+                ->assertSee('passes: 12');
+        });
+
+        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
+    }
+
     public function testFetchInvalid()
     {
         $this->tweakApplication(function ($app) {
