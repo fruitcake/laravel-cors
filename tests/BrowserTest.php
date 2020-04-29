@@ -152,15 +152,28 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
             $kernel->pushMiddleware(ProtectedMiddleware::class);
         });
 
-        File::delete(__DIR__ .'/Browser/invalid.flag');
+        $this->browse(function ($browser) {
+            $browser->visit('js/middleware.html')
+                ->waitForText('passes: 2')
+                ->assertSee('passes: 2');
+        });
+    }
+
+
+    public function testPrependMiddleware()
+    {
+        $this->tweakApplication(function ($app) {
+            // Add the middleware
+            /** @var Kernel $kernel */
+            $kernel = $app->make(Kernel::class);
+            $kernel->prependMiddleware(ProtectedMiddleware::class);
+        });
 
         $this->browse(function ($browser) {
             $browser->visit('js/middleware.html')
                 ->waitForText('passes: 2')
                 ->assertSee('passes: 2');
         });
-
-        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
     }
 
     public function testFetchInvalid()
