@@ -4,10 +4,12 @@ namespace Fruitcake\Cors\Tests;
 
 use Fruitcake\Cors\CorsServiceProvider;
 use Fruitcake\Cors\HandleCors;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\UnauthorizedException;
 
 class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
 {
@@ -147,23 +149,15 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
             // Add the middleware
             /** @var Kernel $kernel */
             $kernel = $app->make(Kernel::class);
-            $kernel->pushMiddleware(new class {
-                public function handle($request, \Closure $next)
-                {
-                    if ($request->is('protected')) {
-                        return response()->json(['message' => 'Authorization Required'], 401);
-                    }
-                    return $next($request);
-                }
-            });
+            $kernel->pushMiddleware(ProtectedMiddleware::class);
         });
 
         File::delete(__DIR__ .'/Browser/invalid.flag');
 
         $this->browse(function ($browser) {
             $browser->visit('js/middleware.html')
-                ->waitForText('passes: 1')
-                ->assertSee('passes: 1');
+                ->waitForText('passes: 2')
+                ->assertSee('passes: 2');
         });
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
@@ -203,5 +197,15 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         });
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
+    }
+}
+
+class ProtectedMiddleware {
+    public function handle($request, \Closure $next)
+    {
+        if ($request->is('protected')) {
+            return response()->json(['message'=> 'Unauthorized'], 401);
+        }
+        return $next($request);
     }
 }
