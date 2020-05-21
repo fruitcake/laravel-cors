@@ -34,6 +34,13 @@ Require the `fruitcake/laravel-cors` package in your `composer.json` and update 
 composer require fruitcake/laravel-cors
 ```
 
+If you get a conflict, this could be because an older version of barryvdh/laravel-cors or fruitcake/laravel-cors is installed. Remove the conflicting package first, then try install again:
+
+```sh
+composer remove barryvdh/laravel-cors fruitcake/laravel-cors
+composer require fruitcake/laravel-cors
+```
+
 ## Global usage
 
 To allow CORS for all your routes, add the `HandleCors` middleware in the `$middleware` property of  `app/Http/Kernel.php` class:
