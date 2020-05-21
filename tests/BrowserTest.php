@@ -214,14 +214,10 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
             $app['config']->set('cors.allowed_methods', ['*']);
         });
 
-        File::delete(__DIR__ .'/Browser/invalid.flag');
-
         $this->browse(function ($browser) {
             $browser->visit('js/axios.html')
                 ->waitForText('passes: 3', 30)
                 ->assertSee('passes: 3');
         });
-
-        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
     }
 }
