@@ -47,7 +47,7 @@
       };
 
       return axios(options).then((response) => {
-        // Should now come here
+        // Should not come here
       })
         .catch(function(error) {
           console.log(error);

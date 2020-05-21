@@ -225,14 +225,3 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
     }
 }
-
-class ProtectedMiddleware {
-    public function handle($request, \Closure $next)
-    {
-        if ($request->is('protected')) {
-            return response()->json(['message'=> 'Unauthorized'], 401);
-        }
-        return $next($request);
-    }
-
-}
