@@ -204,4 +204,35 @@ class BrowserTest extends \Orchestra\Testbench\Dusk\TestCase
 
         $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
     }
+
+    public function testFetchAxios()
+    {
+        $this->tweakApplication(function ($app) {
+            $app['config']->set('cors.supports_credentials', false);
+            $app['config']->set('cors.allowed_origins', ['*']);
+            $app['config']->set('cors.allowed_headers', ['*']);
+            $app['config']->set('cors.allowed_methods', ['*']);
+        });
+
+        File::delete(__DIR__ .'/Browser/invalid.flag');
+
+        $this->browse(function ($browser) {
+            $browser->visit('js/axios.html')
+                ->waitForText('passes: 3', 30)
+                ->assertSee('passes: 3');
+        });
+
+        $this->assertFalse(File::exists(__DIR__ .'/Browser/invalid.flag'));
+    }
+}
+
+class ProtectedMiddleware {
+    public function handle($request, \Closure $next)
+    {
+        if ($request->is('protected')) {
+            return response()->json(['message'=> 'Unauthorized'], 401);
+        }
+        return $next($request);
+    }
+
 }
