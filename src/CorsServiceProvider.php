@@ -19,37 +19,7 @@ class CorsServiceProvider extends BaseServiceProvider
         $this->mergeConfigFrom($this->configPath(), 'cors');
 
         $this->app->singleton(CorsService::class, function ($app) {
-            $config = $app['config']->get('cors');
-
-            if ($config['exposed_headers'] && !is_array($config['exposed_headers'])) {
-                throw new \RuntimeException('CORS config `exposed_headers` should be `false` or an array');
-            }
-
-            foreach (['allowed_origins', 'allowed_origins_patterns',  'allowed_headers', 'allowed_methods'] as $key) {
-                if (!is_array($config[$key])) {
-                    throw new \RuntimeException('CORS config `' . $key . '` should be an array');
-                }
-            }
-
-            // Convert case to supported options
-            $options = [
-                'supportsCredentials' => $config['supports_credentials'],
-                'allowedOrigins' => $config['allowed_origins'],
-                'allowedOriginsPatterns' => $config['allowed_origins_patterns'],
-                'allowedHeaders' => $config['allowed_headers'],
-                'allowedMethods' => $config['allowed_methods'],
-                'exposedHeaders' => $config['exposed_headers'],
-                'maxAge' => $config['max_age'],
-            ];
-
-            // Transform wildcard pattern
-            foreach ($options['allowedOrigins'] as $origin) {
-                if (strpos($origin, '*') !== false) {
-                    $options['allowedOriginsPatterns'][] = $this->convertWildcardToPattern($origin);
-                }
-            }
-
-            return new CorsService($options, $app);
+            return new CorsService($this->corsOptions(), $app);
         });
     }
 
@@ -74,6 +44,46 @@ class CorsServiceProvider extends BaseServiceProvider
     protected function configPath()
     {
         return __DIR__ . '/../config/cors.php';
+    }
+
+    /**
+     * Get options for CorsService
+     *
+     * @return array
+     */
+    protected function corsOptions()
+    {
+        $config = $this->app['config']->get('cors');
+
+        if ($config['exposed_headers'] && !is_array($config['exposed_headers'])) {
+            throw new \RuntimeException('CORS config `exposed_headers` should be `false` or an array');
+        }
+
+        foreach (['allowed_origins', 'allowed_origins_patterns',  'allowed_headers', 'allowed_methods'] as $key) {
+            if (!is_array($config[$key])) {
+                throw new \RuntimeException('CORS config `' . $key . '` should be an array');
+            }
+        }
+
+        // Convert case to supported options
+        $options = [
+            'supportsCredentials' => $config['supports_credentials'],
+            'allowedOrigins' => $config['allowed_origins'],
+            'allowedOriginsPatterns' => $config['allowed_origins_patterns'],
+            'allowedHeaders' => $config['allowed_headers'],
+            'allowedMethods' => $config['allowed_methods'],
+            'exposedHeaders' => $config['exposed_headers'],
+            'maxAge' => $config['max_age'],
+        ];
+
+        // Transform wildcard pattern
+        foreach ($options['allowedOrigins'] as $origin) {
+            if (strpos($origin, '*') !== false) {
+                $options['allowedOriginsPatterns'][] = $this->convertWildcardToPattern($origin);
+            }
+        }
+
+        return $options;
     }
 
     /**
