@@ -19,7 +19,7 @@
         "illuminate/contracts": "^5.6|^6.0|^7.0|^8.0",
         "symfony/http-foundation": "^4.0|^5.0",
         "symfony/http-kernel": "^4.0|^5.0",
-        "asm89/stack-cors": "^2"
+        "asm89/stack-cors": "^2.0.1"
     },
     "require-dev": {
         "laravel/framework": "^5.5|^6.0|^7.0|^8.0",

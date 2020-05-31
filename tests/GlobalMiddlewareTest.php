@@ -147,7 +147,7 @@ class GlobalMiddlewareTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
-        $this->assertEquals('*', $crawler->headers->get('Access-Control-Allow-Headers'));
+        $this->assertEquals('x-custom-3', $crawler->headers->get('Access-Control-Allow-Headers'));
         $this->assertEquals(204, $crawler->getStatusCode());
 
         $this->assertEquals('', $crawler->getContent());
