@@ -114,6 +114,16 @@ $app->middleware([
 ]);
 ```
 
+## Common problems
+
+### Error handling, Middleware order
+
+Sometimes errors/middleware that return own responses can prevent the CORS Middleware from being run. Try changing the order of the Middleware and make sure it's in the global middleware, not a route group. Also check your logs for actual errors, because without CORS, the errors will be swallowed by the browser, only showing CORS errors.
+
+### Echo/die
+
+If you `echo()`, `dd()`, `die()`, `exit()`, `dump()` etc in your code, you will break the Middleware flow. When output is sent before headers, CORS cannot be added. When the scripts exits before the CORS middleware finished, CORS headers will not be added. Always return a proper response or throw an Exception.
+
 ### Disabling CSRF protection for your API
 
 If possible, use a different route group with CSRF protection enabled. 
@@ -124,6 +134,7 @@ protected $except = [
     'api/*'
 ];
 ```
+
     
 ## License
 
