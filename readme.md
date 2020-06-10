@@ -4,7 +4,7 @@
 [![Software License][ico-license]](LICENSE.md)
 [![Total Downloads][ico-downloads]][link-downloads]
 
-Based on https://github.com/asm89/stack-cors
+Implements https://github.com/asm89/stack-cors for Laravel
 
 ## About
 
