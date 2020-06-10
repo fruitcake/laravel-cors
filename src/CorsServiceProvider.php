@@ -38,8 +38,9 @@ class CorsServiceProvider extends BaseServiceProvider
 
         // Add the headers on the Request Handled event as fallback in case of exceptions
         if (class_exists(RequestHandled::class) && $this->app->bound('events')) {
-            $cors = $this->app->make(HandleCors::class);
-            $this->app->make('events')->listen(RequestHandled::class, [$cors, 'onRequestHandled']);
+            $this->app->make('events')->listen(RequestHandled::class, function (RequestHandled $event) {
+                $this->app->make(HandleCors::class)->onRequestHandled($event);
+            });
         }
     }
 
