@@ -6,6 +6,7 @@ use Asm89\Stack\CorsService;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Laravel\Lumen\Application as LumenApplication;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 
 class CorsServiceProvider extends BaseServiceProvider
 {
@@ -33,6 +34,12 @@ class CorsServiceProvider extends BaseServiceProvider
             $this->publishes([$this->configPath() => config_path('cors.php')], 'cors');
         } elseif ($this->app instanceof LumenApplication) {
             $this->app->configure('cors');
+        }
+
+        // Add the headers on the Request Handled event as fallback in case of exceptions
+        if (class_exists(RequestHandled::class) && $this->app->bound('events')) {
+            $cors = $this->app->make(HandleCors::class);
+            $this->app->make('events')->listen(RequestHandled::class, [$cors, 'onRequestHandled']);
         }
     }
 
