@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v2.0 (2020-05-11)
+ 
+[asm89/stack-cors 2.x](https://github.com/asm89/stack-cors/releases/tag/2.0.0) is now used, with these notable changes:
+
+### Added
+- CORS headers are better cachable now, with correct Vary headers (#https://github.com/asm89/stack-cors/pull/70, #https://github.com/asm89/stack-cors/pull/74)
+
+### Changed
+- CORS headers are added to non-Origin requests when possible (#https://github.com/asm89/stack-cors/pull/73)
+- Requests are no longer blocked by the server, only by the browser (#https://github.com/asm89/stack-cors/pull/70)
+ 
 ## v1.0 (2019-12-27)
 
 ### Breaking changes

@@ -34,6 +34,13 @@ Require the `fruitcake/laravel-cors` package in your `composer.json` and update 
 composer require fruitcake/laravel-cors
 ```
 
+If you get a conflict, this could be because an older version of barryvdh/laravel-cors or fruitcake/laravel-cors is installed. Remove the conflicting package first, then try install again:
+
+```sh
+composer remove barryvdh/laravel-cors fruitcake/laravel-cors
+composer require fruitcake/laravel-cors
+```
+
 ## Global usage
 
 To allow CORS for all your routes, add the `HandleCors` middleware in the `$middleware` property of  `app/Http/Kernel.php` class:
@@ -61,55 +68,20 @@ php artisan vendor:publish --tag="cors"
 
 > **Note:** If you are explicitly whitelisting headers, you must include `Origin` or requests will fail to be recognized as CORS.
 
-    
-```php
-<?php
 
-return [
+### Options
 
-    /*
-     * You can enable CORS for 1 or multiple paths.
-     * Example: ['api/*']
-     */
-    'paths' => [],
+| Option                   | Description                                                              | Default value |
+|--------------------------|--------------------------------------------------------------------------|---------------|
+| paths                    | You can enable CORS for 1 or multiple paths, eg. `['api/*'] `            | `array()`     |
+| allowed_origins          | Matches the request origin. Wildcards can be used, eg `*.mydomain.com`   | `array('*')`  |
+| allowed_origins_patterns | Matches the request origin with `preg_match`.                            | `array()`     |
+| allowed_methods          | Matches the request method.                                              | `array('*')`  |
+| allowed_headers          | Sets the Access-Control-Allow-Headers response header.                   | `array('*')`  |
+| exposed_headers          | Sets the Access-Control-Expose-Headers response header.                  | `false`       |
+| max_age                  | Sets the Access-Control-Max-Age response header.                         | `0`           |
+| supports_credentials     | Sets the Access-Control-Allow-Credentials header.                        | `false`       |
 
-    /*
-    * Matches the request method. `[*]` allows all methods.
-    */
-    'allowed_methods' => ['*'],
-
-    /*
-     * Matches the request origin. `[*]` allows all origins.
-     */
-    'allowed_origins' => ['*'],
-
-    /*
-     * Matches the request origin with, similar to `Request::is()`
-     */
-    'allowed_origins_patterns' => [],
-
-    /*
-     * Sets the Access-Control-Allow-Headers response header. `[*]` allows all headers.
-     */
-    'allowed_headers' => ['*'],
-
-    /*
-     * Sets the Access-Control-Expose-Headers response header.
-     */
-    'exposed_headers' => false,
-
-    /*
-     * Sets the Access-Control-Max-Age response header.
-     */
-    'max_age' => false,
-
-    /*
-     * Sets the Access-Control-Allow-Credentials header.
-     */
-    'supports_credentials' => false,
-];
-
-```
 
 `allowed_origins`, `allowed_headers` and `allowed_methods` can be set to `['*']` to accept any value.
 
@@ -142,6 +114,16 @@ $app->middleware([
 ]);
 ```
 
+## Common problems
+
+### Error handling, Middleware order
+
+Sometimes errors/middleware that return own responses can prevent the CORS Middleware from being run. Try changing the order of the Middleware and make sure it's in the global middleware, not a route group. Also check your logs for actual errors, because without CORS, the errors will be swallowed by the browser, only showing CORS errors.
+
+### Echo/die
+
+If you `echo()`, `dd()`, `die()`, `exit()`, `dump()` etc in your code, you will break the Middleware flow. When output is sent before headers, CORS cannot be added. When the scripts exits before the CORS middleware finished, CORS headers will not be added. Always return a proper response or throw an Exception.
+
 ### Disabling CSRF protection for your API
 
 If possible, use a different route group with CSRF protection enabled. 
@@ -152,6 +134,7 @@ protected $except = [
     'api/*'
 ];
 ```
+
     
 ## License
 
