@@ -43,12 +43,12 @@ composer require fruitcake/laravel-cors
 
 ## Global usage
 
-To allow CORS for all your routes, add the `HandleCors` middleware in the `$middleware` property of  `app/Http/Kernel.php` class:
+To allow CORS for all your routes, add the `HandleCors` middleware at the top of the `$middleware` property of  `app/Http/Kernel.php` class:
 
 ```php
 protected $middleware = [
+  \Fruitcake\Cors\HandleCors::class,
     // ...
-    \Fruitcake\Cors\HandleCors::class,
 ];
 ```
 
@@ -118,7 +118,7 @@ $app->middleware([
 
 ### Error handling, Middleware order
 
-Sometimes errors/middleware that return own responses can prevent the CORS Middleware from being run. Try changing the order of the Middleware and make sure it's in the global middleware, not a route group. Also check your logs for actual errors, because without CORS, the errors will be swallowed by the browser, only showing CORS errors.
+Sometimes errors/middleware that return own responses can prevent the CORS Middleware from being run. Try changing the order of the Middleware and make sure it's the first entry in the global middleware, not a route group. Also check your logs for actual errors, because without CORS, the errors will be swallowed by the browser, only showing CORS errors.
 
 ### Echo/die
 
