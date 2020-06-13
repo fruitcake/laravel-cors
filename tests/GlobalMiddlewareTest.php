@@ -29,18 +29,18 @@ class GlobalMiddlewareTest extends TestCase
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
-        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals('http://localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
         $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testOptionsAllowOriginAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
-        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals('http://localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
         $this->assertEquals(204, $crawler->getStatusCode());
     }
 
@@ -49,7 +49,7 @@ class GlobalMiddlewareTest extends TestCase
         $this->app['config']->set('cors.allowed_origins', ['*']);
 
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'laravel.com',
+            'HTTP_ORIGIN' => 'http://laravel.com',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
@@ -62,11 +62,11 @@ class GlobalMiddlewareTest extends TestCase
         $this->app['config']->set('cors.allowed_origins', ['*.laravel.com']);
 
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'test.laravel.com',
+            'HTTP_ORIGIN' => 'http://test.laravel.com',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
-        $this->assertEquals('test.laravel.com', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals('http://test.laravel.com', $crawler->headers->get('Access-Control-Allow-Origin'));
         $this->assertEquals(204, $crawler->getStatusCode());
     }
 
@@ -75,7 +75,7 @@ class GlobalMiddlewareTest extends TestCase
         $this->app['config']->set('cors.allowed_origins', ['*.laravel.com']);
 
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'test.symfony.com',
+            'HTTP_ORIGIN' => 'http://test.symfony.com',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
@@ -85,28 +85,28 @@ class GlobalMiddlewareTest extends TestCase
     public function testOptionsAllowOriginAllowedNonExistingRoute()
     {
         $crawler = $this->call('OPTIONS', 'api/pang', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
-        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals('http://localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
         $this->assertEquals(204, $crawler->getStatusCode());
     }
 
     public function testOptionsAllowOriginNotAllowed()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'otherhost',
+            'HTTP_ORIGIN' => 'http://otherhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
-        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals('http://localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
     }
 
     public function testAllowMethodAllowed()
     {
         $crawler = $this->call('POST', 'web/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Methods'));
@@ -118,7 +118,7 @@ class GlobalMiddlewareTest extends TestCase
     public function testAllowMethodNotAllowed()
     {
         $crawler = $this->call('POST', 'web/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'PUT',
         ]);
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Methods'));
@@ -128,7 +128,7 @@ class GlobalMiddlewareTest extends TestCase
     public function testAllowHeaderAllowedOptions()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-1, x-custom-2',
         ]);
@@ -143,7 +143,7 @@ class GlobalMiddlewareTest extends TestCase
         $this->app['config']->set('cors.allowed_headers', ['*']);
 
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
@@ -156,7 +156,7 @@ class GlobalMiddlewareTest extends TestCase
     public function testAllowHeaderNotAllowedOptions()
     {
         $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
@@ -166,7 +166,7 @@ class GlobalMiddlewareTest extends TestCase
     public function testAllowHeaderAllowed()
     {
         $crawler = $this->call('POST', 'web/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-1, x-custom-2',
         ]);
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
@@ -180,7 +180,7 @@ class GlobalMiddlewareTest extends TestCase
         $this->app['config']->set('cors.allowed_headers', ['*']);
 
         $crawler = $this->call('POST', 'web/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
@@ -192,7 +192,7 @@ class GlobalMiddlewareTest extends TestCase
     public function testAllowHeaderNotAllowed()
     {
         $crawler = $this->call('POST', 'web/ping', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_HEADERS' => 'x-custom-3',
         ]);
         $this->assertEquals(null, $crawler->headers->get('Access-Control-Allow-Headers'));
@@ -202,21 +202,21 @@ class GlobalMiddlewareTest extends TestCase
     public function testError()
     {
         $crawler = $this->call('POST', 'api/error', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
 
-        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals('http://localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
         $this->assertEquals(500, $crawler->getStatusCode());
     }
 
     public function testValidationException()
     {
         $crawler = $this->call('POST', 'api/validation', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
             'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
         ]);
-        $this->assertEquals('localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals('http://localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
         $this->assertEquals(302, $crawler->getStatusCode());
     }
 
@@ -227,7 +227,7 @@ class GlobalMiddlewareTest extends TestCase
         $this->app['config']->set('cors.exposed_headers', true);
 
         $this->call('POST', 'api/validation', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
         ]);
     }
 
@@ -238,7 +238,7 @@ class GlobalMiddlewareTest extends TestCase
         $this->app['config']->set('cors.allowed_origins', true);
 
         $this->call('POST', 'api/validation', [], [], [], [
-            'HTTP_ORIGIN' => 'localhost',
+            'HTTP_ORIGIN' => 'http://localhost',
         ]);
     }
 }
