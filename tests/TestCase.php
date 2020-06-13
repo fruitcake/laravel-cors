@@ -19,7 +19,7 @@ abstract class TestCase extends \Orchestra\Testbench\TestCase
         $app['config']['cors'] = [
             'paths' => ['api/*'],
             'supports_credentials' => false,
-            'allowed_origins' => ['localhost'],
+            'allowed_origins' => ['http://localhost'],
             'allowed_headers' => ['X-Custom-1', 'X-Custom-2'],
             'allowed_methods' => ['GET', 'POST'],
             'exposed_headers' => [],

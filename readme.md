@@ -54,7 +54,7 @@ protected $middleware = [
 
 Now update the config to define the paths you want to run the CORS service on, (see Configuration below):
 
-```php 
+```php
 'paths' => ['api/*'],
 ```
 
@@ -74,7 +74,7 @@ php artisan vendor:publish --tag="cors"
 | Option                   | Description                                                              | Default value |
 |--------------------------|--------------------------------------------------------------------------|---------------|
 | paths                    | You can enable CORS for 1 or multiple paths, eg. `['api/*'] `            | `array()`     |
-| allowed_origins          | Matches the request origin. Wildcards can be used, eg `*.mydomain.com`   | `array('*')`  |
+| allowed_origins          | Matches the request origin. Wildcards can be used, eg. `*.mydomain.com`  | `array('*')`  |
 | allowed_origins_patterns | Matches the request origin with `preg_match`.                            | `array()`     |
 | allowed_methods          | Matches the request method.                                              | `array('*')`  |
 | allowed_headers          | Sets the Access-Control-Allow-Headers response header.                   | `array('*')`  |
@@ -84,6 +84,8 @@ php artisan vendor:publish --tag="cors"
 
 
 `allowed_origins`, `allowed_headers` and `allowed_methods` can be set to `['*']` to accept any value.
+
+> **Note:** For `allowed_origins` you must include the scheme when not using a wildcard, eg. `['http://example.com', 'https://example.com']`. You must also take into account that the scheme will be present when using `allowed_origins_patterns`.
 
 > **Note:** Try to be a specific as possible. You can start developing with loose constraints, but it's better to be as strict as possible!
 
@@ -126,7 +128,7 @@ If you `echo()`, `dd()`, `die()`, `exit()`, `dump()` etc in your code, you will 
 
 ### Disabling CSRF protection for your API
 
-If possible, use a different route group with CSRF protection enabled. 
+If possible, use a different route group with CSRF protection enabled.
 Otherwise you can disable CSRF for certain requests in `App\Http\Middleware\VerifyCsrfToken`:
 
 ```php
@@ -135,7 +137,7 @@ protected $except = [
 ];
 ```
 
-    
+
 ## License
 
 Released under the MIT License, see [LICENSE](LICENSE).
