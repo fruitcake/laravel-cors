@@ -128,7 +128,7 @@ If you `echo()`, `dd()`, `die()`, `exit()`, `dump()` etc in your code, you will 
 
 ### Disabling CSRF protection for your API
 
-If possible, use a different route group with CSRF protection enabled.
+If possible, use a route group with CSRF protection disabled.
 Otherwise you can disable CSRF for certain requests in `App\Http\Middleware\VerifyCsrfToken`:
 
 ```php
