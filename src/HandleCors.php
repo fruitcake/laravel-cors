@@ -53,6 +53,8 @@ class HandleCors
             });
         }
 
+        $this->myConfigureAllowedOrigin($request);
+
         // Handle the request
         $response = $next($request);
 
@@ -60,7 +62,8 @@ class HandleCors
             $this->cors->varyHeader($response, 'Access-Control-Request-Method');
         }
 
-        return $this->addHeaders($request, $response);
+//        return $this->addHeaders($request, $response);
+        return $response;
     }
 
     /**
@@ -72,12 +75,37 @@ class HandleCors
      */
     protected function addHeaders(Request $request, Response $response): Response
     {
+        header_remove('Access-Control-Allow-Origin'); // MTM: To prevent multiple headers
         if (! $response->headers->has('Access-Control-Allow-Origin')) {
             // Add the CORS headers to the Response
             $response = $this->cors->addActualRequestHeaders($response, $request);
         }
 
         return $response;
+    }
+
+    /**
+     * MTM hotfix
+     *
+     * @param Response $response
+     * @param Request $request
+     */
+    private function myConfigureAllowedOrigin(Request $request)
+    {
+        if ($this->cors->options['allowedOrigins'] === true && ! $this->cors->options['supportsCredentials']) {
+            // Safe+cacheable, allow everything
+            header('Access-Control-Allow-Origin: *', true);
+        } elseif ($this->cors->isSingleOriginAllowed()) {
+            // Single origins can be safely set
+            header('Access-Control-Allow-Origin: ' . array_values($this->cors->options['allowedOrigins'])[0], true);
+        } else {
+            // For dynamic headers, check the origin first
+            if ($this->cors->isOriginAllowed($request)) {
+                header('Access-Control-Allow-Origin: ' . $request->headers->get('Origin'), true);
+            }
+
+//            $this->cors->varyHeader($response, 'Origin');
+        }
     }
 
     /**
