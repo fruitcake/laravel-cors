@@ -122,6 +122,10 @@ $app->middleware([
 
 Sometimes errors/middleware that return own responses can prevent the CORS Middleware from being run. Try changing the order of the Middleware and make sure it's the first entry in the global middleware, not a route group. Also check your logs for actual errors, because without CORS, the errors will be swallowed by the browser, only showing CORS errors.
 
+### Authorization headers / Credentials
+
+If your Request includes an Authorization header or uses Credentials mode, set the `supports_credentials` value in the config to true. This will set the [Access-Control-Allow-Credentials](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials) Header to `true`.
+
 ### Echo/die
 
 If you `echo()`, `dd()`, `die()`, `exit()`, `dump()` etc in your code, you will break the Middleware flow. When output is sent before headers, CORS cannot be added. When the scripts exits before the CORS middleware finished, CORS headers will not be added. Always return a proper response or throw an Exception.
