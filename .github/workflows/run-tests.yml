@@ -1,6 +1,10 @@
 on:
   push:
+    branches:
+      - master
   pull_request:
+    branches:
+      - "*"
   schedule:
   - cron: '0 0 * * *'
 
