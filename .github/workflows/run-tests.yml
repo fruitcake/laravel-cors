@@ -1,3 +1,5 @@
+name: Unit Tests
+
 on:
   push:
     branches:
@@ -11,64 +13,36 @@ on:
 jobs:
   php-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      COMPOSER_NO_INTERACTION: 1
 
     strategy:
       matrix:
         php: [7.4, 7.3, 7.2]
-        laravel: [7.*]
-        testbench: [5.*]
+        laravel: [8.*, 6.*, 7.*]
         dependency-version: [prefer-lowest, prefer-stable]
-        include:
-          - laravel: 7.*
-            testbench: 5.*
-            php: 7.4
-            dependency-version: prefer-stable
-          - laravel: 6.*
-            testbench: 4.*
-            php: 7.3
-            dependency-version: prefer-stable
-          - laravel: 5.8.*
-            testbench: 3.8.*
-            php: 7.3
-            dependency-version: prefer-stable
-          - laravel: 5.7.*
-            testbench: 3.7.*
-            php: 7.2
-            dependency-version: prefer-stable
-          - laravel: 5.6.*
-            testbench: 3.6.*
-            php: 7.1
-            dependency-version: prefer-stable
-          - laravel: 8.*
-            testbench: 6.*
-            php: 7.4
-            dependency-version: prefer-stable
         exclude:
-          - laravel: 5.7.*
-            php: 7.4
-          - laravel: 5.6.*
-            php: 7.4
-          - laravel: 5.5.*
-            php: 7.4
+          - laravel: 8.*
+            php: 7.2
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php }}
         coverage: none
-        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
-
+        tools: composer:v2
+        
     - name: Install dependencies
       run: |
-        composer remove phpro/grumphp --no-interaction --no-update --dev
-        composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "orchestra/testbench-dusk:${{ matrix.testbench }}" --no-interaction --no-update
-        composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+        composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+        composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress
 
     - name: Update Dusk Chromedriver
       run: vendor/bin/dusk-updater detect --auto-update
