@@ -2,7 +2,7 @@
 
 namespace Fruitcake\Cors;
 
-use Asm89\Stack\CorsService;
+use SelcukCukur\CorsExpression\CorsExpressionService;
 use Illuminate\Foundation\Application as LaravelApplication;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 use Laravel\Lumen\Application as LumenApplication;
@@ -18,8 +18,8 @@ class CorsServiceProvider extends BaseServiceProvider
     {
         $this->mergeConfigFrom($this->configPath(), 'cors');
 
-        $this->app->singleton(CorsService::class, function ($app) {
-            return new CorsService($this->corsOptions(), $app);
+        $this->app->singleton(CorsExpressionService::class, function ($app) {
+            return new CorsExpressionService($this->corsOptions(), $app);
         });
     }
 
@@ -67,13 +67,13 @@ class CorsServiceProvider extends BaseServiceProvider
 
         // Convert case to supported options
         $options = [
-            'supportsCredentials' => $config['supports_credentials'],
-            'allowedOrigins' => $config['allowed_origins'],
-            'allowedOriginsPatterns' => $config['allowed_origins_patterns'],
-            'allowedHeaders' => $config['allowed_headers'],
-            'allowedMethods' => $config['allowed_methods'],
-            'exposedHeaders' => $config['exposed_headers'],
-            'maxAge' => $config['max_age'],
+            'SupportsCredentials' => $config['supports_credentials'],
+            'AllowedOrigins' => $config['allowed_origins'],
+            'AllowedOriginsPatterns' => $config['allowed_origins_patterns'],
+            'AllowedHeaders' => $config['allowed_headers'],
+            'AllowedMethods' => $config['allowed_methods'],
+            'ExposedHeaders' => $config['exposed_headers'],
+            'AccesControlMaxAge' => $config['max_age'],
         ];
 
         // Transform wildcard pattern
