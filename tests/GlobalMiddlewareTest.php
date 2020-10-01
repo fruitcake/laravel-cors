@@ -70,6 +70,19 @@ class GlobalMiddlewareTest extends TestCase
         $this->assertEquals(204, $crawler->getStatusCode());
     }
 
+    public function testOriginsWildcardIncludesNestedSubdomains()
+    {
+        $this->app['config']->set('cors.allowed_origins', ['*.laravel.com']);
+
+        $crawler = $this->call('OPTIONS', 'api/ping', [], [], [], [
+            'HTTP_ORIGIN' => 'http://api.service.test.laravel.com',
+            'HTTP_ACCESS_CONTROL_REQUEST_METHOD' => 'POST',
+        ]);
+
+        $this->assertEquals('http://api.service.test.laravel.com', $crawler->headers->get('Access-Control-Allow-Origin'));
+        $this->assertEquals(204, $crawler->getStatusCode());
+    }
+
     public function testAllowAllOriginsWildcardNoMatch()
     {
         $this->app['config']->set('cors.allowed_origins', ['*.laravel.com']);
