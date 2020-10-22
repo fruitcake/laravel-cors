@@ -15,8 +15,8 @@
     ],
     "require": {
         "php": ">=7.2",
-        "illuminate/support": "^6|^7|^8",
-        "illuminate/contracts": "^6|^7|^8",
+        "illuminate/support": "^6|^7|^8|^9",
+        "illuminate/contracts": "^6|^7|^8|^9",
         "symfony/http-foundation": "^4|^5",
         "symfony/http-kernel": "^4.3.4|^5",
         "asm89/stack-cors": "^2.0.1"
