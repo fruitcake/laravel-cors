@@ -26,6 +26,9 @@ jobs:
           - laravel: ^8
             php: 7.2
         include:
+          - laravel: ^9
+            php: 7.4
+            dependency-version: prefer-stable
           - laravel: ^7
             php: 7.2
             dependency-version: prefer-lowest
