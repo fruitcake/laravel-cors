@@ -137,7 +137,10 @@ Otherwise you can disable CSRF for certain requests in `App\Http\Middleware\Veri
 
 ```php
 protected $except = [
-    'api/*'
+    'api/*',
+    'sub.domain.zone' => [
+      'prefix/*'
+    ],
 ];
 ```
 
