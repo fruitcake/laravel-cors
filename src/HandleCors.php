@@ -94,13 +94,13 @@ class HandleCors
     /**
      * The the path from the config, to see if the CORS Service should run
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return bool
      */
     protected function isMatchingPath(Request $request): bool
     {
         // Get the paths from the config or the middleware
-        $paths = $this->container['config']->get('cors.paths', []);
+        $paths = $this->getPathsByHost($request->getHost());
 
         foreach ($paths as $path) {
             if ($path !== '/') {
@@ -113,5 +113,24 @@ class HandleCors
         }
 
         return false;
+    }
+
+    /**
+     * Paths by given host or string values in config by default
+     *
+     * @param string $host
+     * @return array
+     */
+    protected function getPathsByHost(string $host)
+    {
+        $paths = $this->container['config']->get('cors.paths', []);
+        // If where are paths by given host
+        if (isset($paths[$host])) {
+            return $paths[$host];
+        }
+        // Defaults
+        return array_filter($paths, function ($path) {
+            return is_string($path);
+        });
     }
 }
