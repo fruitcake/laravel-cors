@@ -4,6 +4,7 @@ namespace Fruitcake\Cors;
 
 use Closure;
 use Asm89\Stack\CorsService;
+use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Container\Container;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,7 @@ class HandleCors
 
     /** @var \Illuminate\Contracts\Container\Container $container */
     protected $container;
-    
+
     public function __construct(CorsService $cors, Container $container)
     {
         $this->cors = $cors;
@@ -38,19 +39,45 @@ class HandleCors
 
         // For Preflight, return the Preflight response
         if ($this->cors->isPreflightRequest($request)) {
-            return $this->cors->handlePreflightRequest($request);
+            $response = $this->cors->handlePreflightRequest($request);
+
+            $this->cors->varyHeader($response, 'Access-Control-Request-Method');
+
+            return $response;
         }
 
-        // If the request is not allowed, return 403
-        if (! $this->cors->isActualRequestAllowed($request)) {
-            return new Response('Not allowed in CORS policy.', 403);
+        // Add the headers on the Request Handled event as fallback in case of exceptions
+        if (class_exists(RequestHandled::class) && $this->container->bound('events')) {
+            $this->container->make('events')->listen(RequestHandled::class, function (RequestHandled $event) {
+                $this->addHeaders($event->request, $event->response);
+            });
         }
 
         // Handle the request
         $response = $next($request);
 
-        // Add the CORS headers to the Response
+        if ($request->getMethod() === 'OPTIONS') {
+            $this->cors->varyHeader($response, 'Access-Control-Request-Method');
+        }
+
         return $this->addHeaders($request, $response);
+    }
+
+    /**
+     * Add the headers to the Response, if they don't exist yet.
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return Response
+     */
+    protected function addHeaders(Request $request, Response $response): Response
+    {
+        if (! $response->headers->has('Access-Control-Allow-Origin')) {
+            // Add the CORS headers to the Response
+            $response = $this->cors->addActualRequestHeaders($response, $request);
+        }
+
+        return $response;
     }
 
     /**
@@ -61,24 +88,19 @@ class HandleCors
      */
     protected function shouldRun(Request $request): bool
     {
-        // Check if this is an actual CORS request
-        if (! $this->cors->isCorsRequest($request)) {
-            return false;
-        }
-
         return $this->isMatchingPath($request);
     }
 
     /**
      * The the path from the config, to see if the CORS Service should run
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return bool
      */
     protected function isMatchingPath(Request $request): bool
     {
         // Get the paths from the config or the middleware
-        $paths = $this->container['config']->get('cors.paths', []);
+        $paths = $this->getPathsByHost($request->getHost());
 
         foreach ($paths as $path) {
             if ($path !== '/') {
@@ -94,18 +116,21 @@ class HandleCors
     }
 
     /**
-     * Add the headers to the Response, if they don't exist yet.
+     * Paths by given host or string values in config by default
      *
-     * @param Request $request
-     * @param Response $response
-     * @return Response
+     * @param string $host
+     * @return array
      */
-    protected function addHeaders(Request $request, Response $response): Response
+    protected function getPathsByHost(string $host)
     {
-        if (! $response->headers->has('Access-Control-Allow-Origin')) {
-            $response = $this->cors->addActualRequestHeaders($response, $request);
+        $paths = $this->container['config']->get('cors.paths', []);
+        // If where are paths by given host
+        if (isset($paths[$host])) {
+            return $paths[$host];
         }
-
-        return $response;
+        // Defaults
+        return array_filter($paths, function ($path) {
+            return is_string($path);
+        });
     }
 }
