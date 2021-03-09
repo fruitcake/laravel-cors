@@ -29,16 +29,6 @@ class GroupMiddlewareTest extends AbstractTest
         Route::group([], __DIR__ . '/routes/web.php');
         Route::middleware([HandleCorsGroup::class])->group(__DIR__ . '/routes/api.php');
 
-        $app['config']['cors'] = [
-            'supports_credentials' => false,
-            'allowed_origins' => ['localhost'],
-            'allowed_origins_patterns' => [],
-            'allowed_headers' => ['X-Custom-1', 'X-Custom-2'],
-            'allowed_methods' => ['GET', 'POST'],
-            'exposed_headers' => false,
-            'max_age' => false,
-        ];
-
         parent::getEnvironmentSetUp($app);
     }
 }
