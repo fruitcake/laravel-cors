@@ -118,9 +118,13 @@ $app->middleware([
 
 ## Common problems
 
+### Wrong config
+
+Make sure the `path` option in the config is correct and actually matches the route you are using. Remember to clear the config cache as well.
+
 ### Error handling, Middleware order
 
-Sometimes errors/middleware that return own responses can prevent the CORS Middleware from being run. Try changing the order of the Middleware and make sure it's the first entry in the global middleware, not a route group. Also check your logs for actual errors, because without CORS, the errors will be swallowed by the browser, only showing CORS errors.
+Sometimes errors/middleware that return own responses can prevent the CORS Middleware from being run. Try changing the order of the Middleware and make sure it's the first entry in the global middleware, not a route group. Also check your logs for actual errors, because without CORS, the errors will be swallowed by the browser, only showing CORS errors. Also try running it without CORS to make sure it actually works.
 
 ### Authorization headers / Credentials
 
@@ -144,6 +148,8 @@ protected $except = [
 ];
 ```
 
+### Duplicate headres
+The CORS Middleware should be the only place you add these headers. If you also add headers in .htaccess, nginx or your index.php file, you will get duplicate headers and unexpected results.
 
 ## License
 
