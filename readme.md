@@ -74,7 +74,7 @@ php artisan vendor:publish --tag="cors"
 | Option                   | Description                                                              | Default value |
 |--------------------------|--------------------------------------------------------------------------|---------------|
 | paths                    | You can enable CORS for 1 or multiple paths, eg. `['api/*'] `            | `[]`          |
-| allowed_origins          | Matches the request origin. Wildcards can be used, eg. `*.mydomain.com`  | `['*']`       |
+| allowed_origins          | Matches the request origin. Wildcards can be used, eg. `*.mydomain.com` or `mydomain.com:*`  | `['*']`       |
 | allowed_origins_patterns | Matches the request origin with `preg_match`.                            | `[]`          |
 | allowed_methods          | Matches the request method.                                              | `['*']`       |
 | allowed_headers          | Sets the Access-Control-Allow-Headers response header.                   | `['*']`       |
@@ -90,6 +90,8 @@ php artisan vendor:publish --tag="cors"
 > **Note:** Try to be a specific as possible. You can start developing with loose constraints, but it's better to be as strict as possible!
 
 > **Note:** Because of [http method overriding](http://symfony.com/doc/current/reference/configuration/framework.html#http-method-override) in Laravel, allowing POST methods will also enable the API users to perform PUT and DELETE requests as well.
+
+> **Note:** Sometimes it's necessary to specify the port _(when you're coding your app in a local environment for example)_. You can specify the port or using a wildcard here too, eg. `localhost:3000`, `localhost:*` or even using a FQDN `app.mydomain.com:8080`
 
 ### Lumen
 
