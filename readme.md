@@ -148,7 +148,7 @@ protected $except = [
 ];
 ```
 
-### Duplicate headres
+### Duplicate headers
 The CORS Middleware should be the only place you add these headers. If you also add headers in .htaccess, nginx or your index.php file, you will get duplicate headers and unexpected results.
 
 ## License
