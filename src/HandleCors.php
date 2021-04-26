@@ -4,6 +4,7 @@ namespace Fruitcake\Cors;
 
 use Closure;
 use Asm89\Stack\CorsService;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Container\Container;
@@ -46,12 +47,6 @@ class HandleCors
             return $response;
         }
 
-        // Add the headers on the Request Handled event as fallback in case of exceptions
-        if (class_exists(RequestHandled::class) && $this->container->bound('events')) {
-            $this->container->make('events')->listen(RequestHandled::class, function (RequestHandled $event) {
-                $this->addHeaders($event->request, $event->response);
-            });
-        }
 
         // Handle the request
         $response = $next($request);
@@ -79,6 +74,19 @@ class HandleCors
 
         return $response;
     }
+
+    /**
+     * Add the headers to the Response, if they don't exist yet.
+     *
+     * @param RequestHandled $event
+     */
+    public function onRequestHandled(RequestHandled $event)
+    {
+        if ($this->shouldRun($event->request) && $this->container->make(Kernel::class)->hasMiddleware(static::class)) {
+            $this->addHeaders($event->request, $event->response);
+        }
+    }
+
 
     /**
      * Determine if the request has a URI that should pass through the CORS flow.
