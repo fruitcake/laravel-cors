@@ -153,6 +153,9 @@ protected $except = [
 ### Duplicate headers
 The CORS Middleware should be the only place you add these headers. If you also add headers in .htaccess, nginx or your index.php file, you will get duplicate headers and unexpected results.
 
+### No Cross-Site requests
+If you are not doing Cross-Site requests, meaning if you are not requesting site-a.com/api from site-b.com, your browser will not send the `Origin: https://site-b.com` request header, CORS will be "disabled" as the `Access-Control-Allow-Origin` header will be also missing. This happens because requests are being dispatched from the same and no protection is needed in this case.
+
 ## License
 
 Released under the MIT License, see [LICENSE](LICENSE).
