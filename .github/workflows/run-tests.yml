@@ -33,9 +33,12 @@ jobs:
             php: 7.3
             dependency-version: prefer-lowest
           - laravel: ^8
+            php: 8.0
+            dependency-version: prefer-stable
+          - laravel: ^9
             php: 8.1
             dependency-version: prefer-stable
-            
+
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
     steps:
