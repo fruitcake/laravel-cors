@@ -17,7 +17,7 @@
         "php": ">=7.2",
         "illuminate/support": "^6|^7|^8|^9",
         "illuminate/contracts": "^6|^7|^8|^9",
-        "fruitcake/php-cors": "^1"
+        "fruitcake/php-cors": "^0.1|^1"
     },
     "require-dev": {
         "laravel/framework": "^6|^7.24|^8",
@@ -37,7 +37,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0-dev"
+            "dev-master": "2.1-dev"
         },
         "laravel": {
             "providers": [
