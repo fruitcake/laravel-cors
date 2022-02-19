@@ -3,8 +3,9 @@
 [![Build Status][ico-actions]][link-actions]
 [![Software License][ico-license]](LICENSE.md)
 [![Total Downloads][ico-downloads]][link-downloads]
+[![Fruitcake](https://img.shields.io/badge/Powered%20By-Fruitcake-b2bc35.svg)](https://fruitcake.nl/)
 
-Implements https://github.com/asm89/stack-cors for Laravel
+Implements https://github.com/fruitcake/php-cors for Laravel
 
 ## About
 
@@ -14,7 +15,7 @@ headers with Laravel middleware configuration.
 If you want to have a global overview of CORS workflow, you can  browse
 this [image](http://www.html5rocks.com/static/images/cors_server_flowchart.png).
 
-## Upgrading from 0.x / barryvdh-laravel-cors
+## Upgrading from 0.x (barryvdh/laravel-cors)
 When upgrading from 0.x versions, there are some breaking changes:
  - **A new 'paths' property is used to enable/disable CORS on certain routes. This is empty by default, so fill it correctly!**
  - **Group middleware is no longer supported, use the global middleware**
