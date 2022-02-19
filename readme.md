@@ -160,7 +160,7 @@ Released under the MIT License, see [LICENSE](LICENSE).
 
 [ico-version]: https://img.shields.io/packagist/v/fruitcake/laravel-cors.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-actions]: https://github.com/fruitcake/laravel-cors/workflows/.github/workflows/run-tests.yml/badge.svg
+[ico-actions]: https://github.com/fruitcake/laravel-cors/actions/workflows/run-tests.yml/badge.svg
 [ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/fruitcake/laravel-cors.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/fruitcake/laravel-cors.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/fruitcake/laravel-cors.svg?style=flat-square
