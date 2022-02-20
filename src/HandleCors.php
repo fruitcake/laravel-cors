@@ -38,6 +38,9 @@ class HandleCors
             return $next($request);
         }
 
+        // Load our CORS configuration
+        $this->cors->setOptions($this->container['config']->get('cors', []));
+
         // For Preflight, return the Preflight response
         if ($this->cors->isPreflightRequest($request)) {
             $response = $this->cors->handlePreflightRequest($request);
