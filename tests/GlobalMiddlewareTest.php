@@ -232,26 +232,4 @@ class GlobalMiddlewareTest extends TestCase
         $this->assertEquals('http://localhost', $crawler->headers->get('Access-Control-Allow-Origin'));
         $this->assertEquals(302, $crawler->getStatusCode());
     }
-
-    public function testInvalidExposedHeadersException()
-    {
-        $this->expectException(\RuntimeException::class);
-
-        $this->app['config']->set('cors.exposed_headers', true);
-
-        $this->call('POST', 'api/validation', [], [], [], [
-            'HTTP_ORIGIN' => 'http://localhost',
-        ]);
-    }
-
-    public function testInvalidOriginsException()
-    {
-        $this->expectException(\RuntimeException::class);
-
-        $this->app['config']->set('cors.allowed_origins', true);
-
-        $this->call('POST', 'api/validation', [], [], [], [
-            'HTTP_ORIGIN' => 'http://localhost',
-        ]);
-    }
 }
