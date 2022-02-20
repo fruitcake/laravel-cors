@@ -79,6 +79,7 @@ class HandleCors
      * Add the headers to the Response, if they don't exist yet.
      *
      * @param RequestHandled $event
+     * @deprecated
      */
     public function onRequestHandled(RequestHandled $event)
     {
