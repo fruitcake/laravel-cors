@@ -50,6 +50,5 @@
         "check-style": "phpcs -p --standard=psr12 src/",
         "fix-style": "phpcbf -p --standard=psr12 src/"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    "minimum-stability": "dev"
 }
