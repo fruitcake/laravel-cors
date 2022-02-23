@@ -3,7 +3,7 @@
 namespace Fruitcake\Cors;
 
 use Closure;
-use Fruitcake\Cors\CorsService;
+use Asm89\Stack\CorsService;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 use Illuminate\Http\Request;
