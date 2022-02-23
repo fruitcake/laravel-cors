@@ -35,6 +35,13 @@ class CorsServiceProvider extends BaseServiceProvider
         } elseif ($this->app instanceof LumenApplication) {
             $this->app->configure('cors');
         }
+
+        // Add the headers on the Request Handled event as fallback in case of exceptions
+        if (class_exists(RequestHandled::class) && $this->app->bound('events')) {
+            $this->app->make('events')->listen(RequestHandled::class, function (RequestHandled $event) {
+                $this->app->make(HandleCors::class)->onRequestHandled($event);
+            });
+        }
     }
 
     /**
