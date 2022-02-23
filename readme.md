@@ -1,6 +1,7 @@
 # CORS Middleware for Laravel
 
 [![Build Status][ico-actions]][link-actions]
+[![Latest Stable Version](https://poser.pugx.org/fruitcake/laravel-cors/version.png)](https://packagist.org/packages/fruitcake/laravel-cors)
 [![Software License][ico-license]](LICENSE.md)
 [![Total Downloads][ico-downloads]][link-downloads]
 [![Fruitcake](https://img.shields.io/badge/Powered%20By-Fruitcake-b2bc35.svg)](https://fruitcake.nl/)
