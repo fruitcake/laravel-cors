@@ -8,6 +8,8 @@
 
 Implements https://github.com/fruitcake/php-cors for Laravel
 
+> *Since Laravel 9.2, this Middleware is included in laravel/framework. You can use the provided middleware, which should be compatible with the Middleware and config provided in this package. See https://github.com/laravel/laravel/pull/5825/files for the changes.*
+
 ## About
 
 The `laravel-cors` package allows you to send [Cross-Origin Resource Sharing](http://enable-cors.org/)
