@@ -19,31 +19,21 @@ jobs:
 
     strategy:
       matrix:
-        php: [8.0, 7.4, 7.3, 7.2]
-        laravel: [^8, ^7, ^6]
-        dependency-version: [prefer-stable]
+        php: [8.1, 8.0, 7.4]
+        laravel: [^9, ^8, ^7, ^6]
+        dependency-version: [prefer-lowest, prefer-stable, dev]
         exclude:
-          - laravel: ^8
-            php: 7.2
-        include:
-          - laravel: ^7
-            php: 7.2
-            dependency-version: prefer-lowest
-          - laravel: ^8
-            php: 7.3
-            dependency-version: prefer-lowest
-          - laravel: ^8
+          - laravel: ^6
             php: 7.4
-            dependency-version: dev
+            dependency-version: prefer-lowest
+          - laravel: ^6
+            php: 8.1
+          - laravel: ^7
+            php: 8.1
           - laravel: ^8
-            php: 8.0
-            dependency-version: prefer-stable
-          - laravel: ^9
             php: 8.1
-            dependency-version: prefer-stable
           - laravel: ^9
-            php: 8.1
-            dependency-version: dev
+            php: 7.4
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
