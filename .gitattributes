@@ -6,5 +6,7 @@
 /grumphp.yml        export-ignore
 /phpunit.xml.dist   export-ignore
 /tests              export-ignore
+/changelog.md       export-ignore
+/.editorconfig      export-ignore
 
 tests/js/* linguist-vendored
