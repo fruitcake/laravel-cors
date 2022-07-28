@@ -84,7 +84,7 @@ php artisan vendor:publish --tag="cors"
 | allowed_headers          | Sets the Access-Control-Allow-Headers response header.                   | `['*']`       |
 | exposed_headers          | Sets the Access-Control-Expose-Headers response header.                  | `false`       |
 | max_age                  | Sets the Access-Control-Max-Age response header.                         | `0`           |
-| supports_credentials     | Sets the Access-Control-Allow-Credentials header.                        | `[]`       |
+| supports_credentials     | Sets the Access-Control-Allow-Credentials header.                        | `false`       |
 
 
 `allowed_origins`, `allowed_headers` and `allowed_methods` can be set to `['*']` to accept any value.
