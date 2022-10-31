@@ -91,7 +91,7 @@ php artisan vendor:publish --tag="cors"
 
 > **Note:** For `allowed_origins` you must include the scheme when not using a wildcard, eg. `['http://example.com', 'https://example.com']`. You must also take into account that the scheme will be present when using `allowed_origins_patterns`.
 
-> **Note:** Try to be a specific as possible. You can start developing with loose constraints, but it's better to be as strict as possible!
+> **Note:** Try to be as specific as possible. You can start developing with loose constraints, but it's better to be as strict as possible!
 
 > **Note:** Because of [http method overriding](http://symfony.com/doc/current/reference/configuration/framework.html#http-method-override) in Laravel, allowing POST methods will also enable the API users to perform PUT and DELETE requests as well.
 
@@ -138,7 +138,7 @@ If your Request includes an Authorization header or uses Credentials mode, set t
 
 ### Echo/die
 
-If you `echo()`, `dd()`, `die()`, `exit()`, `dump()` etc in your code, you will break the Middleware flow. When output is sent before headers, CORS cannot be added. When the scripts exits before the CORS middleware finished, CORS headers will not be added. Always return a proper response or throw an Exception.
+If you use `echo()`, `dd()`, `die()`, `exit()`, `dump()` etc in your code, you will break the Middleware flow. When output is sent before headers, CORS cannot be added. When the script exits before the CORS middleware finishes, CORS headers will not be added. Always return a proper response or throw an Exception.
 
 ### Disabling CSRF protection for your API
 
