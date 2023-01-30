@@ -82,7 +82,7 @@ php artisan vendor:publish --tag="cors"
 | allowed_origins          | Matches the request origin. Wildcards can be used, eg. `*.mydomain.com` or `mydomain.com:*`  | `['*']`       |
 | allowed_origins_patterns | Matches the request origin with `preg_match`.                            | `[]`          |
 | allowed_headers          | Sets the Access-Control-Allow-Headers response header.                   | `['*']`       |
-| exposed_headers          | Sets the Access-Control-Expose-Headers response header.                  | `false`       |
+| exposed_headers          | Sets the Access-Control-Expose-Headers response header.                  | `[]`       |
 | max_age                  | Sets the Access-Control-Max-Age response header.                         | `0`           |
 | supports_credentials     | Sets the Access-Control-Allow-Credentials header.                        | `false`       |
 
