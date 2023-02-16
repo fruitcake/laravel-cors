@@ -8,9 +8,16 @@
 
 Implements https://github.com/fruitcake/php-cors for Laravel
 
-> *Since Laravel 9.2, this Middleware is included in laravel/framework. You can use the provided middleware, which should be compatible with the Middleware and config provided in this package. See https://github.com/laravel/laravel/pull/5825/files for the changes.*
+## Note for users upgrading to Laravel 9, 10 or higher
+### This package is deprecated because all supported Laravel versions now include the CORS middleware in the core.
 
-## Read-only because all supported Laravel versions now include the CORS middleware in the core.
+Since Laravel 9.2, this Middleware is included in laravel/framework. You can use the provided middleware, which should be compatible with the Middleware and config provided in this package. See https://github.com/laravel/laravel/pull/5825/files for the changes.
+
+Steps to upgrade:
+ 1. Remove `"fruitcake/laravel-cors"` from your composer.json
+ 2. Replace `\Fruitcake\Cors\HandleCors::class,` with `\Illuminate\Http\Middleware\HandleCors::class,` in `app/Http/Kernel.php`
+
+See `https://github.com/fruitcake/php-cors` for advanced usage. The config stays the same.
 
 ## About
 
